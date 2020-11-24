@@ -18,28 +18,28 @@ class Customer extends React.Component {
 }
 
 //사용자의 프로필 이미지, 이름, 아이디
-class CustomerProfile extends React.Component{
-    render(){
-        return(
-            <div>
-                <img src={this.props.image} alt="profile"/>
-                <h2>{this.props.name}{this.props.id}</h2>
-            </div>
-        )
-    }
-}
+// class CustomerProfile extends React.Component{
+//     render(){
+//         return(
+//             <div>
+//                 <img src={this.props.image} alt="profile"/>
+//                 <h2>{this.props.name}{this.props.id}</h2>
+//             </div>
+//         )
+//     }
+// }
 
-//사용자의 남은 데이터
-class CustomerInfo extends React.Component{
-    render() {
-        return(
-            <div>
-                <p>{this.props.birthday}</p>
-                <p>{this.props.gender}</p>
-                <p>{this.props.job}</p>
-            </div>
-        )
-    }
-}
+// //사용자의 남은 데이터
+// class CustomerInfo extends React.Component{
+//     render() {
+//         return(
+//             <div>
+//                 <p>{this.props.birthday}</p>
+//                 <p>{this.props.gender}</p>
+//                 <p>{this.props.job}</p>
+//             </div>
+//         )
+//     }
+// }
 
 export default Customer;
