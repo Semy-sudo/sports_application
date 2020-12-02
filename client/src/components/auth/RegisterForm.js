@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, register } from '../../modules/auth';
-import AuthForm from './AuthForm';
+import RegisterFormBlock from './RegisterFormBlock';
 import { check } from '../../modules/user';
 import { withRouter } from 'react-router-dom';
 
 const RegisterForm = ({ history }) => {
+    const [registerType, setRegisterType] = useState('');
     const [error, setError] = useState('');
     const dispatch = useDispatch();
     const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
@@ -16,6 +17,7 @@ const RegisterForm = ({ history }) => {
     }));
     const onChange = e => {
         const { value, name } = e.target;
+        console.log(e.target);
         dispatch(
             changeField({
                 form: 'register',
@@ -24,11 +26,25 @@ const RegisterForm = ({ history }) => {
             })
         );
     };
+
+    const onDropdownChange = e => {
+        setRegisterType(e.value);
+
+        dispatch(
+            changeField({
+                form: 'register',
+                key: 'type',
+                value: e.value,
+            })
+        );
+    };
+
     const onSubmit = e => {
         e.preventDefault();
-        const { id, passwd, passwdConfirm, email, name } = form;
+        const { type, id, passwd, passwdConfirm, email, name, addressBasic, addressDetail, latitude, longitude, certifiNumber } = form;
 
-        if([id, passwd, passwdConfirm, email, name].includes('')) {
+        console.log(form);
+        if([type, id, passwd, passwdConfirm, email, name].includes('')) {
             setError('빈 칸을 모두 입력하세요!');
 
             return;
@@ -42,11 +58,17 @@ const RegisterForm = ({ history }) => {
             return;
         }
         dispatch(register({
+            type,
             id,
             passwd,
             passwdConfirm,
             email,
-            name
+            name,
+            addressBasic,
+            addressDetail,
+            latitude,
+            longitude,
+            certifiNumber,
         }));
     };
 
@@ -95,11 +117,12 @@ const RegisterForm = ({ history }) => {
     }, [history, user]);
 
     return(
-        <AuthForm
-            type="register"
+        <RegisterFormBlock
             form={ form }
             onChange={ onChange }
             onSubmit={ onSubmit }
+            onDropdownChange={ onDropdownChange }
+            registerType={ registerType }
             error={ error }
         />
     );

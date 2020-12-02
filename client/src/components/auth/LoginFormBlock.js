@@ -40,14 +40,10 @@ const Footer = styled.div`
     }
 `;
 
+
 const ButtonWidthMarginTop = styled(Button)`
     margin-top: 1rem;
 `;
-
-const textMap = {
-    login: '로그인',
-    register: '회원가입',
-};
 
 const ErrorMessage = styled.div`
     color: red;
@@ -56,12 +52,10 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
-    const text = textMap[type];
-
+const LoginFormBlock = ({ form, onChange, onSubmit, error }) => {
     return(
         <AuthFormBlock>
-            <h3>{ text }</h3>
+            <h3>로그인</h3>
             <form onSubmit={ onSubmit }>
                 <StyledInput autoComplete="id"
                              name="id"
@@ -76,46 +70,18 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
                              onChange={ onChange }
                              value={ form.passwd }
                 />
-                { type === 'register' && 
-                    <>
-                        <StyledInput autoComplete="new-password"
-                                     name="passwdConfirm"
-                                     placeholder="Re-Password"
-                                     type="password"
-                                     onChange={ onChange }
-                                     value={ form.passwdConfirm }
-                        />
-                        <StyledInput autoComplete="email"
-                                     name="email"
-                                     placeholder="Email"
-                                     onChange={ onChange }
-                                     value={ form.email }
-                        />
-                        <StyledInput autoComplete="name"
-                                     name="name"
-                                     placeholder="Your name"
-                                     onChange={ onChange }
-                                     value={ form.name }
-                        />
-                    </>
-                }
                 { error && <ErrorMessage>{ error }</ErrorMessage> }
                 <ButtonWidthMarginTop 
                     cyan
                     fullWidth        
                 >
-                    { text }
+                    로그인
                 </ButtonWidthMarginTop>
             </form>
             <Footer>
-                { type === 'login' ? (
-                    <Link to="/auth/register">Sign Up</Link>
-                ) : (
-                    <Link to="/auth/login">Login</Link>
-                )}
+                <Link to="/auth/register">Sign Up</Link>
             </Footer>
         </AuthFormBlock>
-    );
-};
-
-export default AuthForm;
+    )
+}
+export default LoginFormBlock;

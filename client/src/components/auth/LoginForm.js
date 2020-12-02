@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, login } from '../../modules/auth';
-import AuthForm from '../../components/auth/AuthForm';
+import LoginFormBlock from '../../components/auth/LoginFormBlock';
 import { withRouter } from 'react-router-dom';
 import { check } from '../../modules/user';
 
@@ -14,6 +14,7 @@ const LoginForm = ({ history }) => {
         authError: auth.authError,
         user: user.user,
     }));
+
     const onChange = e => {
         const { value, name } = e.target;
         dispatch(
@@ -62,12 +63,11 @@ const LoginForm = ({ history }) => {
     }, [history, user]);
 
     return(
-        <AuthForm
-            type="login"
-            form={ form }
+        <LoginFormBlock 
             onChange={ onChange }
             onSubmit={ onSubmit }
             error={ error }
+            form={ form }
         />
     );
 };

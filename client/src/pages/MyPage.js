@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ContentsBlock from './MyPageFragements/ConetentsBlock';
+import ContentsBlock from '../components/myPage/ConetentsBlock';
 
 const MyPage_Contents = styled.div`
     float: left;

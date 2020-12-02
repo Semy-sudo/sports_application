@@ -1,5 +1,5 @@
 import React from 'react';
-import ContentsBlock from './HomeFragements/ContentsBlock';
+import ContentsBlock from '../components/home/ContentsBlock';
 
 const HomePage = () => {
     return(
