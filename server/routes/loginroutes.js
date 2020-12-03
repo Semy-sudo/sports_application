@@ -28,9 +28,9 @@ exports.register = function (req, res) {
 }
 
 exports.login = function (req, res) {
-    var email = req.body.email;
-    var password = req.body.password;
-    connection.query('SELECT * FROM customer WHERE email = ?', [email],
+    var id = req.body.id;
+    var passwd = req.body.passwd;
+    connection.query('SELECT * FROM customer WHERE email = id', [id],
     function( error, results, fields) {
         if (error) {
             // console.log("error ocurred", error);
