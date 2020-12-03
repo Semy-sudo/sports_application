@@ -1,11 +1,16 @@
 exports.register = function (req, res) {
     
     var users = {
-        "name": req.body.name,
+        "type": req.body.type,
+        "id": req.body.id,
         "email": req.body.email,
         "passwd": req.body.passwd,
-    }
-    connenction.query('INSERT INTO customer SET ?' , users, function (error, results, fields) {
+        "addressBasic": req.body.addressBasic,
+        "addressDetail": req.body.addressDetail,
+        "certifiNumber": req.body.certifiNumber,
+    };
+    
+    connection.query('INSERT INTO customer VALUES ?' , users, function (error, results, fields) {
         if (error) {
             console.log("error ocurred", error);
             res.send({

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { Link } from 'react-router-dom';
 import Button from '../common/Button';
 import Dropdown from 'react-dropdown'
 import 'react-dropdown/style.css'
+import DaumPostcode from 'react-daum-postcode';
 
 const AuthFormBlock = styled.div`
     h3 { 
@@ -56,7 +57,7 @@ const DetailAddressInput = styled.input`
     border-bottom: 1px solid ${palette.gray[5]};
     padding-bottom: 0.5rem;
     outline: none;
-    width: 70%;
+    width: 100%;
     margin-top: 1rem;
     &:focus: {
         color: $oc-teal-7;
@@ -65,18 +66,6 @@ const DetailAddressInput = styled.input`
     & + & {
         margin-top: 1rem;
     }
-`;
-
-const BasicAddressButton = styled.button`
-    float: left;
-    border: none;
-    border-radius: 3px;
-    color: white;
-    font-size: 1rem;
-    margin-left: 4%;
-    margin-top: 1rem;
-    width: 26%;
-    background-color: ${palette.cyan[7]};
 `;
 
 const Footer = styled.div`
@@ -107,6 +96,16 @@ const DropDownArea = styled.div`
     margin-bottom: 1rem;
 `;
 
+const AddressSearch = styled.div`
+    width: 100%;
+    margin-top: 1rem;
+`;
+
+const postCodeStyle = {
+    width: "100%",
+    height: "500px",
+};
+
 const options = [
     {
         value: 'parent',
@@ -118,7 +117,25 @@ const options = [
     },
 ];
 
-const RegisterFormBlock = ({ form, onChange, onSubmit, error, onDropdownChange, registerType }) => {
+const RegisterFormBlock = ({ form, onChange, onSubmit, error, onDropdownChange, setAddress, registerType }) => {
+    
+    const handleComplete = data => {
+        let fullAddress = data.address;
+        let extraAddress = ''; 
+        
+        if (data.addressType === 'R') {
+            if (data.bname !== '') {
+            extraAddress += data.bname;
+            }
+            if (data.buildingName !== '') {
+            extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
+            }
+            fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+        }
+        document.getElementById("addressBasic").value = fullAddress;
+        setAddress(fullAddress);
+    };
+
     return(
         <AuthFormBlock>
             <h3>회원가입</h3>
@@ -135,43 +152,51 @@ const RegisterFormBlock = ({ form, onChange, onSubmit, error, onDropdownChange, 
                     ?
                     <div>
                         <StyledInput autoComplete="id"
-                             name="id"
-                             placeholder="ID"
-                             onChange={ onChange }
-                             value={ form.id }
+                                     name="id"
+                                     placeholder="ID"
+                                     onChange={ onChange }
+                                     value={ form.id }
                         />
                         <StyledInput autoComplete="new-password"
-                                    name="passwd"
-                                    placeholder="Password"
-                                    type="password"
-                                    onChange={ onChange }
-                                    value={ form.passwd }
+                                     name="passwd"
+                                     placeholder="Password"
+                                     type="password"
+                                     onChange={ onChange }
+                                     value={ form.passwd }
+                        />
+                        <StyledInput autoComplete="new-password"
+                                     name="passwdConfirm"
+                                     placeholder="Re-Password"
+                                     type="password"
+                                     onChange={ onChange }
+                                     value={ form.passwdConfirm }
                         />
                         <StyledInput autoComplete="email"
-                                    name="email"
-                                    placeholder="Email"
-                                    type="text"
-                                    onChange={ onChange }
-                                    value={ form.email }
-                        />
-                        <BasicAddressInput name="addressBasic"
-                                     placeholder="주소"
+                                     name="email"
+                                     placeholder="Email"
                                      type="text"
                                      onChange={ onChange }
-                                     value={ form.addressBasic }
-                                     readOnly
+                                     value={ form.email }
                         />
-                        <BasicAddressButton
-                            type="button"
-                        >
-                            주소검색
-                        </BasicAddressButton>
+                        <BasicAddressInput id="addressBasic"
+                                           name="addressBasic"
+                                           placeholder="주소"
+                                           type="text"
+                                           onChange={ onChange }
+                                           readOnly
+                        />
                         <DetailAddressInput name="addressDetail"
-                                     placeholder="상세주소"
-                                     type="text"
-                                     onChange={ onChange }
-                                     value={ form.addressDetail }
+                                            placeholder="상세주소"
+                                            type="text"
+                                            onChange={ onChange }
+                                            value={ form.addressDetail }
                         />
+                        <AddressSearch>
+                            <DaumPostcode
+                                style={ postCodeStyle }
+                                onComplete={ handleComplete }
+                            />
+                        </AddressSearch>
                     </div>
                     :
                     <div>
@@ -187,6 +212,13 @@ const RegisterFormBlock = ({ form, onChange, onSubmit, error, onDropdownChange, 
                                      type="password"
                                      onChange={ onChange }
                                      value={ form.passwd }
+                        />
+                        <StyledInput autoComplete="new-password"
+                                     name="passwdConfirm"
+                                     placeholder="Re-Password"
+                                     type="password"
+                                     onChange={ onChange }
+                                     value={ form.passwdConfirm }
                         />
                         <StyledInput autoComplete="email"
                                      name="email"
@@ -215,6 +247,7 @@ const RegisterFormBlock = ({ form, onChange, onSubmit, error, onDropdownChange, 
                 <Link to="/auth/login">Login</Link>
             </Footer>
         </AuthFormBlock>
-    )
-}
+    );
+};
+
 export default RegisterFormBlock;

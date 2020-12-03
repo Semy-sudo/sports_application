@@ -6,6 +6,7 @@ import { check } from '../../modules/user';
 import { withRouter } from 'react-router-dom';
 
 const RegisterForm = ({ history }) => {
+    const [address, setAddress] = useState('');
     const [registerType, setRegisterType] = useState('');
     const [error, setError] = useState('');
     const dispatch = useDispatch();
@@ -39,12 +40,21 @@ const RegisterForm = ({ history }) => {
         );
     };
 
+    useEffect( () => {
+        dispatch(
+            changeField({
+                form: 'register',
+                key: 'addressBasic',
+                value: address
+            })
+        )
+    }, [address]);
+
     const onSubmit = e => {
         e.preventDefault();
-        const { type, id, passwd, passwdConfirm, email, name, addressBasic, addressDetail, latitude, longitude, certifiNumber } = form;
+        const { type, id, passwd, passwdConfirm, email, addressBasic, addressDetail, certifiNumber } = form;
 
-        console.log(form);
-        if([type, id, passwd, passwdConfirm, email, name].includes('')) {
+        if([type, id, passwd, passwdConfirm, email].includes('')) {
             setError('빈 칸을 모두 입력하세요!');
 
             return;
@@ -63,11 +73,8 @@ const RegisterForm = ({ history }) => {
             passwd,
             passwdConfirm,
             email,
-            name,
             addressBasic,
             addressDetail,
-            latitude,
-            longitude,
             certifiNumber,
         }));
     };
@@ -122,6 +129,7 @@ const RegisterForm = ({ history }) => {
             onChange={ onChange }
             onSubmit={ onSubmit }
             onDropdownChange={ onDropdownChange }
+            setAddress={ setAddress }
             registerType={ registerType }
             error={ error }
         />
