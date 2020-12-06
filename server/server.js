@@ -40,11 +40,38 @@ app.use('/api/auth', router);
 // /post 클라이언트측에 json정보 보내줌
 app.get('/api/customers',(req,res)=>{
   connection.query(
-    "SELECT * FROM board",
+    "SELECT * FROM board WHERE isDeleted = 0",
     (err, rows, fields) => {
       res.send(rows);
     }
   ); 
+});
+
+app.post('/api/customers',(req,res) => {
+  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0)';
+  let boardid = req.body.boardid;
+  let boardType = req.body.boardType;
+  let boardLimit = req.body.boardLimit;
+  let boardTitle = req.body.boardTitle;
+  let boardContents = req.body.boardContents;
+  console.log("boardid",boardid);
+  let params = [boardid,boardType,boardLimit,boardTitle,boardContents];
+  connection.query(sql,params,
+    (err,rows,fields)=>{
+      res.send(rows);
+      console.log(rows);
+    }
+  );
+});
+
+app.delete('/api/customers/:boardid',(req,res)=>{
+  let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
+  let params = [req.params.boardid];
+  connection.query(sql,params,
+      (err,rows,fields)=>{
+        res.send(rows);
+      }
+    )
 });
 
 

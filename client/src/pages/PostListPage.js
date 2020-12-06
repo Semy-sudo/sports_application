@@ -22,16 +22,16 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
 
-const styles = theme => ({
-    root: {
-        width: '100%',
-        marginTop: theme.spacing.unit * 3,
-        overflowX: "auto"
-    },
-    table: {
-        minWidth: 1000
-    }
-})
+// const styles = theme => ({
+//     root: {
+//         width: '100%',
+//         marginTop: theme.spacing.unit * 3,
+//         overflowX: "auto"
+//     },
+//     table: {
+//         minWidth: 1000
+//     }
+// })
 
 const PostList_Contents = styled.div`
     float: left;
@@ -45,8 +45,22 @@ const PostList_Contents = styled.div`
 
 class PostListPage extends Component {
 
-    state = {
-        customers:""
+    constructor(props) {
+        super(props);
+        this.state = {
+            customers:'',
+            completed:0
+        }
+    }
+
+    stateRefresh = () => {
+        this.setState({
+            customers:'',
+            completed: 0
+        });
+        this.callApi()
+            .then(res => this.setState({customers:res}))
+            .catch(err=> console.log(err));
     }
 
     componentDidMount() {
@@ -63,8 +77,8 @@ class PostListPage extends Component {
 
     render() {
         return(
-            <PostList_Contents>
             <div>
+            <PostList_Contents>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -73,6 +87,7 @@ class PostListPage extends Component {
                             <TableCell>제한인원</TableCell>
                             <TableCell>제목</TableCell>
                             <TableCell>내용</TableCell>
+                            <TableCell>설정</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -80,7 +95,9 @@ class PostListPage extends Component {
                     this.state.customers.map(c=>{
                         return (
                         <Customer
-                        nickName={c.nickName}
+                        stateRefresh = {this.stateRefresh}
+                        key = {c.boardid}
+                        boardid={c.boardid}
                         boardType={c.boardType}
                         boardLimit={c.boardLimit}
                         boardTitle={c.boardTitle}
@@ -91,9 +108,9 @@ class PostListPage extends Component {
                     : ""}
                     </TableBody>
                 </Table>
-                <CustomerAdd/>
-            </div>
+                <CustomerAdd stateRefresh={this.stateRefresh}/>
             </PostList_Contents>
+            </div>
         )
     }
 }
