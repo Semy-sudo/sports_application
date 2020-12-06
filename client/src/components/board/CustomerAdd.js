@@ -6,7 +6,7 @@ class CustomerAdd extends React.Component {
     constructor(props) {
         super(props);
         this.state= {
-            nickName: '',
+            boardid: '',
             boardType:'',
             boardLimit:'',
             boardTitle:'',
@@ -18,8 +18,17 @@ class CustomerAdd extends React.Component {
         e.preventDefault()
         this.addCustomer()
             .then((response)=>{
-                console.log(response.data);
+                console.log("response.data",response.data);
+                this.props.stateRefresh();
             })
+        this.setState({
+            boardid: '',
+            boardType:'',
+            boardLimit:'',
+            boardTitle:'',
+            boardContents:''
+        })
+        
     }
 
     handleValueChange = (e) => {
@@ -33,14 +42,15 @@ class CustomerAdd extends React.Component {
     addCustomer = () => {
         const url = '/api/customers';
         const formData = new FormData();
-        formData.append('nickName',this.state.nickName);
+        formData.append('boardid',this.state.boardid);
+        console.log("this.state.boardid",this.state.boardid)
         formData.append('boardType',this.state.boardType);
         formData.append('boardLimit',this.state.boardLimit);
         formData.append('boardTitle',this.state.boardTitle);
         formData.append('boardContents',this.state.boardContents);
         const config = {
             headers: {
-                'content=type':'multipart/form-data'
+                'content-type':'multipart/form-data'
             }
             
         }
@@ -49,14 +59,15 @@ class CustomerAdd extends React.Component {
 
     render() {
         return (
-            <from onSubmit={this.handleFormSubmit}>
+            <form onSubmit={this.handleFormSubmit}>
                 <h1>클래스추가</h1>
-                이름: <input type="text" name="nickName" value={this.state.nickName} onChange={this.handleValueChange}/><br/>
+                번호: <input type="text" name="boardid" value={this.state.boardid} onChange={this.handleValueChange}/><br/>
                 종류: <input type="text" name="boardType" value={this.state.boardType} onChange={this.handleValueChange}/><br/>
                 제한인원: <input type="text" name="boardLimit" value={this.state.boardLimit} onChange={this.handleValueChange}/><br/>
                 제목: <input type="text" name="boardTitle" value={this.state.boardTitle} onChange={this.handleValueChange}/><br/>
                 내용: <input type="text" name="boardContents" value={this.state.boardContents} onChange={this.handleValueChange}/><br/>
-            </from>
+                <button type="submit">추가하기</button>
+            </form>
         )
     }
 
