@@ -12,35 +12,23 @@ const [
 ] = createRequestActionTypes('maps/LIST_MAPS');
 
 const [
-    LIST_MAPS_CLASS,
-    LIST_MAPS_CLASS_SUCCESS,
-    LIST_MAPS_CLASS_FAILURE,
-] = createRequestActionTypes('maps/LIST_MAPS_CLASS');
-
-const [
-    LIST_MAPS_SPORTS,
-    LIST_MAPS_SPORTS_SUCCESS,
-    LIST_MAPS_SPORTS_FAILURE,
-] = createRequestActionTypes('maps/LIST_MAPS_SPORTS');
+    LIST_MAPS_KEYWORD,
+    LIST_MAPS_KEYWORD_SUCCESS,
+    LIST_MAPS_KEYWORD_FAILURE,
+] = createRequestActionTypes('maps/LIST_MAPS_KEYWORD');
 
 export const listMaps = createAction(LIST_MAPS);
-export const listMapsByClassName = createAction(
-    LIST_MAPS_CLASS,
-    ({ className }) => ({ className }),
-);
-export const listMapsBySports = createAction(
-    LIST_MAPS_SPORTS,
-    ({ sportsName }) => ({ sportsName }),
+export const listMapsByKeyword = createAction(
+    LIST_MAPS_KEYWORD,
+    ({ keyword }) => ({ keyword }),
 );
 
 const listMapsSaga = createRequestSaga(LIST_MAPS, mapsAPI.mapList);
-const listMapsClassSaga = createRequestSaga(LIST_MAPS_CLASS, mapsAPI.mapListByClass);
-const listMapsSportsSaga = createRequestSaga(LIST_MAPS_SPORTS, mapsAPI.mapListBySports);
+const listMapsKeywordSaga = createRequestSaga(LIST_MAPS_KEYWORD, mapsAPI.mapListByKeyword);
 
 export function* mapsSaga() {
     yield takeLatest(LIST_MAPS, listMapsSaga);
-    yield takeLatest(LIST_MAPS_CLASS, listMapsClassSaga);
-    yield takeLatest(LIST_MAPS_SPORTS, listMapsSportsSaga);
+    yield takeLatest(LIST_MAPS_KEYWORD, listMapsKeywordSaga);
 }
 
 const initialState = {
@@ -58,19 +46,11 @@ const maps = handleActions(
             ...state,
             error,
         }),
-        [LIST_MAPS_CLASS_SUCCESS]: (state, { payload: maps }) => ({
+        [LIST_MAPS_KEYWORD_SUCCESS]: (state, { payload: maps }) => ({
             ...state,
             maps,
         }),
-        [LIST_MAPS_CLASS_FAILURE]: (state, { payload: error }) => ({
-            ...state,
-            error,
-        }),
-        [LIST_MAPS_SPORTS_SUCCESS]: (state, { payload: maps }) => ({
-            ...state,
-            maps,
-        }),
-        [LIST_MAPS_SPORTS_FAILURE]: (state, { payload: error }) => ({
+        [LIST_MAPS_KEYWORD_FAILURE]: (state, { payload: error }) => ({
             ...state,
             error,
         }),

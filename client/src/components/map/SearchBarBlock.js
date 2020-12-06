@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { listMapsByKeyword } from '../../modules/maps';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 
@@ -49,13 +52,33 @@ const SearchButton = styled.button`
 `;
 
 const SearchBarBlock = () => {
+    const dispatch = useDispatch();
+    const { maps, error, loading, user } = useSelector(
+        ({ maps, loading, user }) => ({
+            maps: maps.maps,
+            error: maps.error,
+            loading: loading['maps/LIST_MAPS_KEYWORD'],
+            user: user.user,
+        }),
+    );
+    const onClick = e => {
+        e.preventDefault();
+        const keyword = document.getElementById('keyword').value;
+        
+        dispatch(listMapsByKeyword({ keyword }));
+    };
+
     return(
         <BarArea>
             <Option>
                 <BarHeader>
                     <form onSubmit="">
-                        <SearchBar/>
-                        <SearchButton>
+                        <SearchBar
+                            id="keyword"
+                        />
+                        <SearchButton
+                            onClick={ onClick }
+                        >
                             검색
                         </SearchButton>
                         <hr/>

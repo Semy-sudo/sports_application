@@ -8,6 +8,7 @@ import MapPage from './pages/MapPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HeaderBlock from './components/common/HeaderBlock';
+import PaymentPage from './pages/PaymentPage';
 
 const App = () => {
   return(
@@ -20,6 +21,7 @@ const App = () => {
       <Route component={ MyPage } path="/auth" exact />
       <Route component={ LoginPage } path="/auth/login" exact />
       <Route component={ RegisterPage } path="/auth/register" exact />
+      <Route component={ PaymentPage } path="/payment" exact />
     </>
   )
 }
