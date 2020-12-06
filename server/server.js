@@ -8,6 +8,8 @@ const port = process.env.PORT || 4000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+
+
 const data = fs.readFileSync('./database.json');
 const conf = JSON.parse(data);//data를 js객체로 변환
 const mysql = require('mysql');
@@ -30,11 +32,20 @@ router.get('/',function(req,res){
   res.json({message:'welcom to our upload module apis'});
 });
 
+
 router.post('/register', login.register);
 router.post('/login', login.login)
 app.use('/api/auth', router);
 
-
+// /post 클라이언트측에 json정보 보내줌
+app.get('/api/customers',(req,res)=>{
+  connection.query(
+    "SELECT * FROM board",
+    (err, rows, fields) => {
+      res.send(rows);
+    }
+  ); 
+});
 
 
 app.listen(port, ()=> console.log(`Listening on port ${port}`));
