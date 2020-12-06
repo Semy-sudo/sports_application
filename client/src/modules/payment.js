@@ -6,11 +6,11 @@ import * as paymentAPI from '../lib/api/payment';
 import { takeLatest } from 'redux-saga/effects';
 
 const INITIALIZE = 'payment/INITIALIZE';
-const {
+const [
     PAYMENT_CLASS,
     PAYMENT_CLASS_SUCCESS,
     PAYMENT_CLASS_FAILURE,
-} = createRequestActionTypes('payment/PAYMENT_CLASS');
+] = createRequestActionTypes('payment/PAYMENT_CLASS');
 
 export const initialize = createAction(INITIALIZE);
 export const paymentClass = createAction(
