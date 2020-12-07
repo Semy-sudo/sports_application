@@ -5,11 +5,12 @@ import HomeIcon from '../../lib/styles/img/home-outline.svg';
 import BoardIcon from '../../lib/styles/img/clipboard-outline.svg';
 import MapIcon from '../../lib/styles/img/map-outline.svg';
 import PersonIcon from '../../lib/styles/img/person-outline.svg';
+import HomeLogo from '../../lib/styles/img/img_category/logo_sports.png';
 import '../../components/common/Icon.css';
 
 const Header = styled.div`
     width: 100%;
-    height: 130px;
+    height: 100px;
     position: fixed;
     background-color: #ffffff;
     box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.1);
@@ -18,18 +19,30 @@ const Header = styled.div`
 
 const Header_title = styled.div`
     float: left;
-    width: 100%;
-    height: 50px;
+    width: 30%;
+    height: 100px;
+    padding-left: 80px;
     font-weight: bold;
-    font-size: 40px;
-    text-align: center;
-    color: #000080;
+    font-size: 35px;
+    color: #27AE60;
+`;
+
+const Header_logo_Area = styled.div`
+    float: left;
+    padding-top: 10px;
+`;
+
+const Header_title_Area = styled.div`
+    float: left;
+    padding-top: 25px;
+    padding-left: 20px;
 `;
 
 const Header_nav = styled.div`
     float: left;
-    width: 100%;
-    height: 80px;
+    width: 40%;
+    height: 100px;
+    padding-top: 10px;
     text-align: center;
     ul {
         float: left;
@@ -50,6 +63,17 @@ const Header_nav = styled.div`
     }
 `;
 
+const Header_footer = styled.div`
+    float: left;
+    width: 30%;
+    height: 100px;
+    padding-left: 50px;
+    padding-top: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #27AE60;
+`;
+
 const Header_nav_icon_area = styled.div`
     width: 50px;
     height: 40px;
@@ -64,11 +88,25 @@ const Header_nav_area = styled.div`
     margin-top: 15px;
 `;
 
+const ImageIcon = styled.img`
+    color: #27AE60;
+`;
+
+const Logo = styled.img`
+    width: 80px;
+    height: 80px;
+`;
+
 const HeaderBlock = () => {
     return(
         <Header>
             <Header_title>
-                <Link to="/">Sports Application</Link>
+                <Header_logo_Area>
+                    <Logo src={ HomeLogo }/>
+                </Header_logo_Area>
+                <Header_title_Area>
+                    <Link to="/">체육동산</Link>
+                </Header_title_Area>
             </Header_title>
             <Header_nav>
                 <Header_nav_area>
@@ -76,7 +114,7 @@ const HeaderBlock = () => {
                         <li>
                             <Link to="/">
                                 <Header_nav_icon_area>
-                                    <img src={ HomeIcon } />
+                                    <ImageIcon src={ HomeIcon } />
                                 </Header_nav_icon_area>
                                 <Header_nav_text_area>
                                     Home
@@ -86,7 +124,7 @@ const HeaderBlock = () => {
                         <li>
                             <Link to="/payment">
                                 <Header_nav_icon_area>
-                                    <img src={ BoardIcon } />
+                                    <ImageIcon src={ BoardIcon } />
                                 </Header_nav_icon_area>
                                 <Header_nav_text_area>
                                     Board
@@ -96,7 +134,7 @@ const HeaderBlock = () => {
                         <li>
                             <Link to="/map">
                                 <Header_nav_icon_area>
-                                    <img src={ MapIcon } />
+                                    <ImageIcon src={ MapIcon } />
                                 </Header_nav_icon_area>
                                 <Header_nav_text_area>
                                     Map
@@ -106,7 +144,7 @@ const HeaderBlock = () => {
                         <li>
                             <Link to="/auth">
                                 <Header_nav_icon_area>
-                                    <img src={ PersonIcon } />
+                                    <ImageIcon src={ PersonIcon } />
                                 </Header_nav_icon_area>
                                 <Header_nav_text_area>
                                     My
@@ -116,6 +154,10 @@ const HeaderBlock = () => {
                     </ul>
                 </Header_nav_area>
             </Header_nav>
+            <Header_footer>
+                믿을 수 있는 <br/>
+                우리 아이 체육 교실
+            </Header_footer>
         </Header>
     );
 };

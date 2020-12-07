@@ -1,7 +1,5 @@
 /*global kakao*/
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { listMapsByKeyword } from '../../modules/maps';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import SearchBarBlock from './SearchBarBlock';
@@ -101,17 +99,6 @@ function Marker(map) {
 }
 
 const ContentsBlock = () => {
-    const dispatch = useDispatch();
-    const { maps, error, loading } = useSelector(
-        ({ maps, loading }) => ({
-            maps: maps.maps,
-            error: maps.error,
-        })
-    );
-
-    const onClick = e => {
-        dispatch(listMapsByKeyword(document.getElementById('keyword').value))
-    };
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -131,24 +118,16 @@ const ContentsBlock = () => {
 
                 const mapContainer = new window.kakao.maps.Map(container, options);
                 
-                maps ?
-                maps.map(
-                    (map, i) => {
-                        Marker(map);
-                        console.log(map);
-                    }
-                ) :
-                console.log("Data Loading..")
             });
         };
-    }, [maps]);
+    }, []);
 
     return(
         <div>
             <KakaoMap id="mapContainer">
             </KakaoMap>
             <SearchBarBlock
-                onClick={ onClick }
+                
             />
         </div>
     );
