@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 var login = require('./routes/loginroutes');
 var map = require('./routes/maproutes');
+const path = require("path");
 const port = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
@@ -28,6 +29,21 @@ router.get('/', function (req, res) {
 // router.post('/register', login.register); router.post('/login', login.login)
 // app.use('/api/auth', router); 
 
+app.get('/post', function (req, res) {
+    res.send('GET request to the post');
+    res.redirect('/post')
+});
+
+// app.get('/api/auth/check', (req, res) => {
+//         if(type === 'parent'){
+//             res.redirect('/map');
+//         }else if(type === 'expert'){
+//             res.redirect('/post');
+//         }else{
+//             res.resdirect('/mypage');
+//         }
+// });
+
 //로그인
 app.post('/api/auth/login', (req, res) => {
     let id = req.body.id;
@@ -48,7 +64,14 @@ app.post('/api/auth/login', (req, res) => {
                         "code": 200,
                         "success": "login sucessfull"
                     });
-                    res.redirect('/');
+                    // let type = results[0].type;
+                    // app.get('/api/auth/check', (req, res) => {
+                    //     if(type === 'parent'){
+                    //         res.redirect('/map');
+                    //     }else{
+                    //         res.redirect('/post');
+                    //     }
+                    // });
                 } else {
                     res.send({
                         "code": 204,
@@ -63,13 +86,13 @@ app.post('/api/auth/login', (req, res) => {
             }
         }    
     }) 
+
+ 
     
 })
 
+
 //회원가입
-app.get('/api/auth/check', (req, res) => {
-  
-});
 
 app.post('/api/auth/register', (req, res) => {
     let sql = 'INSERT INTO customer VALUES (null,?,?,?,?,?,?,?)';
@@ -78,11 +101,11 @@ app.post('/api/auth/register', (req, res) => {
     let id = req.body.id;
     let passwd = req.body.passwd;
     let email = req.body.email;
+    console.log(email)
     let addressBasic = req.body.addressBasic;
     let addressDetail = req.body.addressDetail;
     let certifiNumber = req.body.certifiNumber;
     let params = [
-        customerid,
         type,
         id,
         passwd,
@@ -95,7 +118,19 @@ app.post('/api/auth/register', (req, res) => {
         res.send(rows);
         console.log(rows);
     });
+
+    // app.get('/api/auth/check', (req, res) => {
+    //     if(type === 'parent'){
+    //         res.redirect('/map');
+    //     }else if(type === 'expert'){
+    //         res.redirect('/post');
+    //     }else{
+    //         res.resdirect('/mypage');
+    //     }
+    // });
+
 });
+
 
 // 게시판
 app.get('/api/customers', (req, res) => {
@@ -120,7 +155,10 @@ app.post('/api/customers', (req, res) => {
         res.send(rows);
         console.log(rows);
     });
-    res.redirect('/');
+    
+    return res.status(200).json({
+        success:true
+    })
 });
 
 app.delete('/api/customers/:boardid', (req, res) => {
@@ -130,5 +168,9 @@ app.delete('/api/customers/:boardid', (req, res) => {
         res.send(rows);
     })
 });
+
+app.get('/register',(req,res) => {
+    res.send('hi')
+})
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
