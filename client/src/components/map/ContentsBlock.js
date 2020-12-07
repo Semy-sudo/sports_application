@@ -1,5 +1,7 @@
 /*global kakao*/
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { listMapsByKeyword } from '../../modules/maps';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import SearchBarBlock from './SearchBarBlock';
@@ -69,7 +71,48 @@ const AddressArea = styled.span`
     }
 `;
 
+function Marker(map) {
+    var content = 
+        '<OverlayInfo>' +
+        '   <a href="#">' +
+        '       <Link to="#">' +
+        '           <LinkText>' +
+        '               월정리 해수욕장' +
+        '           </LinkText>' +
+        '       </Link>' +
+        '   </a>' +
+        '   <Desc>' +
+        '       <img src="#" style="vertical-align: top;"/>' +
+        '       <AddressArea>' +
+        '           제주특별자치도 제주시 구좌읍 월정리 33-3' +
+        '       </AddressArea>' +
+        '   </Desc>' +
+        '</OverlayInfo>';
+
+    var position = new kakao.maps.LatLng(map.FACI_POINT_Y, map.FACI_POINT_X);
+    var mapCustomOverlay = new kakao.maps.CustomOverlay({
+        position: position,
+        content: content,
+        xAnchor: 0.5,
+        yAnchor: 1.1,
+    });
+
+    mapCustomOverlay.setMap(map);
+}
+
 const ContentsBlock = () => {
+    const dispatch = useDispatch();
+    const { maps, error, loading } = useSelector(
+        ({ maps, loading }) => ({
+            maps: maps.maps,
+            error: maps.error,
+        })
+    );
+
+    const onClick = e => {
+        dispatch(listMapsByKeyword(document.getElementById('keyword').value))
+    };
+
     useEffect(() => {
         const script = document.createElement("script");
         
@@ -80,49 +123,33 @@ const ContentsBlock = () => {
 
         script.onload = () => {
             kakao.maps.load( () => {
-                var container = document.getElementById('map');
+                var container = document.getElementById('mapContainer');
                 var options = {
                     center: new kakao.maps.LatLng(33.450701, 126.570667),
                     level: 7
                 };
 
-                const map = new window.kakao.maps.Map(container, options);
-
-                // var content = 
-                // '<OverlayInfo>' +
-                // '   <a href="#">' +
-                // '       <Link to="#">' +
-                // '           <LinkText>' +
-                // '               월정리 해수욕장' +
-                // '           </LinkText>' +
-                // '       </Link>' +
-                // '   </a>' +
-                // '   <Desc>' +
-                // '       <img src="#" style="vertical-align: top;"/>' +
-                // '       <AddressArea>' +
-                // '           제주특별자치도 제주시 구좌읍 월정리 33-3' +
-                // '       </AddressArea>' +
-                // '   </Desc>' +
-                // '</OverlayInfo>';
-
-                // var position = new kakao.maps.LatLng(33.55635, 126.795841);
-                // var mapCustomOverlay = new kakao.maps.CustomOverlay({
-                //     position: position,
-                //     content: content,
-                //     xAnchor: 0.5,
-                //     yAnchor: 1.1,
-                // });
-
-                // mapCustomOverlay.setMap(map);
+                const mapContainer = new window.kakao.maps.Map(container, options);
+                
+                maps ?
+                maps.map(
+                    (map, i) => {
+                        Marker(map);
+                        console.log(map);
+                    }
+                ) :
+                console.log("Data Loading..")
             });
         };
-    }, []);
+    }, [maps]);
 
     return(
         <div>
-            <KakaoMap id="map">
+            <KakaoMap id="mapContainer">
             </KakaoMap>
-            <SearchBarBlock/>
+            <SearchBarBlock
+                onClick={ onClick }
+            />
         </div>
     );
 };

@@ -20,7 +20,7 @@ const [
 export const listMaps = createAction(LIST_MAPS);
 export const listMapsByKeyword = createAction(
     LIST_MAPS_KEYWORD,
-    ({ keyword }) => ({ keyword }),
+    keyword => keyword
 );
 
 const listMapsSaga = createRequestSaga(LIST_MAPS, mapsAPI.mapList);

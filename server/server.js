@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 var login = require('./routes/loginroutes');
-var map = require('./routes/maproutes');
 const port = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
@@ -35,7 +34,53 @@ router.post('/register', login.register);
 router.post('/login', login.login)
 app.use('/api/auth', router);
 
+app.get('/api/map/mapList/:keyword', (req, res) => {
+  var params = req.params.keyword;
+  var sql = "SELECT * FROM map WHERE FACI_NM LIKE '%" + params + "%' OR FCOB_NM LIKE '%" + params + "%'";
 
+  connection.query(sql ,function(error, rows, field) {
+    if(error) {
+        console.log("error occured", error);
 
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      console.log("The solution is: ", rows);
+
+      var data = new Object();
+
+      console.log(rows);
+      res.send({
+          "code": 200,
+          "success": "Show Maplist successfully",
+          "data": rows,
+      })
+    }
+  });
+});
+
+app.get('/api/map/mapList/', (req, res) => {
+  var sql = "SELECT * FROM map";
+
+  connection.query(sql, function(error, results, field) {
+    if(error) {
+      console.log("error occured", error);
+
+      res.send({
+          "code": 400,
+          "failed": "error occurred",
+      })
+    } else {
+      console.log("The solution is: ", results);
+
+      res.send({
+          "code": 200,
+          "success": "Show Maplist successfully",
+      })
+    }
+  });
+});
 
 app.listen(port, ()=> console.log(`Listening on port ${port}`));

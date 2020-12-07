@@ -84,7 +84,7 @@ const HeaderBlock = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link to="/post">
+                            <Link to="/payment">
                                 <Header_nav_icon_area>
                                     <img src={ BoardIcon } />
                                 </Header_nav_icon_area>
