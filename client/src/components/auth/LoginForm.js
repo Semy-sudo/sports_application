@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import LoginFormBlock from '../../components/auth/LoginFormBlock';
 import { withRouter } from 'react-router-dom';
 
