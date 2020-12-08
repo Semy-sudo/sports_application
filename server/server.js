@@ -88,52 +88,17 @@ passport.use(new LocalStrategy(
         }
 ));
 
+
+
 app.post('/api/auth/login',
     passport.authenticate('local',{
-        successRedirect: '/auth',
+        successRedirect: '/',
         failureRedirect: '/auth/login'
     })
 );
 
 
-// //로그인
-// app.post('/api/auth/login', (req, res) => {
-//   let id = req.body.id;
-//   let passwd = req.body.passwd;
-//   connection.query('SELECT * FROM customer WHERE id = ?', [id],
-//   function( error, results, fields) {
-//       if (error) {
-//           // console.log("error ocurred", error);
-//           res.send({
-//               "code": 400,
-//               "failed": "error ocurred"
-//           })
-//       } else {
-//           // console.log('The solution is: ', results);
-//           if(results.length > 0) {
-//               if(results[0].passwd == passwd) {
-//                   res.send({
-//                       "code": 200,
-//                       "success": "login sucessfull"
-//                   });
-//                   res.redirect('/');
-//               } else {
-//                   res.send({
-//                       "code": 204,
-//                       "success": "id and password does not match"
-//                   });
-//               }
-//           } else {
-//               res.send({
-//                   "code":204,
-//                   "success": "id does not exists"
-//               });
-//           }
-//       }    
-//   }) 
-
-// })
-
+//회원가입
 app.post('/api/auth/register', function(req, res){
   let sql = 'INSERT INTO customer VALUES (null,?,?,?,?,?,?,?)';
   let params = [
@@ -202,17 +167,6 @@ app.get('/api/map/mapList/', (req, res) => {
     }
   });
 });
-
-    // app.get('/api/auth/check', (req, res) => {
-    //     if(type === 'parent'){
-    //         res.redirect('/map');
-    //     }else if(type === 'expert'){
-    //         res.redirect('/post');
-    //     }else{
-    //         res.resdirect('/mypage');
-    //     }
-    // });
-
 
 
 

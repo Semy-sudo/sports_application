@@ -204,11 +204,6 @@ const RegisterFormBlock = ({ history }) => {
         }
 
         if(user.type === '') {
-            console.log(user.certifiDate);
-            console.log(user.certifiGrade);
-            console.log(user.certifiName);
-            console.log(user.type);
-
             setError('회원가입 버튼을 한번 더 눌러주세요');
 
             return;

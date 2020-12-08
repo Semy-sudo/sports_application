@@ -1,8 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Button from '../common/Button';
+var axios = require('axios');
 
 const AuthFormBlock = styled.div`
     h3 { 
@@ -43,8 +44,50 @@ const Footer = styled.div`
     }
 `;
 
-const ButtonWidthMarginTop = styled(Button)`
+const StyleButton = styled.button`
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.25rem 1rem;
+    color: white;
+    outline; none;
+    cursor: pointer;
     margin-top: 1rem;
+    background: ${palette.gray[8]};
+    &:hover {
+        background: ${palette.gray[6]}
+    }
+
+    ${props => 
+      props.fullWidth &&
+      css`
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        width: 100%;
+        font-size: 1.125rem;
+      `
+    }
+
+    ${props => 
+      props.halfWidth &&
+      css`
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        width: 70%;
+        font-size: 1.125rem;
+      `
+    }
+
+    ${props => 
+        props.cyan &&
+        css`
+          background: #27AE60;
+          &:hover {
+            background: #5EC88B;
+          }
+        `
+    }
 `;
 
 const ErrorMessage = styled.div`
@@ -54,7 +97,42 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-const LoginFormBlock = () => {
+const LoginFormBlock = ({ history }) => {
+    const [user, setUser] = useState('');
+    const [tempUser, setTempUser] = useState(
+        {
+            id: 'syi9595',
+            passwd: 'eja9595'
+        }
+    );
+    const changeField = e => {
+        setUser({
+            ...tempUser,
+            [e.target.name]: e.target.value
+        })
+    };
+    const onClick = e => {
+        const config = {
+            headers: {
+                'content-type': 'application/json'
+            }
+        };
+
+        axios.post('/api/auth/login', {
+                id: tempUser.id,
+                passwd: tempUser.passwd
+            },
+            config
+        ).then( (response) => {
+            setTempUser({
+                id: '',
+                passwd: ''
+            })
+        });
+
+        //history.push('/');
+    }
+
     return(
         <AuthFormBlock>
             <h2>
@@ -62,27 +140,31 @@ const LoginFormBlock = () => {
                 준비됐나요?
             </h2>
             <h3>로그인</h3>
-            <form>
-                <StyledInput autoComplete="id"
-                             name="id"
-                             placeholder="ID"
-                />
-                <StyledInput autoComplete="new-password"
-                             name="passwd"
-                             placeholder="Password"
-                             type="password"
-                />
-                <ButtonWidthMarginTop 
-                    cyan
-                    fullWidth        
-                >
-                    로그인
-                </ButtonWidthMarginTop>
-            </form>
+            <StyledInput 
+                autoComplete="id"
+                name="id"
+                placeholder="ID"
+                onChange={ changeField }
+            />
+            <StyledInput 
+                autoComplete="new-password"
+                name="passwd"
+                placeholder="Password"
+                type="password"
+                onChange={ changeField }
+            />
+            <StyleButton 
+                cyan
+                fullWidth  
+                type="button"
+                onClick={ onClick }      
+            >
+                로그인
+            </StyleButton>
             <Footer>
                 <Link to="/auth/register">Sign Up</Link>
             </Footer>
         </AuthFormBlock>
     )
 }
-export default LoginFormBlock;
+export default withRouter(LoginFormBlock);
