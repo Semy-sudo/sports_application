@@ -4,6 +4,7 @@ import palette from '../../lib/styles/palette';
 import { Link } from 'react-router-dom';
 import RegisterCertification from './RegisterCertification';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 const AuthFormBlock = styled.div`
     h3 { 
@@ -113,7 +114,7 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-const RegisterFormBlock = () => {
+const RegisterFormBlock = ({ history }) => {
     const [error, setError] = useState('');
     const [certifiState, setCertifiState] = useState(false);
     const [user, setUser] = useState(
@@ -189,7 +190,7 @@ const RegisterFormBlock = () => {
         ) {
             setUser({ 
                 ...user,
-                type: 'parent'
+                ['type']: 'parent'
             });  
         } else if(
             !([user.certifiDate, 
@@ -198,7 +199,7 @@ const RegisterFormBlock = () => {
         ) {
             setUser({ 
                 ...user,
-                type: 'expert' 
+                ['type']: 'expert' 
             });
         }
 
@@ -208,10 +209,10 @@ const RegisterFormBlock = () => {
             console.log(user.certifiName);
             console.log(user.type);
 
+            setError('회원가입 버튼을 한번 더 눌러주세요');
+
             return;
-        } else {
-            console.log(user.type);
-        }
+        } 
 
         const config = {
             headers: {
@@ -241,6 +242,8 @@ const RegisterFormBlock = () => {
                 certifiDate: '',
             })
         });
+
+        history.push('/');
     };
 
     return(
@@ -309,4 +312,4 @@ const RegisterFormBlock = () => {
     );
 };
 
-export default RegisterFormBlock;
+export default withRouter(RegisterFormBlock);
