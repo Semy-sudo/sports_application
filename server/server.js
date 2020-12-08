@@ -2,6 +2,7 @@ const fs = require('fs'); //파일에 접근
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+
 var login = require('./routes/loginroutes');
 
 var map = require('./routes/maproutes');
@@ -24,102 +25,69 @@ connection.connect();
 
 var router = express.Router();
 
-router.get('/', function (req, res) {
-    res.json({message: 'welcom to our upload module apis'});
-});
-
-// router.post('/register', login.register); router.post('/login', login.login)
-// app.use('/api/auth', router); 
 
 app.get('/post', function (req, res) {
     res.send('GET request to the post');
     res.redirect('/post')
 });
 
-// app.get('/api/auth/check', (req, res) => {
-//         if(type === 'parent'){
-//             res.redirect('/map');
-//         }else if(type === 'expert'){
-//             res.redirect('/post');
-//         }else{
-//             res.resdirect('/mypage');
-//         }
-// });
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 //로그인
 app.post('/api/auth/login', (req, res) => {
-    let id = req.body.id;
-    let passwd = req.body.passwd;
-    connection.query('SELECT * FROM customer WHERE id = ?', [id],
-    function( error, results, fields) {
-        if (error) {
-            // console.log("error ocurred", error);
-            res.send({
-                "code": 400,
-                "failed": "error ocurred"
-            })
-        } else {
-            // console.log('The solution is: ', results);
-            if(results.length > 0) {
-                if(results[0].passwd == passwd) {
-                    res.send({
-                        "code": 200,
-                        "success": "login sucessfull"
-                    });
-                    // let type = results[0].type;
-                    // app.get('/api/auth/check', (req, res) => {
-                    //     if(type === 'parent'){
-                    //         res.redirect('/map');
-                    //     }else{
-                    //         res.redirect('/post');
-                    //     }
-                    // });
-                } else {
-                    res.send({
-                        "code": 204,
-                        "success": "id and password does not match"
-                    });
-                }
-            } else {
-                res.send({
-                    "code":204,
-                    "success": "id does not exists"
-                });
-            }
-        }    
-    }) 
-
- 
-    
+  let id = req.body.id;
+  let passwd = req.body.passwd;
+  connection.query('SELECT * FROM customer WHERE id = ?', [id],
+  function( error, results, fields) {
+      if (error) {
+          // console.log("error ocurred", error);
+          res.send({
+              "code": 400,
+              "failed": "error ocurred"
+          })
+      } else {
+          // console.log('The solution is: ', results);
+          if(results.length > 0) {
+              if(results[0].passwd == passwd) {
+                  res.send({
+                      "code": 200,
+                      "success": "login sucessfull"
+                  });
+                  res.redirect('/');
+              } else {
+                  res.send({
+                      "code": 204,
+                      "success": "id and password does not match"
+                  });
+              }
+          } else {
+              res.send({
+                  "code":204,
+                  "success": "id does not exists"
+              });
+          }
+      }    
+  }) 
 })
 
+app.post('/api/auth/register', function(req, res){
+  let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
+  let params = [
+      req.body.type,
+      req.body.id,
+      req.body.passwd,
+      req.body.email,
+      req.body.certifiGrade,
+      req.body.certifiName,
+      req.body.certifiDate
+  ];
 
-//회원가입
-
-app.post('/api/auth/register', (req, res) => {
-    let sql = 'INSERT INTO customer VALUES (null,?,?,?,?,?,?,?)';
-    let customerid = req.body.customerid;
-    let type = req.body.type;
-    let id = req.body.id;
-    let passwd = req.body.passwd;
-    let email = req.body.email;
-    console.log(email)
-    let addressBasic = req.body.addressBasic;
-    let addressDetail = req.body.addressDetail;
-    let certifiNumber = req.body.certifiNumber;
-    let params = [
-        type,
-        id,
-        passwd,
-        email,
-        addressBasic,
-        addressDetail,
-        certifiNumber
-    ];
-    connection.query(sql, params, (err, rows, fields) => {
-        res.send(rows);
-        console.log(rows);
-    });
+  connection.query(sql, params, (err, rows, fields) => {
+      res.send(rows);
+      console.log(rows);
+  });
+});
 
 
 app.get('/api/map/mapList/:keyword', (req, res) => {
@@ -170,7 +138,7 @@ app.get('/api/map/mapList/', (req, res) => {
     }
   });
 });
-=======
+
     // app.get('/api/auth/check', (req, res) => {
     //     if(type === 'parent'){
     //         res.redirect('/map');

@@ -81,9 +81,18 @@ const ButtonArea = styled.div`
     margin-top: 1rem;
 `;
 
+const ErrorMessage = styled.div`
+    color: red;
+    text-align: center;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+`;
+
 const RegisterCertification = ({
     onRegister,
-    onCancel
+    onCancel,
+    onChange,
+    error
 }) => {
     return(
         <Wrap>
@@ -91,17 +100,21 @@ const RegisterCertification = ({
                 id="certifiGrade"
                 name="certifiGrade"
                 placeholder="자격 등급명) 2급 생활 스포츠 지도사"
+                onChange={ onChange }
             />
             <StyledInput 
                 id="certifiName"
                 name="certifiName"
                 placeholder="자격 종목명) 요가"
+                onChange={ onChange }
             />
             <StyledInput 
-                id="getCertifiDate"
-                name="getCertifiDate"
+                id="certifiDate"
+                name="certifiDate"
                 placeholder="취득일자) 19990101"
+                onChange={ onChange }
             />
+            { error && <ErrorMessage>{ error }</ErrorMessage> }
             <ButtonArea>
                 <StyleButton
                     cyan
