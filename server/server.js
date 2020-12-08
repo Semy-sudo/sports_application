@@ -2,16 +2,15 @@ const fs = require('fs'); //파일에 접근
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-
-var login = require('./routes/loginroutes');
-
-var map = require('./routes/maproutes');
-const path = require("path");
+var session = require('express-session');
+var FileStore = require('session-file-store')(session)
+//var login = require('./routes/loginroutes');
+//var map = require('./routes/maproutes');
 
 const port = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
 
 const data = fs.readFileSync('./database.json');
 const conf = JSON.parse(data); //data를 js객체로 변환
@@ -31,48 +30,77 @@ app.get('/post', function (req, res) {
     res.redirect('/post')
 });
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-//로그인
-app.post('/api/auth/login', (req, res) => {
-  let id = req.body.id;
-  let passwd = req.body.passwd;
-  connection.query('SELECT * FROM customer WHERE id = ?', [id],
-  function( error, results, fields) {
-      if (error) {
-          // console.log("error ocurred", error);
-          res.send({
-              "code": 400,
-              "failed": "error ocurred"
-          })
-      } else {
-          // console.log('The solution is: ', results);
-          if(results.length > 0) {
-              if(results[0].passwd == passwd) {
-                  res.send({
-                      "code": 200,
-                      "success": "login sucessfull"
-                  });
-                  res.redirect('/');
-              } else {
-                  res.send({
-                      "code": 204,
-                      "success": "id and password does not match"
-                  });
-              }
-          } else {
-              res.send({
-                  "code":204,
-                  "success": "id does not exists"
-              });
-          }
-      }    
-  }) 
-})
+//session 관련
+app.use(session({
+    secret: 'adfasjflsjd',
+    resave: false,
+    saveUninitialized: true,
+    store: new FileStore()
+}))
 
+var authData = {
+    id:'syi9595',
+    passwd:'eja9595'
+};
+
+var passport = require('passport'),
+  LocalStrategy = require('passport-local').Strategy;
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+    console.log('serializeUser',user.id);
+});
+
+passport.deserializeUser(function(id, done){
+    console.log('deserializeUser',id);
+});
+
+passport.use(new LocalStrategy(
+    {
+        usernameField:'id',
+        passwordField:'passwd'
+    },
+    function (id,passwd,done){
+        console.log('LocalStrategy', id, passwd);
+        if(id === authData.id){
+            console.log(1);
+            if(passwd === authData.passwd){
+              console.log(2);
+              return done(null, authData);//여기서 authData를 serial의 user로 대입
+            } else {
+              console.log(3);
+              return done(null, false, {
+                message: 'Incorrect password.'
+              });
+            }
+        } else {
+            console.log(4);
+            return done(null, false, {
+              message: 'Incorrect id.'
+            });
+          }
+        }
+));
+
+
+
+app.post('/api/auth/login',
+    passport.authenticate('local',{
+        successRedirect: '/',
+        failureRedirect: '/auth/login'
+    })
+);
+
+
+//회원가입
 app.post('/api/auth/register', function(req, res){
-  let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
+  let sql = 'INSERT INTO customer VALUES (null,?,?,?,?,?,?,?)';
   let params = [
       req.body.type,
       req.body.id,
@@ -82,7 +110,8 @@ app.post('/api/auth/register', function(req, res){
       req.body.certifiName,
       req.body.certifiDate
   ];
-
+  console.log(req.body.type)
+  console.log(req.body.id)
   connection.query(sql, params, (err, rows, fields) => {
       res.send(rows);
       console.log(rows);
@@ -139,20 +168,9 @@ app.get('/api/map/mapList/', (req, res) => {
   });
 });
 
-    // app.get('/api/auth/check', (req, res) => {
-    //     if(type === 'parent'){
-    //         res.redirect('/map');
-    //     }else if(type === 'expert'){
-    //         res.redirect('/post');
-    //     }else{
-    //         res.resdirect('/mypage');
-    //     }
-    // });
-
-});
 
 
-// 게시판
+// 게시판띄우기
 app.get('/api/customers', (req, res) => {
     connection.query(
         "SELECT * FROM board WHERE isDeleted = 0",
@@ -162,15 +180,17 @@ app.get('/api/customers', (req, res) => {
     );
 });
 
-app.post('/api/customers', (req, res) => {
-    let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0)';
-    let boardid = req.body.boardid;
+app.post('/api/customer', (req, res) => {
+    let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0,1)';
+    let nickName = req.body.nickName;
     let boardType = req.body.boardType;
     let boardLimit = req.body.boardLimit;
     let boardTitle = req.body.boardTitle;
     let boardContents = req.body.boardContents;
-    console.log("boardid", boardid);
-    let params = [boardid, boardType, boardLimit, boardTitle, boardContents];
+    console.log(req.body);
+    console.log(nickName);
+    console.log(boardType);
+    let params = [nickName, boardType, boardLimit, boardTitle, boardContents];
     connection.query(sql, params, (err, rows, fields) => {
         res.send(rows);
         console.log(rows);
@@ -178,16 +198,17 @@ app.post('/api/customers', (req, res) => {
     
     return res.status(200).json({
         success:true
-    })
+    });
 });
 
-app.delete('/api/customers/:boardid', (req, res) => {
-    let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
-    let params = [req.params.boardid];
-    connection.query(sql, params, (err, rows, fields) => {
-        res.send(rows);
-    })
-});
+// app.delete('/api/customers/:boardid', (req, res) => {
+//     let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
+//     let params = [req.params.boardid];
+//     console.log(params)
+//     connection.query(sql, params, (err, rows, fields) => {
+//         res.send(rows);
+//     })
+// });
 
 app.get('/register',(req,res) => {
     res.send('hi')

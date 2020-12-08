@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { Link, withRouter } from 'react-router-dom';
 import Button from '../common/Button';
+var axios = require('axios');
 
 const AuthFormBlock = styled.div`
     h3 { 
@@ -100,8 +101,8 @@ const LoginFormBlock = ({ history }) => {
     const [user, setUser] = useState('');
     const [tempUser, setTempUser] = useState(
         {
-            id: '',
-            passwd: ''
+            id: 'syi9595',
+            passwd: 'eja9595'
         }
     );
     const changeField = e => {
@@ -129,7 +130,7 @@ const LoginFormBlock = ({ history }) => {
             })
         });
 
-        history.push('/');
+        //history.push('/');
     }
 
     return(
