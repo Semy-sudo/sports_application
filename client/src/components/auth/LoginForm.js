@@ -5,8 +5,7 @@ import { withRouter } from 'react-router-dom';
 const LoginForm = ({ history }) => {
 
     return(
-        <LoginFormBlock 
-        />
+        <LoginFormBlock />
     );
 };
 
