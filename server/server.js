@@ -37,10 +37,8 @@ app.get('/post', function (req, res) {
 // app.get('/api/auth/check', (req, res) => {
 //         if(type === 'parent'){
 //             res.redirect('/map');
-//         }else if(type === 'expert'){
-//             res.redirect('/post');
 //         }else{
-//             res.resdirect('/mypage');
+//             res.redirect('/s');
 //         }
 // });
 
@@ -64,7 +62,7 @@ app.post('/api/auth/login', (req, res) => {
                         "code": 200,
                         "success": "login sucessfull"
                     });
-                    // let type = results[0].type;
+                    let type = results[0].type;
                     // app.get('/api/auth/check', (req, res) => {
                     //     if(type === 'parent'){
                     //         res.redirect('/map');
@@ -132,7 +130,7 @@ app.post('/api/auth/register', (req, res) => {
 });
 
 
-// 게시판
+// 게시판띄우기
 app.get('/api/customers', (req, res) => {
     connection.query(
         "SELECT * FROM board WHERE isDeleted = 0",
@@ -142,15 +140,17 @@ app.get('/api/customers', (req, res) => {
     );
 });
 
-app.post('/api/customers', (req, res) => {
-    let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0)';
-    let boardid = req.body.boardid;
+app.post('/api/customer', (req, res) => {
+    let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0,1)';
+    let nickName = req.body.nickName;
     let boardType = req.body.boardType;
     let boardLimit = req.body.boardLimit;
     let boardTitle = req.body.boardTitle;
     let boardContents = req.body.boardContents;
-    console.log("boardid", boardid);
-    let params = [boardid, boardType, boardLimit, boardTitle, boardContents];
+    console.log(req.body);
+    console.log(nickName);
+    console.log(boardType);
+    let params = [nickName, boardType, boardLimit, boardTitle, boardContents];
     connection.query(sql, params, (err, rows, fields) => {
         res.send(rows);
         console.log(rows);
@@ -158,16 +158,17 @@ app.post('/api/customers', (req, res) => {
     
     return res.status(200).json({
         success:true
-    })
+    });
 });
 
-app.delete('/api/customers/:boardid', (req, res) => {
-    let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
-    let params = [req.params.boardid];
-    connection.query(sql, params, (err, rows, fields) => {
-        res.send(rows);
-    })
-});
+// app.delete('/api/customers/:boardid', (req, res) => {
+//     let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
+//     let params = [req.params.boardid];
+//     console.log(params)
+//     connection.query(sql, params, (err, rows, fields) => {
+//         res.send(rows);
+//     })
+// });
 
 app.get('/register',(req,res) => {
     res.send('hi')
