@@ -29,11 +29,21 @@ const StyleButton = styled.button`
     }
 
     ${props => 
+      props.halfWidth &&
+      css`
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        width: 70%;
+        font-size: 1.125rem;
+      `
+    }
+
+    ${props => 
         props.cyan &&
         css`
-          background: ${palette.cyan[5]};
+          background: #27AE60;
           &:hover {
-            background: ${palette.cyan[4]};
+            background: #5EC88B;
           }
         `
     }

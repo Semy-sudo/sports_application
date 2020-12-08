@@ -2,11 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
-import { useDispatch, useSelector } from 'react-redux';
 import '../../components/common/table.css';
 import '../../components/common/Icon.css';
 import ShortCut from '../../lib/styles/img/chevron-forward-outline.svg';
-import { logout } from '../../modules/user';
 
 const Table_Layout = styled.div`
     width: 50%;
@@ -41,30 +39,17 @@ const Button_Logout = styled.button`
 `;
 
 const ContentsBlock = () => {
-    const { user } = useSelector(({ user }) => ({ user: user.user }));
-    console.log(user);
-    const dispatch = useDispatch();
-    const onLogout = () => {
-        dispatch(logout());
-    };
 
     return(
         <Table_Layout>
             <table>
                 <tr>
                     <td className="full_line" colspan="2">
-                        {
-                            user ? 
-                            <Table_Text>
-                                { user.id } 님 환영합니다! 
-                            </Table_Text>
-                             : 
-                            <Table_Text>
-                                <Link to="/auth/login">
-                                    로그인 및 회원가입 하기
-                                </Link>
-                            </Table_Text>
-                        }
+                        <Table_Text>
+                            <Link to="/auth/login">
+                                로그인 및 회원가입 하기
+                            </Link>
+                        </Table_Text>
                     </td>
                 </tr>
                 <tr>
@@ -127,20 +112,12 @@ const ContentsBlock = () => {
                     user &&
                     <tr>
                         <td className="full_line" colspan="2">
-                            <Button_Logout/>
-                        </td>
-                    </tr>
-                } */}
-                {
-                    user &&
-                    <tr>
-                        <td className="full_line" colspan="2">
-                            <Button_Logout onClick={ onLogout }>
+                            <Button_Logout>
                                 Logout
                             </Button_Logout>
                         </td>
                     </tr>
-                }
+                } */}
             </table>
         </Table_Layout>
     );

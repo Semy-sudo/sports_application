@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { Link } from 'react-router-dom';
-import Button from '../common/Button';
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
-import DaumPostcode from 'react-daum-postcode';
+import RegisterCertification from './RegisterCertification';
+import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 const AuthFormBlock = styled.div`
     h3 { 
@@ -13,6 +12,21 @@ const AuthFormBlock = styled.div`
         color: ${palette.gray[8]};
         margin-bottom: 1rem;
     }
+`;
+
+const AuthFormBlockHeader = styled.div`
+    width: 100%;
+`;
+
+const Header_Header = styled.div`
+    float: left;
+    width: 50%;
+`;
+
+const Header_Footer = styled.div`
+    float: left;
+    width: 50%;
+    text-align: right;
 `;
 
 const StyledInput = styled.input`
@@ -31,40 +45,49 @@ const StyledInput = styled.input`
     }
 `;
 
-const BasicAddressInput = styled.input`
-    float: left;
-    font-size: 1rem;
+const StyleButton = styled.button`
     border: none;
-    border-bottom: 1px solid ${palette.gray[5]};
-    padding-bottom: 0.5rem;
-    outline: none;
-    width: 70%;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.25rem 1rem;
+    color: white;
+    outline; none;
+    cursor: pointer;
     margin-top: 1rem;
-    &:focus: {
-        color: $oc-teal-7;
-        border-bottom: 1px solid ${palette.gray[7]};
+    background: ${palette.gray[8]};
+    &:hover {
+        background: ${palette.gray[6]}
     }
-    & + & {
-        margin-top: 1rem;
-    }
-`;
 
-const DetailAddressInput = styled.input`
-    float: left;
-    margin-top: 1rem;
-    font-size: 1rem;
-    border: none;
-    border-bottom: 1px solid ${palette.gray[5]};
-    padding-bottom: 0.5rem;
-    outline: none;
-    width: 100%;
-    margin-top: 1rem;
-    &:focus: {
-        color: $oc-teal-7;
-        border-bottom: 1px solid ${palette.gray[7]};
+    ${props => 
+      props.fullWidth &&
+      css`
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        width: 100%;
+        font-size: 1.125rem;
+      `
     }
-    & + & {
-        margin-top: 1rem;
+
+    ${props => 
+      props.halfWidth &&
+      css`
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        width: 70%;
+        font-size: 1.125rem;
+      `
+    }
+
+    ${props => 
+        props.cyan &&
+        css`
+          background: #27AE60;
+          &:hover {
+            background: #5EC88B;
+          }
+        `
     }
 `;
 
@@ -80,8 +103,8 @@ const Footer = styled.div`
     }
 `;
 
-const ButtonWidthMarginTop = styled(Button)`
-    margin-top: 1rem;
+const Button_Certification = styled.button`
+    background-color: #ffffff;
 `;
 
 const ErrorMessage = styled.div`
@@ -91,158 +114,197 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-const DropDownArea = styled.div`
-    width: 50%;
-    margin-bottom: 1rem;
-`;
-
-const AddressSearch = styled.div`
-    width: 100%;
-    margin-top: 1rem;
-`;
-
-const postCodeStyle = {
-    width: "100%",
-    height: "500px",
-};
-
-const options = [
-    {
-        value: 'parent',
-        label: '부모님',
-    },
-    {
-        value: 'expert',
-        label: '지도사',
-    },
-];
-
-const RegisterFormBlock = ({ form, onChange, onSubmit, error, onDropdownChange, setAddress, registerType }) => {
-    
-    const handleComplete = data => {
-        let fullAddress = data.address;
-        let extraAddress = ''; 
-        
-        if (data.addressType === 'R') {
-            if (data.bname !== '') {
-            extraAddress += data.bname;
-            }
-            if (data.buildingName !== '') {
-            extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
-            }
-            fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+const RegisterFormBlock = ({ history }) => {
+    const [error, setError] = useState('');
+    const [certifiState, setCertifiState] = useState(false);
+    const [user, setUser] = useState(
+        {
+            type: '',
+            id: '',
+            passwd: '',
+            passwdConfirm: '',
+            email: '',
+            certifiGrade: '',
+            certifiName: '',
+            certifiDate: '',
         }
-        document.getElementById("addressBasic").value = fullAddress;
-        setAddress(fullAddress);
+    );
+    const changeField = e => {
+        setUser({
+            ...user,
+            [e.target.name]: e.target.value
+        })
+    };
+    const onCertifiButtonClick = e => {
+        setCertifiState(true);
+    };
+    const onCancel = e => {
+        setUser({ 
+            ...user,
+            ['certifiDate']: '' 
+        });
+
+        setUser({ 
+            ...user,
+            ['certifiName']: '' 
+        });
+
+        setUser({ 
+            ...user,
+            ['certifiGrade']: '' 
+        });
+
+        setCertifiState(false);
+    };
+    const onRegister = e => {
+        e.preventDefault();
+
+        if([user.certifiDate, 
+            user.certifiGrade, 
+            user.certifiName].includes('')
+        ) {
+            setError('빈 칸을 모두 입력하세요');
+
+            return;
+        }
+
+        setCertifiState(false);
+    };
+    const onClick = e => {
+        if([user.id, user.passwd, user.passwdConfirm, user.email].includes('')) {
+            setError('빈 칸을 모두 입력하세요');
+
+            return;
+        }
+
+        if(user.passwd !== user.passwdConfirm) {
+            setError('비밀번호가 일치하지 않습니다!');
+
+            return;
+        }
+
+        if(
+            [user.certifiDate, 
+            user.certifiGrade, 
+            user.certifiName].includes('')
+        ) {
+            setUser({ 
+                ...user,
+                ['type']: 'parent'
+            });  
+        } else if(
+            !([user.certifiDate, 
+            user.certifiGrade, 
+            user.certifiName].includes(''))
+        ) {
+            setUser({ 
+                ...user,
+                ['type']: 'expert' 
+            });
+        }
+
+        if(user.type === '') {
+            console.log(user.certifiDate);
+            console.log(user.certifiGrade);
+            console.log(user.certifiName);
+            console.log(user.type);
+
+            setError('회원가입 버튼을 한번 더 눌러주세요');
+
+            return;
+        } 
+
+        const config = {
+            headers: {
+                'content-type': 'application/json'
+            }
+        };
+
+        axios.post('/api/auth/register', {
+                type: user.type,
+                id: user.id,
+                passwd: user.passwd,
+                email: user.email,
+                certifiName: user.certifiName,
+                certifiGrade: user.certifiGrade,
+                certifiDate: user.certifiDate,
+            },
+            config
+        ).then( (response) => {
+            setUser({
+                type: '',
+                id: '',
+                passwd: '',
+                passwdConfirm: '',
+                email: '',
+                certifiGrade: '',
+                certifiName: '',
+                certifiDate: '',
+            })
+        });
+
+        history.push('/');
     };
 
     return(
         <AuthFormBlock>
-            <h3>회원가입</h3>
-            <form onSubmit={ onSubmit }>
-                <DropDownArea>
-                    <Dropdown
-                        options={options} 
-                        value={options[0]}
-                        onChange={ onDropdownChange }
-                    />
-                </DropDownArea>
-                { 
-                    registerType === "parent" 
-                    ?
-                    <div>
-                        <StyledInput autoComplete="id"
-                                     name="id"
-                                     placeholder="ID"
-                                     onChange={ onChange }
-                                     value={ form.id }
-                        />
-                        <StyledInput autoComplete="new-password"
-                                     name="passwd"
-                                     placeholder="Password"
-                                     type="password"
-                                     onChange={ onChange }
-                                     value={ form.passwd }
-                        />
-                        <StyledInput autoComplete="new-password"
-                                     name="passwdConfirm"
-                                     placeholder="Re-Password"
-                                     type="password"
-                                     onChange={ onChange }
-                                     value={ form.passwdConfirm }
-                        />
-                        <StyledInput autoComplete="email"
-                                     name="email"
-                                     placeholder="Email"
-                                     type="text"
-                                     onChange={ onChange }
-                                     value={ form.email }
-                        />
-                        <BasicAddressInput id="addressBasic"
-                                           name="addressBasic"
-                                           placeholder="주소"
-                                           type="text"
-                                           onChange={ onChange }
-                                           readOnly
-                        />
-                        <DetailAddressInput name="addressDetail"
-                                            placeholder="상세주소"
-                                            type="text"
-                                            onChange={ onChange }
-                                            value={ form.addressDetail }
-                        />
-                        <AddressSearch>
-                            <DaumPostcode
-                                style={ postCodeStyle }
-                                onComplete={ handleComplete }
-                            />
-                        </AddressSearch>
-                    </div>
-                    :
-                    <div>
-                        <StyledInput autoComplete="id"
-                                     name="id"
-                                     placeholder="ID"
-                                     onChange={ onChange }
-                                     value={ form.id }
-                        />
-                        <StyledInput autoComplete="new-password"
-                                     name="passwd"
-                                     placeholder="Password"
-                                     type="password"
-                                     onChange={ onChange }
-                                     value={ form.passwd }
-                        />
-                        <StyledInput autoComplete="new-password"
-                                     name="passwdConfirm"
-                                     placeholder="Re-Password"
-                                     type="password"
-                                     onChange={ onChange }
-                                     value={ form.passwdConfirm }
-                        />
-                        <StyledInput autoComplete="email"
-                                     name="email"
-                                     placeholder="Email"
-                                     type="text"
-                                     onChange={ onChange }
-                                     value={ form.email }
-                        />
-                        <StyledInput name="certifiNumber"
-                                     placeholder="Your Certification Number"
-                                     type="text"
-                                     onChange={ onChange }
-                                     value={ form.certifiNumber }
-                        />
-                    </div>                             
-                }
-                { error && <ErrorMessage>{ error }</ErrorMessage> }
-                <ButtonWidthMarginTop 
-                    cyan
-                    fullWidth        
-                >
-                    회원가입
-                </ButtonWidthMarginTop>
-            </form>
+            <AuthFormBlockHeader>
+                <Header_Header>
+                    <h3>회원가입</h3>
+                </Header_Header>
+                <Header_Footer>
+                    <Button_Certification
+                        onClick={ onCertifiButtonClick }
+                    >
+                        지도사로 가입하려면?
+                    </Button_Certification>
+                </Header_Footer>
+            </AuthFormBlockHeader>
+            {
+                certifiState &&
+                <RegisterCertification
+                    onRegister={ onRegister }
+                    onCancel={ onCancel }
+                    onChange={ changeField }
+                    error={ error }
+                />
+            }
+            <StyledInput 
+                autoComplete="id"
+                name="id"
+                placeholder="ID"
+                onChange={ changeField }
+            />
+            <StyledInput 
+                autoComplete="new-password"
+                name="passwd"
+                placeholder="Password"
+                type="password"
+                onChange={ changeField }
+            />
+            <StyledInput 
+                autoComplete="new-password"
+                name="passwdConfirm"
+                placeholder="Re-Password"
+                type="password"
+                onChange={ changeField }
+            />
+            <StyledInput 
+                autoComplete="email"
+                name="email"
+                placeholder="Email"
+                type="text"
+                onChange={ changeField }
+            />
+            { error && <ErrorMessage>{ error }</ErrorMessage> }
+            <StyleButton 
+                cyan
+                fullWidth  
+                type="button"  
+                onClick={ onClick }    
+            >
+                회원가입
+            </StyleButton>
             <Footer>
                 <Link to="/auth/login">Login</Link>
             </Footer>
@@ -250,4 +312,4 @@ const RegisterFormBlock = ({ form, onChange, onSubmit, error, onDropdownChange, 
     );
 };
 
-export default RegisterFormBlock;
+export default withRouter(RegisterFormBlock);

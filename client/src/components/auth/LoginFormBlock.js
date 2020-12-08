@@ -9,6 +9,9 @@ const AuthFormBlock = styled.div`
         margin: 0;
         color: ${palette.gray[8]};
         margin-bottom: 1rem;
+    },
+    h2 {
+        color: #27AE60;
     }
 `;
 
@@ -40,7 +43,6 @@ const Footer = styled.div`
     }
 `;
 
-
 const ButtonWidthMarginTop = styled(Button)`
     margin-top: 1rem;
 `;
@@ -52,25 +54,24 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-const LoginFormBlock = ({ form, onChange, onSubmit, error }) => {
+const LoginFormBlock = () => {
     return(
         <AuthFormBlock>
+            <h2>
+                체육 시간, <br/>
+                준비됐나요?
+            </h2>
             <h3>로그인</h3>
-            <form onSubmit={ onSubmit }>
+            <form>
                 <StyledInput autoComplete="id"
                              name="id"
                              placeholder="ID"
-                             onChange={ onChange }
-                             value={ form.id }
                 />
                 <StyledInput autoComplete="new-password"
                              name="passwd"
                              placeholder="Password"
                              type="password"
-                             onChange={ onChange }
-                             value={ form.passwd }
                 />
-                { error && <ErrorMessage>{ error }</ErrorMessage> }
                 <ButtonWidthMarginTop 
                     cyan
                     fullWidth        

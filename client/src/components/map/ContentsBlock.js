@@ -69,7 +69,37 @@ const AddressArea = styled.span`
     }
 `;
 
+function Marker(map) {
+    var content = 
+        '<OverlayInfo>' +
+        '   <a href="#">' +
+        '       <Link to="#">' +
+        '           <LinkText>' +
+        '               월정리 해수욕장' +
+        '           </LinkText>' +
+        '       </Link>' +
+        '   </a>' +
+        '   <Desc>' +
+        '       <img src="#" style="vertical-align: top;"/>' +
+        '       <AddressArea>' +
+        '           제주특별자치도 제주시 구좌읍 월정리 33-3' +
+        '       </AddressArea>' +
+        '   </Desc>' +
+        '</OverlayInfo>';
+
+    var position = new kakao.maps.LatLng(map.FACI_POINT_Y, map.FACI_POINT_X);
+    var mapCustomOverlay = new kakao.maps.CustomOverlay({
+        position: position,
+        content: content,
+        xAnchor: 0.5,
+        yAnchor: 1.1,
+    });
+
+    mapCustomOverlay.setMap(map);
+}
+
 const ContentsBlock = () => {
+
     useEffect(() => {
         const script = document.createElement("script");
         
@@ -80,49 +110,25 @@ const ContentsBlock = () => {
 
         script.onload = () => {
             kakao.maps.load( () => {
-                var container = document.getElementById('map');
+                var container = document.getElementById('mapContainer');
                 var options = {
                     center: new kakao.maps.LatLng(33.450701, 126.570667),
                     level: 7
                 };
 
-                const map = new window.kakao.maps.Map(container, options);
-
-                // var content = 
-                // '<OverlayInfo>' +
-                // '   <a href="#">' +
-                // '       <Link to="#">' +
-                // '           <LinkText>' +
-                // '               월정리 해수욕장' +
-                // '           </LinkText>' +
-                // '       </Link>' +
-                // '   </a>' +
-                // '   <Desc>' +
-                // '       <img src="#" style="vertical-align: top;"/>' +
-                // '       <AddressArea>' +
-                // '           제주특별자치도 제주시 구좌읍 월정리 33-3' +
-                // '       </AddressArea>' +
-                // '   </Desc>' +
-                // '</OverlayInfo>';
-
-                // var position = new kakao.maps.LatLng(33.55635, 126.795841);
-                // var mapCustomOverlay = new kakao.maps.CustomOverlay({
-                //     position: position,
-                //     content: content,
-                //     xAnchor: 0.5,
-                //     yAnchor: 1.1,
-                // });
-
-                // mapCustomOverlay.setMap(map);
+                const mapContainer = new window.kakao.maps.Map(container, options);
+                
             });
         };
     }, []);
 
     return(
         <div>
-            <KakaoMap id="map">
+            <KakaoMap id="mapContainer">
             </KakaoMap>
-            <SearchBarBlock/>
+            <SearchBarBlock
+                
+            />
         </div>
     );
 };
