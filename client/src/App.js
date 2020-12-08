@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import MyPage from './pages/MyPage';
@@ -10,12 +10,14 @@ import RegisterPage from './pages/RegisterPage';
 import HeaderBlock from './components/common/HeaderBlock';
 import PaymentPage from './pages/PaymentPage';
 
+
+
 const App = () => {
   return(
     <>
       <HeaderBlock />
       <Route component={ HomePage } path="/" exact />
-      <Route component={ postListPage } path="/post" exact />
+      <Route component={ postListPage } path="/post" exact/>
       <Route component={ PostPage } path="/post/postDetail" exact />
       <Route component={ MapPage } path="/map" exact />
       <Route component={ MyPage } path="/auth" exact />
