@@ -101,12 +101,12 @@ const LoginFormBlock = ({ history }) => {
     const [user, setUser] = useState('');
     const [tempUser, setTempUser] = useState(
         {
-            id: 'syi9595',
-            passwd: 'eja9595'
+            id: '',
+            passwd: ''
         }
     );
     const changeField = e => {
-        setUser({
+        setTempUser({
             ...tempUser,
             [e.target.name]: e.target.value
         })
