@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 var session = require('express-session');
 var FileStore = require('session-file-store')(session)
+
 //var login = require('./routes/loginroutes');
 //var map = require('./routes/maproutes');
 
@@ -54,11 +55,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser(function(user, done) {
-    console.log('serializeUser',user.id);
+    console.log('serializeUser',user);
+    done(null,user.id);
 });
 
 passport.deserializeUser(function(id, done){
     console.log('deserializeUser',id);
+    done(null,authData);
 });
 
 passport.use(new LocalStrategy(
@@ -66,41 +69,43 @@ passport.use(new LocalStrategy(
         usernameField:'id',
         passwordField:'passwd'
     },
-    function (id,passwd,done){
-        console.log('LocalStrategy', id, passwd);
-        if(id === authData.id){
-            console.log(1);
-            if(passwd === authData.passwd){
-              console.log(2);
-              return done(null, authData);//여기서 authData를 serial의 user로 대입
-            } else {
-              console.log(3);
-              return done(null, false, {
-                message: 'Incorrect password.'
-              });
+    function (username,password,done){
+        console.log('LocalStrategy', username, password);
+        let sql = 'SELECT * FROM user WHERE id = ?';
+        connection.query(sql, [username], function(err, results){
+            if(err)
+                return done(err);
+            if(!results[0])
+                return done('please check your id.');
+
+            var user = results[0];
+            if(user.passwd === password){
+                return done(null,user)
+            }else{
+                return done('please check your passwd');
             }
-        } else {
-            console.log(4);
-            return done(null, false, {
-              message: 'Incorrect id.'
-            });
-          }
+        });
+      
+
+
+
         }
 ));
 
 
-
 app.post('/api/auth/login',
     passport.authenticate('local',{
-        successRedirect: '/',
+        successRedirect: '/auth',
         failureRedirect: '/auth/login'
     })
 );
 
 
+
+
 //회원가입
 app.post('/api/auth/register', function(req, res){
-  let sql = 'INSERT INTO customer VALUES (null,?,?,?,?,?,?,?)';
+  let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
   let params = [
       req.body.type,
       req.body.id,
@@ -110,8 +115,6 @@ app.post('/api/auth/register', function(req, res){
       req.body.certifiName,
       req.body.certifiDate
   ];
-  console.log(req.body.type)
-  console.log(req.body.id)
   connection.query(sql, params, (err, rows, fields) => {
       res.send(rows);
       console.log(rows);
@@ -180,24 +183,19 @@ app.get('/api/customers', (req, res) => {
     );
 });
 
-app.post('/api/customer', (req, res) => {
+//클래스 열기
+app.post('/api/classopen', (req, res) => {
     let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0,1)';
-    let nickName = req.body.nickName;
-    let boardType = req.body.boardType;
-    let boardLimit = req.body.boardLimit;
-    let boardTitle = req.body.boardTitle;
-    let boardContents = req.body.boardContents;
-    console.log(req.body);
-    console.log(nickName);
-    console.log(boardType);
-    let params = [nickName, boardType, boardLimit, boardTitle, boardContents];
+    let params = [
+        req.user,
+        req.body.boardType,
+        req.body.boardLimit,
+        req.body.boardTitle,
+        req.body.boardContents
+    ];
     connection.query(sql, params, (err, rows, fields) => {
         res.send(rows);
         console.log(rows);
-    });
-    
-    return res.status(200).json({
-        success:true
     });
 });
 

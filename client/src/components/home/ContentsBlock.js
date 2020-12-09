@@ -69,7 +69,7 @@ const ContentsBlock = () => {
             </Contents_table>
             <Contents_table>
                 <Table_td>
-                    <Link to="/post">
+                    <Link to="/OpenClass">
                         <h2>총 90개의 클래스가 오픈되어있어요!</h2>
                         <ButtonWidthMarginTop cyan="cyan" fullWidth="fullWidth">
                             나도 클래스 오픈해볼까
