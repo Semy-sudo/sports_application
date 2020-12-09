@@ -5,6 +5,7 @@ import palette from '../../lib/styles/palette';
 import '../../components/common/table.css';
 import '../../components/common/Icon.css';
 import ShortCut from '../../lib/styles/img/chevron-forward-outline.svg';
+import axios from "axios";
 
 const Table_Layout = styled.div`
     width: 50%;
@@ -49,6 +50,17 @@ const ContentsBlock = () => {
                             <Link to="/auth/login">
                                 로그인 및 회원가입 하기
                             </Link>
+                            
+                        </Table_Text>
+                    </td>
+                </tr>
+                <tr>
+                    <td className="full_line" colspan="2">
+                        <Table_Text>
+                            <Link to="/auth/login">
+                                님 환영합니다!
+                            </Link>
+                            
                         </Table_Text>
                     </td>
                 </tr>
@@ -68,7 +80,7 @@ const ContentsBlock = () => {
                             내 게시글
                         </Table_Text>
                         <Shortcut_Area>
-                            <Link to="#">
+                            <Link to="/board">
                                 <img src={ ShortCut }/>
                             </Link>
                         </Shortcut_Area>
@@ -108,7 +120,7 @@ const ContentsBlock = () => {
                         </Shortcut_Area>
                     </td>
                 </tr>
-                {/* {
+                {/* 
                     user &&
                     <tr>
                         <td className="full_line" colspan="2">
@@ -117,7 +129,7 @@ const ContentsBlock = () => {
                             </Button_Logout>
                         </td>
                     </tr>
-                } */}
+                 */}
             </table>
         </Table_Layout>
     );
