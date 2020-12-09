@@ -7,6 +7,7 @@ import '../../components/common/Icon.css';
 import ShortCut from '../../lib/styles/img/chevron-forward-outline.svg';
 import axios from "axios";
 
+
 const Table_Layout = styled.div`
     width: 50%;
     height: 500px;
@@ -38,6 +39,7 @@ const Button_Logout = styled.button`
     font-size: 20px;
     border-radius: 10px;
 `;
+
 
 const ContentsBlock = () => {
 
@@ -80,7 +82,7 @@ const ContentsBlock = () => {
                             내 게시글
                         </Table_Text>
                         <Shortcut_Area>
-                            <Link to="/board">
+                            <Link to="/myclass">
                                 <img src={ ShortCut }/>
                             </Link>
                         </Shortcut_Area>

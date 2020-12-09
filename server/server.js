@@ -43,10 +43,6 @@ app.use(session({
     store: new FileStore()
 }))
 
-var authData = {
-    id:'syi9595',
-    passwd:'eja9595'
-};
 
 var passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy;
@@ -61,7 +57,7 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done){
     console.log('deserializeUser',id);
-    done(null,authData);
+    done(null,id);
 });
 
 passport.use(new LocalStrategy(
@@ -173,7 +169,7 @@ app.get('/api/map/mapList/', (req, res) => {
 
 
 
-// 게시판띄우기
+// 홈 화면 클래스띄우기
 app.get('/api/customers', (req, res) => {
     connection.query(
         "SELECT * FROM board WHERE isDeleted = 0",
@@ -181,6 +177,16 @@ app.get('/api/customers', (req, res) => {
             res.send(rows);
         }
     );
+});
+
+//내 클래스 내역
+app.get('/api/myclass', (req, res) => {
+    var userid = req.user;
+    let sql = 'SELECT * FROM board WHERE nickName = ?';
+    connection.query(sql, [userid], (err, rows, fields) => {
+        console.log(rows);
+        res.send(rows);        
+    });
 });
 
 //클래스 열기
@@ -199,14 +205,14 @@ app.post('/api/classopen', (req, res) => {
     });
 });
 
-// app.delete('/api/customers/:boardid', (req, res) => {
-//     let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
-//     let params = [req.params.boardid];
-//     console.log(params)
-//     connection.query(sql, params, (err, rows, fields) => {
-//         res.send(rows);
-//     })
-// });
+app.delete('/api/customers/:boardid', (req, res) => {
+    let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
+    let params = [req.params.boardid];
+    console.log(params)
+    connection.query(sql, params, (err, rows, fields) => {
+        res.send(rows);
+    })
+});
 
 app.get('/register',(req,res) => {
     res.send('hi')

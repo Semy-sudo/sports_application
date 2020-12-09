@@ -157,8 +157,7 @@ const LoginFormBlock = ({ history }) => {
             <StyleButton 
                 cyan
                 fullWidth  
-                type="button"
-                      
+                type="button"  
             >
                 <input type="submit" value="로그인"></input>
             </StyleButton>
