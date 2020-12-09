@@ -93,8 +93,6 @@ passport.use(new LocalStrategy(
 ));
 
 
-
-
 app.post('/api/auth/login',
     passport.authenticate('local',{
         successRedirect: '/auth',
@@ -185,24 +183,19 @@ app.get('/api/customers', (req, res) => {
     );
 });
 
-app.post('/api/customer', (req, res) => {
+//클래스 열기
+app.post('/api/classopen', (req, res) => {
     let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0,1)';
-    let nickName = req.body.nickName;
-    let boardType = req.body.boardType;
-    let boardLimit = req.body.boardLimit;
-    let boardTitle = req.body.boardTitle;
-    let boardContents = req.body.boardContents;
-    console.log(req.body);
-    console.log(nickName);
-    console.log(boardType);
-    let params = [nickName, boardType, boardLimit, boardTitle, boardContents];
+    let params = [
+        req.user,
+        req.body.boardType,
+        req.body.boardLimit,
+        req.body.boardTitle,
+        req.body.boardContents
+    ];
     connection.query(sql, params, (err, rows, fields) => {
         res.send(rows);
         console.log(rows);
-    });
-    
-    return res.status(200).json({
-        success:true
     });
 });
 

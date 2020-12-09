@@ -17,7 +17,7 @@ const App = () => {
     <>
       <HeaderBlock />
       <Route component={ HomePage } path="/" exact />
-      <Route component={ postListPage } path="/post" exact/>
+      <Route component={ postListPage } path="/OpenClass" exact/>
       <Route component={ PostPage } path="/post/postDetail" exact />
       <Route component={ MapPage } path="/map" exact />
       <Route component={ MyPage } path="/auth" exact />
