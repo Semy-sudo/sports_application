@@ -175,8 +175,19 @@ app.get('/api/customers', (req, res) => {
         "SELECT * FROM board WHERE isDeleted = 0",
         (err, rows, fields) => {
             res.send(rows);
+            console.log(rows);
         }
     );
+});
+
+//마이페이지 이름
+app.get('/api/mypage', (req, res) => {
+    var userid = req.user;
+    let sql = 'SELECT * FROM user WHERE id = ?';
+    connection.query(sql, [userid], (err, rows, fields) => {
+        console.log(rows);
+        res.send(rows);        
+    });
 });
 
 //내 클래스 내역
@@ -205,7 +216,7 @@ app.post('/api/classopen', (req, res) => {
     });
 });
 
-app.delete('/api/customers/:boardid', (req, res) => {
+app.delete('/api/myclass/:boardid', (req, res) => {
     let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
     let params = [req.params.boardid];
     console.log(params)
@@ -214,8 +225,5 @@ app.delete('/api/customers/:boardid', (req, res) => {
     })
 });
 
-app.get('/register',(req,res) => {
-    res.send('hi')
-})
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

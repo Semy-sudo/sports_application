@@ -9,10 +9,10 @@ const Table_td = styled.td `
     margin-right: 20%;
 `;
 
-class CustomerDelete extends React.Component {
+class CustomerSelect extends React.Component {
 
     deleteCustomer(boardid) {
-        const url = '/api/myclass/'+ boardid;
+        const url = '/api/myclass/'+boardid;
         fetch(url,{
             method: 'DELETE'
         });
@@ -22,10 +22,10 @@ class CustomerDelete extends React.Component {
     render() {
         return (
             <Table_td>
-            <button onClick={(e)=> {this.deleteCustomer(this.props.boardid)}}>취소하기</button>
+            <button onClick={(e)=> {this.deleteCustomer(this.props.boardid)}}>상세보기</button>
             </Table_td>
         )
     }
 }
 
-export default CustomerDelete;
+export default CustomerSelect;

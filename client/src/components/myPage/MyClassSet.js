@@ -9,9 +9,9 @@ import TableCell from '@material-ui/core/TableCell';
 import styled from 'styled-components';
 
 const Table_td = styled.td `
-    width: 100px;
+    width: 200px;
     height: 100px;
-    text-align: center;
+    text-align: right;
 `;
 
 class MyClassSet extends Component {
@@ -19,23 +19,23 @@ class MyClassSet extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            customers: '',
+            myclass: '',
             completed: 0
         }
     }
 
     stateRefresh = () => {
-        this.setState({customers: '', completed: 0});
+        this.setState({myclass: '', completed: 0});
         this
             .callApi()
-            .then(res => this.setState({customers: res}))
+            .then(res => this.setState({myclass: res}))
             .catch(err => console.log(err));
     }
 
     componentDidMount() {
         this
             .callApi()
-            .then(res => this.setState({customers: res}))
+            .then(res => this.setState({myclass: res}))
             .catch(err => console.log(err));
     }
 
@@ -56,12 +56,13 @@ class MyClassSet extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <Table_td>
-                            {
-                                this.state.customers
+                        <TableRow>
+                        <TableCell align="right">
+                        {
+                                this.state.myclass
                                     ? this
                                         .state
-                                        .customers
+                                        .myclass
                                         .map(c => {
                                             return (
                                                 <MyClassSetContents
@@ -71,8 +72,9 @@ class MyClassSet extends Component {
                                             );
                                         })
                                     : ""
-                            }
-                            </Table_td>
+                        }
+                        </TableCell>
+                        </TableRow>
                         </TableBody>
                     </Table>
                    

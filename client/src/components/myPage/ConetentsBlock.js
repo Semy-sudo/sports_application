@@ -1,12 +1,17 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import '../../components/common/table.css';
 import '../../components/common/Icon.css';
 import ShortCut from '../../lib/styles/img/chevron-forward-outline.svg';
+import ExpertIcon from '../../lib/styles/img/지도사.png';
 import axios from "axios";
+import CustomerMyPage from '../../components/board/CustomerMyPage';
 
+const ImageIcon = styled.img`
+    color: #27AE60;
+`;
 
 const Table_Layout = styled.div`
     width: 50%;
@@ -40,36 +45,98 @@ const Button_Logout = styled.button`
     border-radius: 10px;
 `;
 
+class ContentsBlock extends Component {
 
-const ContentsBlock = () => {
+        constructor(props) {
+            super(props);
+            this.state = {
+                customers: '',
+                completed: 0
+            }
+        }
+    
+        stateRefresh = () => {
+            this.setState({customers: '', completed: 0});
+            this
+                .callApi()
+                .then(res => this.setState({customers: res}))
+                .catch(err => console.log(err));
+        }
+    
+        componentDidMount() {
+            this
+                .callApi()
+                .then(res => this.setState({customers: res}))
+                .catch(err => console.log(err));
+        }
+    
+        callApi = async () => {
+            const response = await fetch('/api/mypage');
+            const body = await response.json();
+            return body;
+        }
+    
+        render() {
 
     return(
         <Table_Layout>
             <table>
                 <tr>
-                    <td className="full_line" colspan="2">
+                    <td className="half_left_line">
                         <Table_Text>
-                            <Link to="/auth/login">
-                                로그인 및 회원가입 하기
+                            <Link to="/auth">
+                            {
+                                this.state.customers
+                                    ? this
+                                        .state
+                                        .customers
+                                        .map(c => {
+                                            return (
+                                                <CustomerMyPage
+                                                    stateRefresh={this.stateRefresh}
+                                                    key={c.id}
+                                                    id={c.id}
+                                                />
+                                            );
+                                        })
+                                    : ""
+                            }님 환영합니다!
+                            {
+                                this.state.customers
+                                    ? this
+                                        .state
+                                        .customers
+                                        .map(c => {
+                                            return (
+                                                <CustomerMyPage
+                                                    stateRefresh={this.stateRefresh}
+                                                    key={c.id}
+                                                    type={c.type}
+                                                    src={ ExpertIcon }
+                                                />
+                                            );
+                                        })
+                                    : ""
+                            }
                             </Link>
                             
                         </Table_Text>
                     </td>
-                </tr>
-                <tr>
-                    <td className="full_line" colspan="2">
+                    <td className="half_right_line">
                         <Table_Text>
-                            <Link to="/auth/login">
-                                님 환영합니다!
-                            </Link>
-                            
+                            로그아웃
                         </Table_Text>
+                        <Shortcut_Area>
+                            <Link to="/myclass">
+                                <img src={ ShortCut }/>
+                            </Link>
+                        </Shortcut_Area>
                     </td>
                 </tr>
                 <tr>
                     <td className="half_left_line">
                         <Table_Text>
-                            내 포인트
+                            쪽지함
                         </Table_Text>
                         <Shortcut_Area>
                             <Link to="#">
@@ -83,28 +150,6 @@ const ContentsBlock = () => {
                         </Table_Text>
                         <Shortcut_Area>
                             <Link to="/myclass">
-                                <img src={ ShortCut }/>
-                            </Link>
-                        </Shortcut_Area>
-                    </td>
-                </tr>
-                <tr>
-                    <td className="half_left_line">
-                        <Table_Text>
-                            찜 리스트
-                        </Table_Text>
-                        <Shortcut_Area>
-                            <Link to="#">
-                                <img src={ ShortCut }/>
-                            </Link>
-                        </Shortcut_Area>
-                    </td>
-                    <td class="half_right_line">
-                        <Table_Text>
-                            쪽지함
-                        </Table_Text>
-                        <Shortcut_Area>
-                            <Link to="#">
                                 <img src={ ShortCut }/>
                             </Link>
                         </Shortcut_Area>
@@ -134,7 +179,8 @@ const ContentsBlock = () => {
                  */}
             </table>
         </Table_Layout>
-    );
-};
+    )
+                }
+}
 
 export default ContentsBlock;
