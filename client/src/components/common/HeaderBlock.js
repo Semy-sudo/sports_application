@@ -5,7 +5,7 @@ import HomeIcon from '../../lib/styles/img/home-outline.svg';
 import BoardIcon from '../../lib/styles/img/clipboard-outline.svg';
 import MapIcon from '../../lib/styles/img/map-outline.svg';
 import PersonIcon from '../../lib/styles/img/person-outline.svg';
-import HomeLogo from '../../lib/styles/img/img_category/logo_sports.png';
+import HomeLogo from '../../lib/styles/img/img_category/logo_sports_color.png';
 import '../../components/common/Icon.css';
 
 const Header = styled.div`

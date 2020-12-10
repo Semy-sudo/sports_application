@@ -30,7 +30,13 @@ exports.register = function (req, res) {
 exports.login = function (req, res) {
     var id = req.body.id;
     var passwd = req.body.passwd;
+<<<<<<< HEAD
     connection.query('SELECT * FROM customer WHERE id = ?', [id],
+=======
+
+    connection.query('SELECT * FROM customer WHERE id = ?', [id],
+
+>>>>>>> map
     function( error, results, fields) {
         if (error) {
             // console.log("error ocurred", error);

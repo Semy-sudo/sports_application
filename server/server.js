@@ -125,7 +125,8 @@ app.post('/api/auth/register', function(req, res){
 });
 
 
-app.get('/api/map/mapList/:keyword', (req, res) => {
+app.get('/api/map/mapList/:keyword', function(req, res){
+
   var params = req.params.keyword;
   var sql = "SELECT * FROM map WHERE FACI_NM LIKE '%" + params + "%' OR FCOB_NM LIKE '%" + params + "%'";
 
@@ -140,16 +141,69 @@ app.get('/api/map/mapList/:keyword', (req, res) => {
     } else {
       console.log("The solution is: ", rows);
 
-      var data = new Object();
-
-      console.log(rows);
-      res.send({
-          "code": 200,
-          "success": "Show Maplist successfully",
-          "data": rows,
-      })
+      res.json(rows)
     }
   });
+});
+
+app.get('/api/map/mapListByPlace/:keyword', function(req, res){
+  var params = req.params.keyword.split(" ");
+  var sql = "SELECT * FROM map WHERE FMNG_CP_NM = '" + params[0] + "' AND FMNG_CPB_NM = '" + params[1] + "'";
+
+  connection.query(sql ,function(error, rows, field) {
+    if(error) {
+        console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+    }
+  });
+});
+
+app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
+  var params = req.params.keyword;
+  var sql = '';
+
+  if(params === '골프') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%게이트볼%' OR FCOB_NM LIKE '%게이트볼%'";
+  } else if(params === '농구') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%농구%' OR FCOB_NM LIKE '%농구%'";
+  } else if(params === '테니스') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%테니스%' OR FCOB_NM LIKE '%테니스%' OR FACI_NM LIKE '%테니스%' OR FCOB_NM LIKE '%테니스%'";  
+  } else if(params === '배구') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%배구%' OR FCOB_NM LIKE '%배구%'";    
+  } else if(params === '축구') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%축구%' OR FCOB_NM LIKE '%축구%'";  
+  } else if(params === '풋살') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%풋살%' OR FCOB_NM LIKE '%풋살%'";  
+  } else if(params === '야구') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%야구%' OR FCOB_NM LIKE '%야구%'";  
+  } else if(params === '사격') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%사격%' OR FCOB_NM LIKE '%사격%'";  
+  } else if(params === '양궁') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%양궁%' OR FCOB_NM LIKE '%양궁%' OR FACI_NM LIKE '%국궁%' OR FCOB_NM LIKE '%국궁%'";  
+  } else if(params === '기타') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%암벽%' OR FCOB_NM LIKE '%암벽%' OR FACI_NM LIKE '%수영%' OR FCOB_NM LIKE '%수영%' OR FACI_NM LIKE '%인라인%' OR FCOB_NM LIKE '%인라인%'";  
+  }
+
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+      
+      console.log(rows);
+    }
+  })
 });
 
 app.get('/api/map/mapList/', (req, res) => {

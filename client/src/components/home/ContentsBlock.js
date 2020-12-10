@@ -7,6 +7,7 @@ import Button from '../common/Button';
 import OnedayClass from './OnedayClass';
 import RegularClass from './RegularClass';
 
+
 const ButtonWidthMarginTop = styled(Button)`
     margin-top: 1rem;
     width: 50%;
