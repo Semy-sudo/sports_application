@@ -1,5 +1,4 @@
 /*global kakao*/
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -18,7 +17,8 @@ const KakaoMap = styled.div`
     text-align: center;
 `;
 
-function Marker(map, mapContainer) {
+
+function Marker(map, mapContainer, history) {
     var position = new kakao.maps.LatLng(Number(map.FACI_POINT_Y), Number(map.FACI_POINT_X));
     var marker = new kakao.maps.Marker({
         map: mapContainer,
@@ -31,13 +31,13 @@ function Marker(map, mapContainer) {
 
     if(map.FACI_NM) {
         map.FACI_NM = map.FACI_NM.replace(/"/gi, "");
-        console.log(map.FACI_NM);
+
     }
 
     var content = 
     '<div class="wrap">' +
     '   <div class="header">' +
-    '       <div class="header_header">' +
+    '       <div id="close" class="header_header">' +
     `            <img src=${Close} style="width: 30px; height: 30px;">` +
     '       </div>' +
     '       <div class="header_contents">' +
@@ -74,24 +74,61 @@ function Marker(map, mapContainer) {
     '       <div class="article_header">' +
     '           <b>대관 날짜 선택</b>' +
     '       </div>' +
+    '       <div class="article_contents">' +
+    '           시작 날짜: <input type="date" id="startDate"/>' +
+    '       </div>' +
+    '       <div class="article_contents">' +
+    '           종료 날짜: <input type="date" id="finishDate" min="2020-12-10"/>' +
+    '       </div>' +
+    '       <div class="article_contents">' +
+    '           시작 시간: <input type="number" id="startTime" min="9" placeholder="9시부터 입력가능"/>' +
+    '       </div>' +
+    '       <div class="article_contents">' +
+    '           종료 시간: <input type="number" id="finishTime" min="22" placeholder="22시까지 입력가능"/>' +
+    '       </div>' +
+    '   </div>' +
+    '   <div class="footer">' +
+    '       <div id="submit">' +
+    '           <b>대관하기</b>' +
+    '       </div>' +
     '   </div>' +
     '</div>';
-    
+
+    var overlay = new kakao.maps.CustomOverlay({
+        content: content,
+        position: marker.getPosition()
+    });
+
     kakao.maps.event.addListener(marker, 'click', function(){
-        var overlay = new kakao.maps.CustomOverlay({
+        overlay = new kakao.maps.CustomOverlay({
+
             content: content,
             map: mapContainer,
             position: marker.getPosition()
         });
 
-        overlay.setMap(mapContainer);
+        document.getElementById('close').addEventListener("click", closeInfo);
+        document.getElementById('submit').addEventListener("click", goRental);
     });
 
-    // marker.setMap(mapContainer);
+    function closeInfo() {
+        overlay.setMap(null);
+    }
+    
+    function goRental() {
+        var startDate = document.getElementById('startDate').value;
+        var finishDate = document.getElementById('finishDate').value;
+        var startTime = document.getElementById('startTime').value;
+        var finishTime = document.getElementById('finishTime').value;
+
+        history.push(
+            '/OpenClass?startDate='+ startDate +'&finishDate=' + finishDate +
+            '&startTime=' + startTime + '&finishTime=' + finishTime + '&map=' + map
+        );   
+    }
 }
 
-
-const ContentsBlock = () => {
+const ContentsBlock = ({ history }) => {
     const [place, setPlace] = useState(false);
     const [placeValue, setPlaceValue] = useState('');
     const [mapList, setMapList] = useState([{
@@ -181,21 +218,22 @@ const ContentsBlock = () => {
                     center: new kakao.maps.LatLng(Number(mapList[0].FACI_POINT_Y), Number(mapList[0].FACI_POINT_X)),
                     level: 7
                 };
+                var zoomControl = new kakao.maps.ZoomControl();
 
                 const mapContainer = new window.kakao.maps.Map(container, options);
 
+
+                mapContainer.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+                
                 mapList.map(
                     (map, i) => {
-                        Marker(map, mapContainer);
+                        Marker(map, mapContainer, history);
                     }
                 )
             });
         };
     }, [mapList]);
 
-    useEffect( () => {
-        console.log("update placeValue");
-    }, [placeValue]);
 
     return(
         <div>

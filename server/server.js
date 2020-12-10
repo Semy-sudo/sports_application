@@ -124,9 +124,7 @@ app.post('/api/auth/register', function(req, res){
   });
 });
 
-
 app.get('/api/map/mapList/:keyword', function(req, res){
-
   var params = req.params.keyword;
   var sql = "SELECT * FROM map WHERE FACI_NM LIKE '%" + params + "%' OR FCOB_NM LIKE '%" + params + "%'";
 
@@ -145,6 +143,7 @@ app.get('/api/map/mapList/:keyword', function(req, res){
     }
   });
 });
+
 
 app.get('/api/map/mapListByPlace/:keyword', function(req, res){
   var params = req.params.keyword.split(" ");
@@ -303,3 +302,24 @@ app.delete('/api/myclass/:boardid', (req, res) => {
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+app.post('/api/payment/', (req, res) => {
+  let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
+  let params = [
+      req.body.paymentPlace,
+      req.body.paymentThing,
+      req.body.paymentMoney,
+      req.body.userName,
+      req.body.userTel,
+      req.body.paymentContents,
+      req.body.userId
+  ];
+
+  connection.query(sql, params, (err, rows, fields) => {
+      res.send(rows);
+      console.log(rows);
+  });
+});
+
+app.listen(port, ()=> console.log(`Listening on port ${port}`));
+

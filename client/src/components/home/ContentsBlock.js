@@ -53,9 +53,11 @@ const Main_img = styled.img `
 
 
 const ContentsBlock = () => {
+
     return (
             <Contents>
                 <Contents_table>
+
                     <Table_td>
                         <Link to="#">
                             <Main_img src={mainimg} width="300" height="300"/>
@@ -90,6 +92,7 @@ const ContentsBlock = () => {
                 </Contents_table_class>
             </Contents>
         
+
     );
 };
 
