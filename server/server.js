@@ -301,7 +301,7 @@ app.delete('/api/myclass/:boardid', (req, res) => {
 });
 
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
 
 app.post('/api/payment/', (req, res) => {
   let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
