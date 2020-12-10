@@ -166,7 +166,7 @@ const CustomerAdd = ({ history }) => {
             })
         });
 
-        history.push('/');
+        //history.push('/');
     };
 
     return(
