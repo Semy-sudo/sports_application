@@ -45,54 +45,54 @@ const Table_td = styled.td `
 const Main_img = styled.img `
     width: 600px;
     height: 300px;
-    margin:0;
-    padding:0;
+`;
+
+const Line_2 = styled.div`
+    border-left: 3px solid black;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    margin-left: -2px;
+    top: 10;
 `;
 
 
-
-
 const ContentsBlock = () => {
-
     return (
-            <Contents>
-                <Contents_table>
-
-                    <Table_td>
-                        <Link to="#">
-                            <Main_img src={mainimg} width="300" height="300"/>
-                        </Link>
-                    </Table_td>
-                </Contents_table>
-                <Contents_table>
-                    <Table_td>
-                        <Link to="/OpenClass">
-                            <h2>총 90개의 클래스가 오픈되어있어요!</h2>
-                            <ButtonWidthMarginTop cyan="cyan" fullWidth="fullWidth">
-                                나도 클래스 오픈해볼까
-                            </ButtonWidthMarginTop>
-                        </Link>
-                    </Table_td>
-                </Contents_table>
-                <Contents_table_class>
-                    <Table_td>
-                        <OnedayClass/>
-                    </Table_td>
-                    <Table_td>
-                        <RegularClass/>
-                    </Table_td>
-                </Contents_table_class>
-                <Contents_table_class>
-                <h2>아니 이런 클래스도 있다고?</h2>
-                #놓칠 수 없는. 이색. 체육수업.            
-                </Contents_table_class>
-                <Contents_table_class>
-                <h2>선생님들 주목!</h2>
-                #만족도 최상. 인기 있는 대관장소 Top3
-                </Contents_table_class>
-            </Contents>
-        
-
+        <Contents>
+            <Contents_table>
+                <Table_td>
+                    <Link to="#">
+                        <Main_img src={mainimg} width="300" height="300"/>
+                    </Link>
+                </Table_td>
+            </Contents_table>
+            <Contents_table>
+                <Table_td>
+                    <Link to="/OpenClass">
+                        <h2>총 90개의 클래스가 오픈되어있어요!</h2>
+                        <ButtonWidthMarginTop cyan="cyan" fullWidth="fullWidth">
+                            나도 클래스 오픈해볼까
+                        </ButtonWidthMarginTop>
+                    </Link>
+                </Table_td>
+            </Contents_table>
+            <Contents_table_class>
+                <Table_td>
+                    <OnedayClass/>
+                </Table_td>
+                <Table_td>
+                    <RegularClass/>
+                </Table_td>
+            </Contents_table_class>
+            <Contents_table_class>
+            <h2>아니 이런 클래스도 있다고?</h2>
+            #놓칠 수 없는. 이색. 체육수업.            </Contents_table_class>
+            <Contents_table_class>
+            <h2>선생님들 주목!</h2>
+            #만족도 최상. 인기 있는 대관장소 Top3
+            </Contents_table_class>
+        </Contents>
     );
 };
 
