@@ -22,6 +22,7 @@ const App = () => {
       <Route component={ LoginPage } path="/auth/login" exact />
       <Route component={ RegisterPage } path="/auth/register" exact />
       <Route component={ PaymentPage } path="/payment" exact />
+
     </>
   )
 }

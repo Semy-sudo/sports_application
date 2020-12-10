@@ -1,6 +1,8 @@
 /*global kakao*/
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import styled from 'styled-components';
 import SearchBarBlock from './SearchBarBlock';
 import axios from 'axios';
@@ -88,6 +90,7 @@ function Marker(map, mapContainer) {
     // marker.setMap(mapContainer);
 }
 
+
 const ContentsBlock = () => {
     const [place, setPlace] = useState(false);
     const [placeValue, setPlaceValue] = useState('');
@@ -162,14 +165,17 @@ const ContentsBlock = () => {
 
     useEffect(() => {
         const script = document.createElement("script");
+
         
         script.async = true;
         script.src =
             "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4864e82f11768fe659ceb5b45c6cc4e3&autoload=false";
+
         document.head.appendChild(script);
 
         script.onload = () => {
             kakao.maps.load( () => {
+
                 var container = document.getElementById('mapContainer');
                 var options = {
                     center: new kakao.maps.LatLng(Number(mapList[0].FACI_POINT_Y), Number(mapList[0].FACI_POINT_X)),
@@ -206,6 +212,7 @@ const ContentsBlock = () => {
             <KakaoMap id="mapContainer">
             </KakaoMap>
         </div>
+
     );
 };
 
