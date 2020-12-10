@@ -2,11 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import '../../components/common/Icon.css';
-import soccer from '../../lib/styles/img/football-outline.svg';
-import footsal from '../../lib/styles/img/img_category/sepak_takraw.png';
-import basketball from '../../lib/styles/img/basketball-outline.svg';
-import baseball from '../../lib/styles/img/baseball-outline.svg';
-import volleyball from '../../lib/styles/img/img_category/volleyball.png';
 
 const Contents = styled.div`
     float: left;
@@ -32,7 +27,7 @@ const ContentsBlock = () => {
     return(
         <Contents>
             <Contents_table>
-                <tr>
+                {/* <tr>
                     <Table_td>
                         <Link to="#">
                             <div className="contents_category_area">
@@ -93,7 +88,7 @@ const ContentsBlock = () => {
                             </span>
                         </Link>
                     </Table_td>
-                </tr> 
+                </tr>  */}
             </Contents_table>
         </Contents>
     );

@@ -87,7 +87,7 @@ const ContentsBlock = () => {
                     </td>
                     <td class="half_right_line">
                         <Table_Text>
-                            쪽지함
+                            결제 내역
                         </Table_Text>
                         <Shortcut_Area>
                             <Link to="#">
@@ -99,7 +99,7 @@ const ContentsBlock = () => {
                 <tr>
                     <td className="full_line" colspan="2">
                         <Table_Text>
-                            대관 내역
+                            알림
                         </Table_Text>
                         <Shortcut_Area>
                             <Link to="#">

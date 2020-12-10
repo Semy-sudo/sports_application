@@ -4,9 +4,9 @@ import ContentsBlock from '../components/myPage/ConetentsBlock';
 
 const MyPage_Contents = styled.div`
     float: left;
-    margin-top: 130px;
+    margin-top: 100px;
     width: 100%;
-    height: 600px;
+    height: 100%;
     background-color: #dcdcdc;
     text-align: center;
 `;

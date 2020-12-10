@@ -1,9 +1,11 @@
 import React from 'react';
 import ContentsBlock from '../components/map/ContentsBlock';
 
-const MapPage = () => {
+const MapPage = ({ history }) => {
     return(
-        <ContentsBlock/>
+        <ContentsBlock
+            history={ history }
+        />
     );
 };
 
