@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { Link, withRouter } from 'react-router-dom';
-import Button from '../common/Button';
+import axios from 'axios';
 
 const AuthFormBlock = styled.div`
     h3 { 
