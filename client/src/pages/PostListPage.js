@@ -1,12 +1,15 @@
 import React from 'react';
-import Button from '../components/common/Button';
+import AuthTemplate from '../components/auth/AuthTemplate';
+import ClassAddForm from '../components/board/ClassAddForm';
+
 
 const PostListPage = () => {
     return(
-        <div>
-            <Button>버튼</Button>
-        </div>
+        <AuthTemplate>
+            <ClassAddForm/>
+        </AuthTemplate>
     );
-};
+};  
+
 
 export default PostListPage;

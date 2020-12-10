@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import styled from 'styled-components';
-import ContentsBlock from '../components/myPage/ConetentsBlock';
+import ContentsBlock from '../components/myPage/ContentsBlock';
+//import ContentsBlock_NoLogin from '../components/myPage/ContentsBlock_NoLogin';
 
 const MyPage_Contents = styled.div`
     float: left;
@@ -11,12 +13,58 @@ const MyPage_Contents = styled.div`
     text-align: center;
 `;
 
-const MyPage = () => {
+
+class MyPage extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            customers: '',
+            completed: 0
+        }
+    }
+
+    stateRefresh = () => {
+        this.setState({customers: '', completed: 0});
+        this
+            .callApi()
+            .then(res => this.setState({customers: res}))
+            .catch(err => console.log(err));
+    }
+
+    componentDidMount() {
+        this
+            .callApi()
+            .then(res => this.setState({customers: res}))
+            .catch(err => console.log(err));
+    }
+
+    callApi = async () => {
+        const response = await fetch('/api/mypage');
+        const body = await response.json();
+        return body;
+    }
+
+    render() {
+
     return(
         <MyPage_Contents>
-            <ContentsBlock/>
+            {
+            this.state.customers
+                ? this
+                    .state
+                    .customers
+                    .map(c => {
+                        return (
+                            <ContentsBlock/>
+                        );
+                    })
+                :""
+        }
         </MyPage_Contents>
     );
+    }
 };
+
 
 export default MyPage;

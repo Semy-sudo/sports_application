@@ -1,6 +1,7 @@
 /*global kakao*/
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import styled from 'styled-components';
 import SearchBarBlock from './SearchBarBlock';
 import axios from 'axios';
@@ -16,6 +17,7 @@ const KakaoMap = styled.div`
     text-align: center;
 `;
 
+
 function Marker(map, mapContainer, history) {
     var position = new kakao.maps.LatLng(Number(map.FACI_POINT_Y), Number(map.FACI_POINT_X));
     var marker = new kakao.maps.Marker({
@@ -29,6 +31,7 @@ function Marker(map, mapContainer, history) {
 
     if(map.FACI_NM) {
         map.FACI_NM = map.FACI_NM.replace(/"/gi, "");
+
     }
 
     var content = 
@@ -98,6 +101,7 @@ function Marker(map, mapContainer, history) {
 
     kakao.maps.event.addListener(marker, 'click', function(){
         overlay = new kakao.maps.CustomOverlay({
+
             content: content,
             map: mapContainer,
             position: marker.getPosition()
@@ -198,14 +202,17 @@ const ContentsBlock = ({ history }) => {
 
     useEffect(() => {
         const script = document.createElement("script");
+
         
         script.async = true;
         script.src =
             "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4864e82f11768fe659ceb5b45c6cc4e3&autoload=false";
+
         document.head.appendChild(script);
 
         script.onload = () => {
             kakao.maps.load( () => {
+
                 var container = document.getElementById('mapContainer');
                 var options = {
                     center: new kakao.maps.LatLng(Number(mapList[0].FACI_POINT_Y), Number(mapList[0].FACI_POINT_X)),
@@ -214,6 +221,7 @@ const ContentsBlock = ({ history }) => {
                 var zoomControl = new kakao.maps.ZoomControl();
 
                 const mapContainer = new window.kakao.maps.Map(container, options);
+
 
                 mapContainer.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
                 
@@ -225,6 +233,7 @@ const ContentsBlock = ({ history }) => {
             });
         };
     }, [mapList]);
+
 
     return(
         <div>
@@ -241,6 +250,7 @@ const ContentsBlock = ({ history }) => {
             <KakaoMap id="mapContainer">
             </KakaoMap>
         </div>
+
     );
 };
 

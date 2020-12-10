@@ -142,7 +142,7 @@ const HeaderBlock = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link to="/auth">
+                            <Link to="/auth/login">
                                 <Header_nav_icon_area>
                                     <ImageIcon src={ PersonIcon } />
                                 </Header_nav_icon_area>

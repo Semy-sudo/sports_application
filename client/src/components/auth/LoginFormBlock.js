@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { Link, withRouter } from 'react-router-dom';
-import axios from 'axios';
+import Button from '../common/Button';
+var axios = require('axios');
 
 const AuthFormBlock = styled.div`
     h3 { 
@@ -97,43 +98,44 @@ const ErrorMessage = styled.div`
 `;
 
 const LoginFormBlock = ({ history }) => {
-    const [user, setUser] = useState('');
-    const [tempUser, setTempUser] = useState(
-        {
-            id: '',
-            passwd: ''
-        }
-    );
-    const changeField = e => {
-        setUser({
-            ...tempUser,
-            [e.target.name]: e.target.value
-        })
-    };
-    const onClick = e => {
-        const config = {
-            headers: {
-                'content-type': 'application/json'
-            }
-        };
+    // const [user, setUser] = useState('');
+    // const [tempUser, setTempUser] = useState(
+    //     {
+    //         id: '',
+    //         passwd: ''
+    //     }
+    // );
+    // const changeField = e => {
+    //     setTempUser({
+    //         ...tempUser,
+    //         [e.target.name]: e.target.value
+    //     })
+    // };
+    // const onClick = e => {
+    //     const config = {
+    //         headers: {
+    //             'content-type': 'application/json'
+    //         }
+    //     };
 
-        axios.post('/api/auth/login', {
-                id: tempUser.id,
-                passwd: tempUser.passwd
-            },
-            config
-        ).then( (response) => {
-            setTempUser({
-                id: '',
-                passwd: ''
-            })
-        });
+    //     axios.post('/api/auth/login', {
+    //             id: tempUser.id,
+    //             passwd: tempUser.passwd
+    //         },
+    //         config
+    //     ).then( (response) => {
+    //         setTempUser({
+    //             id: '',
+    //             passwd: ''
+    //         })
+    //     });
 
-        history.push('/');
-    }
+    //     //history.push('/');
+    // }
 
     return(
         <AuthFormBlock>
+            <form action="/api/auth/login" method="post">
             <h2>
                 체육 시간, <br/>
                 준비됐나요?
@@ -143,26 +145,26 @@ const LoginFormBlock = ({ history }) => {
                 autoComplete="id"
                 name="id"
                 placeholder="ID"
-                onChange={ changeField }
+                
             />
             <StyledInput 
                 autoComplete="new-password"
                 name="passwd"
                 placeholder="Password"
                 type="password"
-                onChange={ changeField }
+               
             />
             <StyleButton 
                 cyan
                 fullWidth  
-                type="button"
-                onClick={ onClick }      
-            >
-                로그인
+                type="submit"  
+            >로그인
+                {/* <input type="submit" value="로그인"></input> */}
             </StyleButton>
             <Footer>
                 <Link to="/auth/register">Sign Up</Link>
             </Footer>
+            </form>
         </AuthFormBlock>
     )
 }
