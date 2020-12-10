@@ -5,9 +5,9 @@ import palette from '../../lib/styles/palette';
 import '../../components/common/table.css';
 import '../../components/common/Icon.css';
 import ShortCut from '../../lib/styles/img/chevron-forward-outline.svg';
-import ExpertIcon from '../../lib/styles/img/지도사.png';
+import imgfile from '../../lib/styles/img/지도사.png';
 import axios from "axios";
-import CustomerMyPage from '../../components/board/CustomerMyPage';
+import CustomerMyPage from '../board/CustomerMyPage';
 
 const ImageIcon = styled.img`
     color: #27AE60;
@@ -15,7 +15,7 @@ const ImageIcon = styled.img`
 
 const Table_Layout = styled.div`
     width: 50%;
-    height: 500px;
+    height: 300px;
     margin-top: 50px;
     display: inline-block;
     border-radius: 10px;
@@ -33,19 +33,22 @@ const Table_Text = styled.div`
 const Shortcut_Area = styled.span`
     float: right;
     margin-top: 25px;
+    width: 100px;
 `;
 
 const Button_Logout = styled.button`
     width: 50%;
     height: 50px;
-    background-color: ${palette.cyan[4]};
-    border: 0px solid ${palette.cyan[4]};
+    background-color: #27AE60;
+    border: 0px solid #27AE60;
     color: white;
     font-size: 20px;
     border-radius: 10px;
 `;
 
-class ContentsBlock extends Component {
+
+
+class ContentsBlock_Expert extends Component {
 
         constructor(props) {
             super(props);
@@ -82,7 +85,7 @@ class ContentsBlock extends Component {
         <Table_Layout>
             <table>
                 <tr>
-                    <td className="half_left_line">
+                    <td className="full_line" colspan="2">
                         <Table_Text>
                             <Link to="/auth">
                             {
@@ -100,56 +103,34 @@ class ContentsBlock extends Component {
                                             );
                                         })
                                     : ""
-                            }님 환영합니다!
-                            {
-                                this.state.customers
-                                    ? this
-                                        .state
-                                        .customers
-                                        .map(c => {
-                                            return (
-                                                <CustomerMyPage
-                                                    stateRefresh={this.stateRefresh}
-                                                    key={c.id}
-                                                    type={c.type}
-                                                    src={ ExpertIcon }
-                                                />
-                                            );
-                                        })
-                                    : ""
-                            }
-                            </Link>
+                            }<b>님 환영합니다!</b>
                             
-                        </Table_Text>
-                    </td>
-                    <td className="half_right_line">
-                        <Table_Text>
-                            로그아웃
-                        </Table_Text>
-                        <Shortcut_Area>
-                            <Link to="/myclass">
-                                <img src={ ShortCut }/>
                             </Link>
-                        </Shortcut_Area>
+                        </Table_Text>
+                            <Shortcut_Area>
+                                <Link to="/myclass">
+                                    <img src={imgfile} width='100%'/>
+                                </Link>
+                            </Shortcut_Area>
                     </td>
                 </tr>
                 <tr>
                     <td className="half_left_line">
                         <Table_Text>
-                            쪽지함
+                            내클래스
                         </Table_Text>
                         <Shortcut_Area>
-                            <Link to="#">
+                            <Link to="/myclass">
                                 <img src={ ShortCut }/>
                             </Link>
                         </Shortcut_Area>
                     </td>
                     <td className="half_right_line">
                         <Table_Text>
-                            내 게시글
+                            결제내역
                         </Table_Text>
                         <Shortcut_Area>
-                            <Link to="/myclass">
+                            <Link to="#">
                                 <img src={ ShortCut }/>
                             </Link>
                         </Shortcut_Area>
@@ -167,20 +148,19 @@ class ContentsBlock extends Component {
                         </Shortcut_Area>
                     </td>
                 </tr>
-                {/* 
-                    user &&
-                    <tr>
-                        <td className="full_line" colspan="2">
+                <tr>
+                    <td className="full_line" colspan="2">
+                        <form action="/api/auth/logout" method="post">
                             <Button_Logout>
-                                Logout
+                                <Link to="/auth/login">로그아웃</Link>
                             </Button_Logout>
-                        </td>
-                    </tr>
-                 */}
+                        </form>
+                    </td>
+                </tr>
             </table>
         </Table_Layout>
     )
                 }
 }
 
-export default ContentsBlock;
+export default ContentsBlock_Expert;

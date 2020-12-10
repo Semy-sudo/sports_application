@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
-import ContentsBlock from '../components/myPage/ConetentsBlock';
-import ContentsBlock_NoLogin from '../components/myPage/ContentsBlock_NoLogin';
+import ContentsBlock from '../components/myPage/ContentsBlock';
+//import ContentsBlock_NoLogin from '../components/myPage/ContentsBlock_NoLogin';
 
 const MyPage_Contents = styled.div`
     float: left;
@@ -59,7 +59,7 @@ class MyPage extends Component {
                             <ContentsBlock/>
                         );
                     })
-                :<ContentsBlock_NoLogin/>
+                :""
         }
         </MyPage_Contents>
     );
