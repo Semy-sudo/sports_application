@@ -25,6 +25,7 @@ const App = () => {
       <Route component={ RegisterPage } path="/auth/register" exact />
       <Route component={ PaymentPage } path="/payment" exact />
       <Route component={ MyClassPage } path="/myclass" exact />
+
     </>
   )
 }
