@@ -157,9 +157,9 @@ const LoginFormBlock = ({ history }) => {
             <StyleButton 
                 cyan
                 fullWidth  
-                type="button"  
-            >
-                <input type="submit" value="로그인"></input>
+                type="submit"  
+            >로그인
+                {/* <input type="submit" value="로그인"></input> */}
             </StyleButton>
             <Footer>
                 <Link to="/auth/register">Sign Up</Link>

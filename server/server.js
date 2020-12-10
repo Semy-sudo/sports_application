@@ -96,7 +96,14 @@ app.post('/api/auth/login',
     })
 );
 
-
+//로그아웃
+app.post('/api/auth/logout', function(req,res){
+    req.logout();
+    res.redirect('/auth/login');
+    // req.session.save(function(err){
+    //     res.redirect('/auth/login');
+    // });
+});
 
 
 //회원가입
@@ -180,15 +187,30 @@ app.get('/api/customers', (req, res) => {
     );
 });
 
+//마이페이지에서 expert와 
+app.get('/api/contentsblock', (req, res) => {
+    var userid = req.user;
+    var expert = 'expert';
+    let sql = 'SELECT * FROM user WHERE id =? AND type=?';
+    connection.query(sql, [userid,expert], (err, rows, fields) => {
+        console.log("/api/contentsblock",rows);
+        res.send(rows);        
+    });
+});
+
+
+
+
 //마이페이지 이름
 app.get('/api/mypage', (req, res) => {
     var userid = req.user;
     let sql = 'SELECT * FROM user WHERE id = ?';
     connection.query(sql, [userid], (err, rows, fields) => {
-        console.log(rows);
+        console.log("/api/mypage",rows);
         res.send(rows);        
     });
 });
+
 
 //내 클래스 내역
 app.get('/api/myclass', (req, res) => {
