@@ -1,0 +1,55 @@
+h1, h2, h3, h4, h5, h6, b {
+    margin: 0;
+    padding: 0;
+}
+
+.board_marker_wrap {
+    width: 230px;
+    height: 160px;
+    background-color: #ffffff;
+    border-radius: 7px;
+    text-align: center;
+    margin-top: 80px;
+    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.1);
+}
+
+.board_marker_header {
+    float: left;
+    width: 90%;
+    text-align: left;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 10px;
+}
+
+.board_marker_article {
+    float: left;
+    width: 90%;
+    height: 40px;
+    margin-top: 10px;
+    text-align: left;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+.board_marker_footer {
+    float: left;
+    width: 100%;
+    text-align: left;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 5px;
+}
+
+.board_button {
+    text-align: center;
+    margin-top: 210px;
+    padding-top: 10px;
+    width: 250px;
+    height: 50px;
+    border-radius: 30px;
+    margin-left: 50%;
+    background-color: #27AE60;
+    color: #ffffff;
+}

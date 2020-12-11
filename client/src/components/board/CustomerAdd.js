@@ -113,7 +113,7 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-const CustomerAdd = ({ history }) => {
+const CustomerAdd = ({ history, search }) => {
     const [error, setError] = useState('');
     const [user, setUser] = useState(
         {
