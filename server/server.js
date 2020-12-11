@@ -300,7 +300,26 @@ app.delete('/api/myclass/:boardid', (req, res) => {
     })
 });
 
+// 키워드 기반 클래스 목록
+app.get('/api/class/:keyword', function(req, res) {
+  var params = req.params.keyword;
+  var sql = "SELECT * FROM board WHERE boardTitle LIKE '%" + params + "%' OR boardContents LIKE '%" + params + "%'";  
 
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+      
+      console.log(rows);
+    }
+  })
+});
 
 
 app.post('/api/payment/', (req, res) => {

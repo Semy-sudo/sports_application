@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import qs from 'querystring'
 import '../common/BoardMarker.css';
 
 const KakaoMap = styled.div`
@@ -38,7 +39,19 @@ function Marker(mapContainer, history) {
     }
 }
 
-const BoardSearchMap = ({ history }) => {
+// var params = qs.parse(location.search)
+// var keys = Object.keys(params);
+// var values = Object.values(params);
+// var startDate = values[0].replace('?',"");
+// var finishDate = values[1];
+// var startTime = values[2];
+// var finishTime = values[3];
+// var mapData = new Object();
+
+// for(var i = 4; i < Object.keys(params).length; i++) {
+//     mapData[keys[i]] = values[i]
+// }
+const BoardSearchMap = ({ history, location }) => {
     useEffect(() => {
         const script = document.createElement("script");
 

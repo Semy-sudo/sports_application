@@ -18,7 +18,7 @@ const PaymentHeader = styled.div`
     text-align: left;
 `;
 
-const PaymentPage = () => {
+const PaymentPage = ({ history, location }) => {
     return(
         // <PaymentWrap>
         //     <PaymentHeader>
@@ -26,7 +26,10 @@ const PaymentPage = () => {
         //     </PaymentHeader>
         //     <PaymentContents/>
         // </PaymentWrap>
-        <BoardSearchMap />
+        <BoardSearchMap
+            history={ history }
+            location={ location }
+        />
     );
 };
 
