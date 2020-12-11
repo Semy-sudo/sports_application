@@ -4,219 +4,306 @@ import palette from '../../lib/styles/palette';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import ShortCut from '../../lib/styles/img/chevron-forward-outline.svg';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '../common/Button';
+import { post } from 'axios';
+
+const Contents = styled.div `
+    float: left;
+    margin-top: 100px;
+    width: 100%;
+    height: 800px;
+`;
+
+const ButtonWidthMarginTop = styled(Button)`
+    margin-top: 1rem;
+    width: 20%;
+    float: right;
+`;
 
 const AuthFormBlock = styled.div`
-    h3 { 
-        margin: 0;
-        color: ${palette.gray[8]};
-        margin-bottom: 1rem;
-    }
+    margin-top: 0px;
 `;
 
-const AuthFormBlockHeader = styled.div`
+const Contents_Title = styled.div`
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-weight: bold; 
+    font-size: 20px; 
+    color: rgb(39, 174, 96);
+`;
+
+const Contents_Title_Line = styled.div`
+    top: 135px;
+    left: 333px;
+    width: 800px;
+    height: 3px;
+    background-color: rgb(39, 174, 96);
+`;
+
+const Contents_Detail_Text = styled.div`
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 100*100;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-weight: bold; 
+    font-size: 15px;
+    margin-left: 20px;
+    margin-right: 20px;
+`;
+
+const Table_Layout = styled.div`
     width: 100%;
+    margin-top: 50px;
 `;
 
-const Header_Header = styled.div`
+const Table_Text = styled.div`
     float: left;
-    width: 50%;
+    margin-left: 20px;
+    line-height: 100px;
+    font-size: 20px;
 `;
 
-const Header_Footer = styled.div`
-    float: left;
-    width: 50%;
-    text-align: right;
+
+
+const Shortcut_Area = styled.span`
+    float: right;
+    margin-top: 25px;
 `;
 
-const StyledInput = styled.input`
-    font-size: 1rem;
-    border: none;
-    border-bottom: 1px solid ${palette.gray[5]};
-    padding-bottom: 0.5rem;
-    outline: none;
-    width: 100%;
-    &:focus: {
-        color: $oc-teal-7;
-        border-bottom: 1px solid ${palette.gray[7]};
-    }
-    & + & {
-        margin-top: 1rem;
-    }
-`;
-
-const StyleButton = styled.button`
-    border: none;
+const Input_Title = styled.input`
+    padding: 6px 12px;
+    width: 400%;
+    height: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.25rem 1rem;
-    color: white;
-    outline; none;
-    cursor: pointer;
-    margin-top: 1rem;
-    background: ${palette.gray[8]};
-    &:hover {
-        background: ${palette.gray[6]}
-    }
-
-    ${props => 
-      props.fullWidth &&
-      css`
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-        width: 100%;
-        font-size: 1.125rem;
-      `
-    }
-
-    ${props => 
-      props.halfWidth &&
-      css`
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-        width: 70%;
-        font-size: 1.125rem;
-      `
-    }
-
-    ${props => 
-        props.cyan &&
-        css`
-          background: #27AE60;
-          &:hover {
-            background: #5EC88B;
-          }
-        `
-    }
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-sizing: border-box;
+    resize: none;
+    font-size: 14px;
+    data-text-content="true";
+    type="text";
 `;
 
-const Footer = styled.div`
-    margin-top: 2rem;
-    text-align: right;
-    a {
-        color: ${palette.gray[6]};
-        text-decoration: underline;
-        &:hover {
-            color: ${palette.gray[9]};
-        }
-    }
+const Input_Detail = styled.input`
+    padding: 6px 12px;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-sizing: border-box;
+    resize: none;
+    font-size: 14px;
+    data-text-content="true";
 `;
 
-const Button_Certification = styled.button`
-    background-color: #ffffff;
+const Input_Contents = styled.input`
+    padding: 100px 12px;
+    width: 400%;
+    height: 400%;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-sizing: 100;
+    font-size: 14px;
+    data-text-content="true";
 `;
 
-const ErrorMessage = styled.div`
-    color: red;
+
+const Input_Detail_Block = styled.input`
+    background-color: rgb(224, 224, 224);
     text-align: center;
-    font-size: 0.875rem;
-    margin-top: 1rem;
+    padding: 181*24;
 `;
 
-const CustomerAdd = ({ history }) => {
-    const [error, setError] = useState('');
-    const [user, setUser] = useState(
-        {
-            boardType: '',
-            boardLimit: '',
-            boardTitle: '',
-            boardContents: '',
+class CustomerAdd extends React.Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            boardTitle:''
         }
-    );
-    const changeField = e => {
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value
+        this.handleFormSubmit = this.handleFormSubmit.bind(this)
+        this.handleValueChange = this.handleValueChange.bind(this)
+        this.addCustomer = this.addCustomer.bind(this)
+    }
+    
+    handleFormSubmit(e) {
+
+        e.preventDefault()
+        
+        this.addCustomer()
+        
+        .then((response) => {
+        
+        console.log(response.data);
+        
         })
-    };
+        
+    }
+
+    handleValueChange(e) {
+
+        let nextState = {};
+        
+        nextState[e.target.name] = e.target.value;
+        
+        this.setState(nextState);
+        
+    }
 
 
-    const onClick = e => {
-        if([user.boardType, user.boardLimit, user.boardTitle, user.boardContents].includes('')) {
-            setError('빈 칸을 모두 입력하세요');
 
-            return;
-        }
 
-        if(user.boardType === '') {
-            setError('등록 버튼을 한번 더 눌러주세요');
 
-            return;
-        } 
 
+    addCustomer(){
+        const url = '/api/classopen';
+        const formData = new FormData();
+        formData.append('boardTitle',this.state.boardTitle);
         const config = {
             headers: {
-                'content-type': 'application/json'
+                'content-type':'multipart/form-data'
             }
-        };
+        }
+        return post(url,formData,config)
+    }
+    
+    render(){
 
-        axios.post('/api/classopen', {
-                boardType: user.boardType,
-                boardLimit: user.boardLimit,
-                boardTitle: user.boardTitle,
-                boardContents: user.boardContents,
-            },
-            config
-        ).then( (response) => {
-            setUser({
-                boardType: '',
-                boardLimit: '',
-                boardTitle: '',
-                boardContents: '',
-            })
-        });
-
-        //history.push('/');
+        return(
+            <Contents>
+            <Table_Layout>
+            <Table_Text>
+                <Contents_Title>클래스 등록하기</Contents_Title><Contents_Title_Line></Contents_Title_Line>
+            </Table_Text>
+            <form onSubmit={this.handleFormSubmit}>
+                <table>
+                    <tr>
+                        <td className="full_line" colspan="2">
+                            <Table_Text>
+                            <input type="checkbox"/>원데이 클래스 <input type="checkbox"/> 정규 클래스 
+                            </Table_Text>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="full_line" colspan="2">
+                            <Table_Text>
+                            <Input_Title 
+                            autoComplete="boardTitle"
+                            name="boardTitle"
+                            placeholder="제목을 적어주세요. (Ex. 축구할 친구들 모여라!)"
+                            type="text"
+                            value={this.state.boardTitle}
+                            onChange={this.handleValueChange}
+                            />
+                            </Table_Text>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="half_left_line">
+                        <div data-image-content="true"></div>
+                        </td>
+                        <td className="half_right_line">
+                            <tr>
+                                <Table_Text>
+                                <Contents_Detail_Text>수강료:</Contents_Detail_Text>
+                                </Table_Text>
+                                <Shortcut_Area>
+                                <Input_Detail 
+                                autoComplete="baordpay"
+                                name="boardpay"
+                                placeholder="원"
+                                type="text"
+                                />
+                                </Shortcut_Area>
+                            </tr>
+                            <tr>
+                                <Table_Text>
+                                <Contents_Detail_Text>최소인원:</Contents_Detail_Text>
+                                </Table_Text>
+                                <Shortcut_Area>
+                                <Input_Detail_Block
+                                autoComplete="boardmin"
+                                name="boardmin"
+                                placeholder="명(수)"
+                                type="text"
+                                />
+                                </Shortcut_Area>
+                            </tr>
+                            <tr>
+                                <Table_Text>
+                                <Contents_Detail_Text>최대인원:</Contents_Detail_Text>
+                                </Table_Text>
+                                <Shortcut_Area>
+                                <Input_Detail_Block
+                                autoComplete="boardmax"
+                                name="boardmax"
+                                placeholder="명(수)"
+                                type="text"
+                                />
+                                </Shortcut_Area>
+                            </tr>
+                             
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="full_line" colspan="2">
+                            <Table_Text>
+                                
+                                    날짜 시간(지도에서 입력받아 온것)
+                                
+                            </Table_Text>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="full_line" colspan="2">
+                            <Table_Text>
+                            <Input_Contents 
+                            autoComplete="boardContents"
+                            name="boardContents"
+                            placeholder="어떤 클래스를 진행할건지 상세히 적어주세요! (Ex. 프로그램 일정. 강사 약력 등등...)"
+                            type="text"
+                            />
+                            </Table_Text>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="full_line" colspan="2">
+                           
+                        
+                            <ButtonWidthMarginTop cyan="cyan" fullWidth="fullWidth">
+                                <button type="submit">등록&결제</button>
+                            </ButtonWidthMarginTop>
+                        
+                           
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </Table_Layout>
+            </Contents>
+        );
     };
 
-    return(
-        <AuthFormBlock>
-            <AuthFormBlockHeader>
-                <Header_Header>
-                    <h3>Class 글쓰기</h3>
-                </Header_Header>
-            </AuthFormBlockHeader>
-            <StyledInput 
-                autoComplete="boardType"
-                name="boardType"
-                placeholder="종류"
-                onChange={ changeField }
-            />
-            <StyledInput 
-                autoComplete="boardLimit"
-                name="boardLimit"
-                placeholder="기간"
-                type="text"
-                onChange={ changeField }
-            />
-            <StyledInput 
-                autoComplete="boardTitle"
-                name="boardTitle"
-                placeholder="제목"
-                type="text"
-                onChange={ changeField }
-            />
-            <StyledInput 
-                autoComplete="boardContents"
-                name="boardContents"
-                placeholder="내용"
-                type="text"
-                onChange={ changeField }
-            />
-            { error && <ErrorMessage>{ error }</ErrorMessage> }
-            <StyleButton 
-                cyan
-                fullWidth  
-                type="button"  
-                onClick={ onClick }    
-            >
-                등록하기
-            </StyleButton>
-            <Footer>
-                <Link to="/auth">MYPAGE</Link>
-            </Footer>
-        </AuthFormBlock>
-    );
-};
+}
 
-export default withRouter(CustomerAdd);
+
+export default CustomerAdd;

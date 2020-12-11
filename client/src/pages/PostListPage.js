@@ -1,13 +1,13 @@
 import React from 'react';
-import AuthTemplate from '../components/auth/AuthTemplate';
+import ClassTemplate from '../components/auth/ClassTemplate';
 import ClassAddForm from '../components/board/ClassAddForm';
 
 
 const PostListPage = () => {
     return(
-        <AuthTemplate>
+        <ClassTemplate>
             <ClassAddForm/>
-        </AuthTemplate>
+        </ClassTemplate>
     );
 };  
 
