@@ -50,7 +50,7 @@ class MyPage extends Component {
     return(
         <MyPage_Contents>
             {
-            this.state.customers
+                this.state.customers
                 ? this
                     .state
                     .customers
@@ -60,7 +60,7 @@ class MyPage extends Component {
                         );
                     })
                 :""
-        }
+            }
         </MyPage_Contents>
     );
     }

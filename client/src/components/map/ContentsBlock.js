@@ -1,7 +1,6 @@
 /*global kakao*/
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
 import SearchBarBlock from './SearchBarBlock';
 import axios from 'axios';
@@ -101,7 +100,6 @@ function Marker(map, mapContainer, history) {
 
     kakao.maps.event.addListener(marker, 'click', function(){
         overlay = new kakao.maps.CustomOverlay({
-
             content: content,
             map: mapContainer,
             position: marker.getPosition()
