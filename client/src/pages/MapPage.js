@@ -1,11 +1,15 @@
 import React from 'react';
 import ContentsBlock from '../components/map/ContentsBlock';
+import ContentsBlockParent from '../components/map/ContentsBlockParent';
 
 const MapPage = ({ history }) => {
     return(
-        <ContentsBlock
+        // type === 'parent' ?
+        // <ContentsBlock
+        //     history={ history }
+        // /> // :
+        <ContentsBlockParent
             history={ history }
-            // type={ user.type }
         />
     );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PaymentContents from '../components/payment/PaymentContents';
-import BoardSearchMap from '../components/board/BoardSearchMap';
+import MapPage from './MapPage';
 
 const PaymentWrap = styled.div`
     width: 100%;
@@ -20,16 +20,15 @@ const PaymentHeader = styled.div`
 
 const PaymentPage = ({ history, location }) => {
     return(
-        // <PaymentWrap>
-        //     <PaymentHeader>
-        //         <h2><b>결제하기</b></h2>
-        //     </PaymentHeader>
-        //     <PaymentContents/>
-        // </PaymentWrap>
-        <BoardSearchMap
-            history={ history }
-            location={ location }
-        />
+        <PaymentWrap>
+            <PaymentHeader>
+                <h2><b>결제하기</b></h2>
+            </PaymentHeader>
+            <PaymentContents/>
+        </PaymentWrap>
+        // <MapPage
+        //     history={ history }
+        // />
     );
 };
 

@@ -124,6 +124,26 @@ app.post('/api/auth/register', function(req, res){
   });
 });
 
+app.get(`/api/auth/getExpert/:nickName`, function(req, res) {
+  var params = req.params.nickName;
+  var sql = `SELECT * FROM user WHERE id=${params}`;
+
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+      res.send({
+        "code": 400,
+        "failed": "error occured",
+      })
+    } else {
+      console.log("The solution is", rows);
+
+      res.json(rows);
+    }
+  });
+});
+
 app.get('/api/map/mapList/:keyword', function(req, res){
   var params = req.params.keyword;
   var sql = "SELECT * FROM map WHERE FACI_NM LIKE '%" + params + "%' OR FCOB_NM LIKE '%" + params + "%'";
@@ -175,6 +195,8 @@ app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
     sql = "SELECT * FROM map WHERE FACI_NM LIKE '%테니스%' OR FCOB_NM LIKE '%테니스%' OR FACI_NM LIKE '%테니스%' OR FCOB_NM LIKE '%테니스%'";  
   } else if(params === '배구') {
     sql = "SELECT * FROM map WHERE FACI_NM LIKE '%배구%' OR FCOB_NM LIKE '%배구%'";    
+  } else if(params === '배드민턴') {
+    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%배드민턴%' OR FCOB_NM LIKE '%배드민턴%'";    
   } else if(params === '축구') {
     sql = "SELECT * FROM map WHERE FACI_NM LIKE '%축구%' OR FCOB_NM LIKE '%축구%'";  
   } else if(params === '풋살') {
@@ -321,6 +343,69 @@ app.get('/api/class/:keyword', function(req, res) {
   })
 });
 
+app.get('/api/class/classListByPlace/:keyword', function(req, res) {
+  var params = req.params.keyword.split(" ");
+  var sql = `SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FMNG_CP_NM') = '${params[0]}' AND JSON_EXTRACT(mapData, '$.FMNG_CP_NM') = '${params[1]}'`;  
+  
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+      
+      console.log(rows);
+    }
+  })
+});
+
+app.get('/api/class/classListByFilter/:keyword', function(req, res) {
+  var params = req.params.keyword;
+  var sql = '';
+
+  if(params === '골프') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%게이트볼%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%게이트볼%'";
+  } else if(params === '농구') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%농구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%농구%'";
+  } else if(params === '테니스') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%테니스%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%테니스%' OR JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%정구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%정구%'";
+  } else if(params === '배구') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%배구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%배구%'";   
+  } else if(params === '배드민턴') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%배드민턴%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%배드민턴%'";   
+  } else if(params === '축구') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%축구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%축구%'";   
+  } else if(params === '풋살') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%풋살%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%풋살%'";   
+  } else if(params === '야구') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%야구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%야구%'";   
+  } else if(params === '사격') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%사격%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%사격%'";   
+  } else if(params === '양궁') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%양궁%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%양궁%' OR JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%국궁%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%국궁%'";
+  } else if(params === '기타') {
+    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%암벽%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%암벽%' OR JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%빙상%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%빙상%' OR JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%인라인%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%인라인%'";
+  }
+
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+      
+      console.log(rows);
+    }
+  })
+});
 
 app.post('/api/payment/', (req, res) => {
   let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';

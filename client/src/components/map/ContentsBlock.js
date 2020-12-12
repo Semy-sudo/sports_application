@@ -136,7 +136,6 @@ function Marker(map, mapContainer, history) {
     }
 }
 
-// user.type === 'parent'
 const ContentsBlock = ({ history }) => {
     const [place, setPlace] = useState(false);
     const [placeValue, setPlaceValue] = useState('');
@@ -154,9 +153,6 @@ const ContentsBlock = ({ history }) => {
             }
         };
 
-        // if(user.type === 'parent') {
-        //     var res = await axios.get(`/api/`)
-        // }
         var res = await axios.get(`/api/map/mapList/${document.getElementById('keyword').value}`, config);
 
         setMapList( (res.data.data) )
