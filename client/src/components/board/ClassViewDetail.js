@@ -22,8 +22,6 @@ class ClassViewDetail extends Component {
         this.state = {
             classviewdetail: '',
             completed: 0,
-            history: props.history,
-            loaction: props.location
         }
     }
 
@@ -62,6 +60,8 @@ class ClassViewDetail extends Component {
                                         .map(c => {
                                             return (
                                                 <ViewDetailContents
+                                                    history={ this.props.history }
+                                                    location={ this.props.location }
                                                     stateRefresh={this.stateRefresh}
                                                     key={c.boardid}
                                                     boardTitle={c.boardTitle}
