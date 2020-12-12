@@ -126,19 +126,6 @@ app.post('/api/auth/register', function(req, res){
   });
 });
 
-//클래스
-app.post('/api/auth/class', function(req, res){
-  let sql = 'INSERT INTO board VALUES (null,?,?,?,null,null,null,null,null,null,null,null,null,null,null,null)';
-  let params = [
-      req.body.classKind,
-      req.body.boardType,
-      req.body.boardpay
-  ];
-  connection.query(sql, params, (err, rows, fields) => {
-      res.send(rows);
-      console.log(rows);
-  });
-});
 
 app.get('/api/map/mapList/:keyword', function(req, res){
   var params = req.params.keyword;
@@ -292,26 +279,43 @@ app.get('/api/myclass', (req, res) => {
     });
 });
 
-//쿼리 처리
-app.get('/api/classopen', function(req, res) {
-   var queryData = url.parse(req.url, true).query;
 
-});
+app.get('/OpenClass', function(req,res){
+  
+  console.log(startDate);
+  var _url = req.url;
+  console.log(_url);
+  var queryData = url.parse(_url, true).query;
+  console.log("시작일",queryData.startDate);
+
+ 
+})
+
 
 //클래스 열기
 app.post('/api/classopen', function(req, res){
-  console.log("queryData",req.body);
-  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,?,?)';
+  var _url = req.url;
+  console.log("_url",_url);
+  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,?,null,?,?,?,?,?,NOW(),null,?)';
   let params = [
       req.user,
       req.body.boardTitle,
-      req.body.boardLimit,
-      req.body.boardType,
-      req.body.boardContents
+      req.body.baordpay,
+      req.body.boardmin,
+      req.body.boardmax,
+      req.body.boardContents,
+      req.body.startDate,
+      req.body.finishDate,
+      req.body.startTime,
+      req.body.finishDate,
+      req.body.FACI_NM,
+      req.body.classkind
   ];
+
+ 
   connection.query(sql, params, (err, rows, fields) => {
       res.send(rows);
-      console.log(rows);
+      console.log("row",rows);
   });
   res.redirect('/payment');
 });
@@ -327,7 +331,26 @@ app.delete('/api/myclass/:boardid', (req, res) => {
     })
 });
 
+// 키워드 기반 클래스 목록
+app.get('/api/class/:keyword', function(req, res) {
+  var params = req.params.keyword;
+  var sql = "SELECT * FROM board WHERE boardTitle LIKE '%" + params + "%' OR boardContents LIKE '%" + params + "%'";  
 
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+      
+      console.log(rows);
+    }
+  })
+});
 
 
 app.post('/api/payment/', (req, res) => {

@@ -5,6 +5,7 @@ const MapPage = ({ history }) => {
     return(
         <ContentsBlock
             history={ history }
+            // type={ user.type }
         />
     );
 };

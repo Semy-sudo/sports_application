@@ -3,11 +3,15 @@ import ClassTemplate from '../components/auth/ClassTemplate';
 import ClassAddForm from '../components/board/ClassAddForm';
 
 
-const PostListPage = () => {
+const PostListPage = ({ history, search }) => {
     return(
         <ClassTemplate>
-            <ClassAddForm/>
+            <ClassAddForm
+                history={ history }
+                search={ search }
+            />
         </ClassTemplate>
+
     );
 };  
 

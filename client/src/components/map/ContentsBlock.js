@@ -1,7 +1,6 @@
 /*global kakao*/
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
 import SearchBarBlock from './SearchBarBlock';
 import axios from 'axios';
@@ -17,6 +16,17 @@ const KakaoMap = styled.div`
     text-align: center;
 `;
 
+function parseJsonToString(json) {
+    var query = '';
+    var keys = Object.keys(json);
+    var values = Object.values(json);
+
+    for(var i = 0; i < Object.keys(json).length; i++) {
+        query += `&${keys[i]}=${values[i]}`
+    }
+
+    return query;
+}
 
 function Marker(map, mapContainer, history) {
     var position = new kakao.maps.LatLng(Number(map.FACI_POINT_Y), Number(map.FACI_POINT_X));
@@ -31,7 +41,6 @@ function Marker(map, mapContainer, history) {
 
     if(map.FACI_NM) {
         map.FACI_NM = map.FACI_NM.replace(/"/gi, "");
-
     }
 
     var content = 
@@ -101,7 +110,6 @@ function Marker(map, mapContainer, history) {
 
     kakao.maps.event.addListener(marker, 'click', function(){
         overlay = new kakao.maps.CustomOverlay({
-
             content: content,
             map: mapContainer,
             position: marker.getPosition()
@@ -123,11 +131,12 @@ function Marker(map, mapContainer, history) {
 
         history.push(
             '/OpenClass?startDate='+ startDate +'&finishDate=' + finishDate +
-            '&startTime=' + startTime + '&finishTime=' + finishTime + '&map=' + map
+            '&startTime=' + startTime + '&finishTime=' + finishTime + parseJsonToString(map)
         );   
     }
 }
 
+// user.type === 'parent'
 const ContentsBlock = ({ history }) => {
     const [place, setPlace] = useState(false);
     const [placeValue, setPlaceValue] = useState('');
@@ -135,6 +144,15 @@ const ContentsBlock = ({ history }) => {
         FACI_POINT_Y: 33.450701,
         FACI_POINT_X: 126.570667
     }]);
+    // const [board, setUser] = useState(
+    //     {
+    //         startDate: '',
+    //         finishDate: '',
+    //         startTime: '',
+    //         finishTime: '',
+            
+    //     }
+    // );
     const [filter, setFilter] = useState(false);
     const onClick = async e => {
         e.preventDefault();
@@ -145,6 +163,25 @@ const ContentsBlock = ({ history }) => {
             }
         };
 
+        // axios.post('/OpenClass', {
+        //     startDate: board.startDate,
+        //     finishDate: board.finishDate,
+        //     startTime: board.startTime,
+        //     finishTime: board.startTime
+        //                 },
+        //                 config
+        //             ).then( (response) => {
+        //                 setUser({
+        //                     startDate: '',
+        //                     finishDate: '',
+        //                     startTime: '',
+        //                     finishTime: '',
+        //                 })
+        //             });
+
+        // if(user.type === 'parent') {
+        //     var res = await axios.get(`/api/`)
+        // }
         var res = await axios.get(`/api/map/mapList/${document.getElementById('keyword').value}`, config);
 
         setMapList( (res.data.data) )
@@ -212,7 +249,6 @@ const ContentsBlock = ({ history }) => {
 
         script.onload = () => {
             kakao.maps.load( () => {
-
                 var container = document.getElementById('mapContainer');
                 var options = {
                     center: new kakao.maps.LatLng(Number(mapList[0].FACI_POINT_Y), Number(mapList[0].FACI_POINT_X)),

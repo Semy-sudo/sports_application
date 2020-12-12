@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import CustomerAdd from './CustomerAdd';
 import { withRouter } from 'react-router-dom';
 
-const ClassAddForm = ({ history }) => {
+const ClassAddForm = ({ history, search }) => {
 
     return(
         <CustomerAdd
+            history={ history }
+            search={ search }
         />
     );
 };
