@@ -16,7 +16,10 @@ const MyClassPage_Contents = styled.div`
 const ClassDetail = ({ history, location }) => {
     return(
         <ClassTemplate>
-            <ClassViewDetail/>
+            <ClassViewDetail
+                history={ history }
+                location={ location }
+            />
         </ClassTemplate>
     );
 };
