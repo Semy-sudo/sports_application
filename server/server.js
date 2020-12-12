@@ -256,15 +256,25 @@ app.get('/api/map/mapList/', (req, res) => {
 
 
 // 홈 화면 클래스띄우기
-app.get('/api/customers', (req, res) => {
+app.get('/api/onedayclass', (req, res) => {
     connection.query(
-        "SELECT * FROM board WHERE isDeleted = 0",
+        "SELECT * FROM board WHERE isDeleted = 0 && classkind = 1",
         (err, rows, fields) => {
             res.send(rows);
             console.log(rows);
         }
     );
     
+});
+app.get('/api/regularclass', (req, res) => {
+  connection.query(
+      "SELECT * FROM board WHERE isDeleted = 0 && classkind = 2",
+      (err, rows, fields) => {
+          res.send(rows);
+          console.log(rows);
+      }
+  );
+  
 });
 
 //마이페이지에서 expert와 

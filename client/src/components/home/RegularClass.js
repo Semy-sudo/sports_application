@@ -23,6 +23,12 @@ const Line_1 = styled.hr`
   margin-left: auto;
   margin-right: auto;
 `;
+const Table_head = styled.div`
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: green;
+`;
 
 class RegularClass extends Component {
 
@@ -50,7 +56,7 @@ class RegularClass extends Component {
     }
 
     callApi = async () => {
-        const response = await fetch('/api/customers');
+        const response = await fetch('/api/regularclass');
         const body = await response.json();
         return body;
     }
@@ -62,18 +68,31 @@ class RegularClass extends Component {
                     <h2>정규 클래스</h2>
                     <Table>
                         <Table_td>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>이름</TableCell>
-                                <TableCell>종류</TableCell>
-                                <TableCell>제한인원</TableCell>
-                                <TableCell>제목</TableCell>
-                                <TableCell>내용</TableCell>
-                                <TableCell>설정</TableCell>
-                            </TableRow>
-                        </TableHead>
+
+                        <Table_head>현재 모집중인 정규 클래스 !!!</Table_head> 
                         <TableBody>
                             {
+                                this.state.customers
+                                    ? this
+                                        .state
+                                        .customers
+                                        .map(c => {
+                                            return (
+                                                <Customer
+                                                    stateRefresh={this.stateRefresh}
+                                                    key={c.boardid}
+                                                    boardid={c.boardid}
+                                                    startDate={c.startDate}
+                                                    startTime={c.startTime}
+                                                    finishDate={c.finishDate}
+                                                    finishTime={c.finishTime}
+                                                    boardTitle={c.boardTitle}
+                                                    />
+                                            );
+                                        })
+                                    : ""
+                            }
+                            {/* {
                                 this.state.customers
                                     ? this
                                         .state
@@ -91,7 +110,7 @@ class RegularClass extends Component {
                                             );
                                         })
                                     : ""
-                            }
+                            } */}
                         </TableBody>
                         </Table_td>
                         
