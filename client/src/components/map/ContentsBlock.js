@@ -130,7 +130,7 @@ function Marker(map, mapContainer, history) {
         var finishTime = document.getElementById('finishTime').value;
 
         history.push(
-            '/payment?startDate='+ startDate +'&finishDate=' + finishDate +
+            '/OpenClass?startDate='+ startDate +'&finishDate=' + finishDate +
             '&startTime=' + startTime + '&finishTime=' + finishTime + parseJsonToString(map)
         );   
     }
@@ -144,6 +144,15 @@ const ContentsBlock = ({ history }) => {
         FACI_POINT_Y: 33.450701,
         FACI_POINT_X: 126.570667
     }]);
+    // const [board, setUser] = useState(
+    //     {
+    //         startDate: '',
+    //         finishDate: '',
+    //         startTime: '',
+    //         finishTime: '',
+            
+    //     }
+    // );
     const [filter, setFilter] = useState(false);
     const onClick = async e => {
         e.preventDefault();
@@ -153,6 +162,22 @@ const ContentsBlock = ({ history }) => {
                 'content-type': 'application/json'
             }
         };
+
+        // axios.post('/OpenClass', {
+        //     startDate: board.startDate,
+        //     finishDate: board.finishDate,
+        //     startTime: board.startTime,
+        //     finishTime: board.startTime
+        //                 },
+        //                 config
+        //             ).then( (response) => {
+        //                 setUser({
+        //                     startDate: '',
+        //                     finishDate: '',
+        //                     startTime: '',
+        //                     finishTime: '',
+        //                 })
+        //             });
 
         // if(user.type === 'parent') {
         //     var res = await axios.get(`/api/`)

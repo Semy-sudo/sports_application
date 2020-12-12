@@ -10,8 +10,8 @@ var FileStore = require('session-file-store')(session)
 
 const port = process.env.PORT || 4000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 const data = fs.readFileSync('./database.json');
 const conf = JSON.parse(data); //data를 js객체로 변환
@@ -25,6 +25,10 @@ connection.connect();
 
 var router = express.Router();
 
+const url = require('url');
+
+
+
 
 app.get('/post', function (req, res) {
     res.send('GET request to the post');
@@ -32,8 +36,6 @@ app.get('/post', function (req, res) {
 });
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
 
 //session 관련
 app.use(session({
@@ -123,6 +125,7 @@ app.post('/api/auth/register', function(req, res){
       console.log(rows);
   });
 });
+
 
 app.get('/api/map/mapList/:keyword', function(req, res){
   var params = req.params.keyword;
@@ -238,6 +241,7 @@ app.get('/api/customers', (req, res) => {
             console.log(rows);
         }
     );
+    
 });
 
 //마이페이지에서 expert와 
@@ -275,21 +279,48 @@ app.get('/api/myclass', (req, res) => {
     });
 });
 
+
+app.get('/OpenClass', function(req,res){
+  
+  console.log(startDate);
+  var _url = req.url;
+  console.log(_url);
+  var queryData = url.parse(_url, true).query;
+  console.log("시작일",queryData.startDate);
+
+ 
+})
+
+
 //클래스 열기
-app.post('/api/classopen', (req, res) => {
-    let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0,1)';
-    let params = [
-        req.user,
-        req.body.boardType,
-        req.body.boardLimit,
-        req.body.boardTitle,
-        req.body.boardContents
-    ];
-    connection.query(sql, params, (err, rows, fields) => {
-        res.send(rows);
-        console.log(rows);
-    });
+app.post('/api/classopen', function(req, res){
+  var _url = req.url;
+  console.log("_url",_url);
+  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,?,null,?,?,?,?,?,NOW(),null,?)';
+  let params = [
+      req.user,
+      req.body.boardTitle,
+      req.body.baordpay,
+      req.body.boardmin,
+      req.body.boardmax,
+      req.body.boardContents,
+      req.body.startDate,
+      req.body.finishDate,
+      req.body.startTime,
+      req.body.finishDate,
+      req.body.FACI_NM,
+      req.body.classkind
+  ];
+
+ 
+  connection.query(sql, params, (err, rows, fields) => {
+      res.send(rows);
+      console.log("row",rows);
+  });
+  res.redirect('/payment');
 });
+
+
 
 app.delete('/api/myclass/:boardid', (req, res) => {
     let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
