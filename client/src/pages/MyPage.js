@@ -42,6 +42,9 @@ class MyPage extends Component {
     callApi = async () => {
         const response = await fetch('/api/mypage');
         const body = await response.json();
+
+        localStorage.setItem("user", JSON.stringify(body[0]));
+
         return body;
     }
 
