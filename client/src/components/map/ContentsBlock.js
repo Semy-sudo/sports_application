@@ -130,7 +130,7 @@ function Marker(map, mapContainer, history) {
         var finishTime = document.getElementById('finishTime').value;
 
         history.push(
-            '/payment?startDate='+ startDate +'&finishDate=' + finishDate +
+            '/OpenClass?startDate='+ startDate +'&finishDate=' + finishDate +
             '&startTime=' + startTime + '&finishTime=' + finishTime + parseJsonToString(map)
         );   
     }
@@ -143,6 +143,15 @@ const ContentsBlock = ({ history }) => {
         FACI_POINT_Y: 33.450701,
         FACI_POINT_X: 126.570667
     }]);
+    // const [board, setUser] = useState(
+    //     {
+    //         startDate: '',
+    //         finishDate: '',
+    //         startTime: '',
+    //         finishTime: '',
+            
+    //     }
+    // );
     const [filter, setFilter] = useState(false);
     const onClick = async e => {
         e.preventDefault();
@@ -152,6 +161,7 @@ const ContentsBlock = ({ history }) => {
                 'content-type': 'application/json'
             }
         };
+
 
         var res = await axios.get(`/api/map/mapList/${document.getElementById('keyword').value}`, config);
 
