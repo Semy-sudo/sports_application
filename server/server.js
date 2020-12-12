@@ -408,7 +408,7 @@ app.get('/api/class/classListByFilter/:keyword', function(req, res) {
 });
 
 app.post('/api/payment/', (req, res) => {
-  let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
+  let sql = 'INSERT INTO payment VALUES (null,?,?,?,?,?,?,?)';
   let params = [
       req.body.paymentPlace,
       req.body.paymentThing,

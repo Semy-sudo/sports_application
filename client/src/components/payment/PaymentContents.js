@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Contents = styled.div`
     width: 60%;
@@ -49,9 +50,39 @@ const ContentsElFooterButton = styled.button`
     border: none;
 `;
 
-const PaymentContents = () => {
-    const onClick = e => {
+function getToday(){
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = ("0" + (1 + date.getMonth())).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+
+    return year + "-" + month + "-" + day;
+}
+
+const PaymentContents = ({ history, paymentData }) => {
+    const onClick = async e => {
         e.preventDefault();
+
+        const config = {
+            headers: {
+                'content-type': 'application/json'
+            }
+        };
+
+        axios.post('/api/payment', {
+                paymentDate: getToday(),
+                paymentPlace: paymentData.paymentPlace,
+                paymentThing: paymentData.paymentThing,
+                paymentMoney: paymentData.paymentMoney,
+                userName: paymentData.userName,
+                userTel: paymentData.userTel,
+                paymentContents: paymentData.paymentContents,
+                userId: paymentData.userId,
+            },
+            config
+        )
+
+        history.push('/');
     };
 
     return(
@@ -62,7 +93,7 @@ const PaymentContents = () => {
                         일시
                     </ContentsElTitle>
                     <ContentsElContents>
-                        2020.02.22
+                        { getToday() }
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -71,6 +102,7 @@ const PaymentContents = () => {
                     </ContentsElTitle>
                     <ContentsElContents>
                         체육동산
+                        { paymentData.paymentPlace }
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -79,6 +111,7 @@ const PaymentContents = () => {
                     </ContentsElTitle>
                     <ContentsElContents>
                         카카오페이
+                        {/* { paymentData.paymentThing } */}
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -87,6 +120,7 @@ const PaymentContents = () => {
                     </ContentsElTitle>
                     <ContentsElContents>
                         30000
+                        {/* { paymentData.paymentMoney } */}
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -95,6 +129,7 @@ const PaymentContents = () => {
                     </ContentsElTitle>
                     <ContentsElContents>
                         김나희
+                        {/* { paymentData.userName } */}
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -103,6 +138,7 @@ const PaymentContents = () => {
                     </ContentsElTitle>
                     <ContentsElContents>
                         010-1234-5678
+                        {/* { paymentData.userTel } */}
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -111,6 +147,7 @@ const PaymentContents = () => {
                     </ContentsElTitle>
                     <ContentsElContents>
                         장수축구장 체육동산차량
+                        {/* { paymentData.paymentContents } */}
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsElFooter>
