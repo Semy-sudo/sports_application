@@ -9,8 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '../common/Button';
 import {post} from 'axios';
 import qs from 'qs';
-
-
+import BoardSearchMap from './BoardSearchMap';
 
 const Contents = styled.div `
     float: left;
@@ -164,9 +163,19 @@ const CustomerAdd = ({history, location}) => {
 
     const [error, setError] = useState('');
     const [certifiState, setCertifiState] = useState(false);
-    const [board, setUser] = useState(
-        {classkind: '', boardTitle: '', baordpay: '', boardmin: '', boardmax: '', boardContents: '',startDate: startDate ,finishDate:finishDate ,startTime:startTime,finishTime:finishTime,FACI_NM:FACI_NM}
-    );
+    const [board, setUser] = useState({
+        classkind: '',
+        boardTitle: '',
+        baordpay: '',
+        boardmin: '',
+        boardmax: '',
+        boardContents: '',
+        startDate: startDate,
+        finishDate: finishDate,
+        startTime: startTime,
+        finishTime: finishTime,
+        FACI_NM: FACI_NM
+    });
 
     const changeField = e => {
         setUser({
@@ -177,8 +186,7 @@ const CustomerAdd = ({history, location}) => {
 
     const onClick = e => {
         // if ([board.boardTitle, board.baordpay, board.boardmin, board.boardmax,
-        // board.boardContents].includes('')) {     setError('빈 칸을 모두 입력하세요');
-        // return; }
+        // board.boardContents].includes('')) {     setError('빈 칸을 모두 입력하세요'); return; }
 
         if (board.type === '') {
             setError('등록 버튼을 한번 더 눌러주세요');
@@ -194,7 +202,7 @@ const CustomerAdd = ({history, location}) => {
 
         axios
             .post('/api/classopen', {
-                classkind : board.classkind,
+                classkind: board.classkind,
                 boardTitle: board.boardTitle,
                 baordpay: board.baordpay,
                 boardmin: board.boardmin,
@@ -204,12 +212,22 @@ const CustomerAdd = ({history, location}) => {
                 finishDate: board.finishDate,
                 startTime: board.startTime,
                 finishTime: board.finishTime,
-                FACI_NM: board.FACI_NM,
+                FACI_NM: board.FACI_NM
             }, config)
             .then((response) => {
-                setUser(
-                    {classkind:'', boardTitle: '', baordpay: '', boardmin: '', boardmax: '', boardContents: '',startDate:'',finishDate:'',startTime:'',finishTime:'',FACI_NM:''}
-                )
+                setUser({
+                    classkind: '',
+                    boardTitle: '',
+                    baordpay: '',
+                    boardmin: '',
+                    boardmax: '',
+                    boardContents: '',
+                    startDate: '',
+                    finishDate: '',
+                    startTime: '',
+                    finishTime: '',
+                    FACI_NM: ''
+                })
             });
 
         history.push('/');
@@ -226,20 +244,10 @@ const CustomerAdd = ({history, location}) => {
                     <tr>
                         <td className="full_line" colspan="2">
                             <Table_Text>
-                                <input
-                                    name="classkind"
-                                    type="checkbox"
-                                    value="1"
-                                    onChange={changeField}
-                                    />원데이 클래스
-                                    <input
-                                    name="classkind"
-                                    type="checkbox"
-                                    value="2"
-                                    onChange={changeField}
-                                    />정규클래스
-                                {/* <input type="checkbox"/>
-                                정규 클래스 */}
+                                <input name="classkind" type="checkbox" value="1" onChange={changeField}/>원데이 클래스
+                                <input name="classkind" type="checkbox" value="2" onChange={changeField}/>정규클래스 {/* <input type="checkbox"/>
+                                정규 클래스 */
+                                }
                             </Table_Text>
                         </td>
                     </tr>
@@ -257,7 +265,11 @@ const CustomerAdd = ({history, location}) => {
                     </tr>
                     <tr>
                         <td className="half_left_line">
-                            <div data-image-content="true"></div>
+                            <div data-image-content="true">
+
+                                <BoardSearchMap></BoardSearchMap>
+
+                            </div>
                         </td>
                         <td className="half_right_line">
                             <tr>
