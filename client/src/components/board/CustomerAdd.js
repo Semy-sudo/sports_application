@@ -9,7 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '../common/Button';
 import {post} from 'axios';
 import qs from 'qs';
-import BoardSearchMap from './BoardSearchMap';
+import BoardMap from './BoardMap';
 
 const Contents = styled.div `
     float: left;
@@ -267,7 +267,7 @@ const CustomerAdd = ({history, location}) => {
                         <td className="half_left_line">
                             <div data-image-content="true">
 
-                                <BoardSearchMap></BoardSearchMap>
+                                
 
                             </div>
                         </td>

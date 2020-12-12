@@ -22,7 +22,7 @@ const WhiteBox = styled.div`
     background-color: #ffffff;
 `;
 
-const AuthTemplate = ({ children }) => {
+const ClassTemplate = ({ children }) => {
     return(
         <AuthTemplateBlock>
             <WhiteBox>
@@ -32,4 +32,4 @@ const AuthTemplate = ({ children }) => {
     );
 };
 
-export default AuthTemplate;
+export default ClassTemplate;

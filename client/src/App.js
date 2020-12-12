@@ -8,6 +8,7 @@ import MapPage from './pages/MapPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HeaderBlock from './components/common/HeaderBlock';
+import ClassDetail from './pages/ClassDetail';
 import PaymentPage from './pages/PaymentPage';
 import MyClassPage from './pages/MyClassPage';
 import InfiniteScroll from "./InfiniteScroll";
@@ -26,6 +27,7 @@ const App = () => {
       <Route component={ RegisterPage } path="/auth/register" exact />
       <Route component={ PaymentPage } path="/payment" exact />
       <Route component={ MyClassPage } path="/myclass" exact />
+      <Route component={ ClassDetail } path="/postView" exact />
       </InfiniteScroll>
     </>
   )
