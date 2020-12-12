@@ -21,7 +21,9 @@ class ClassViewDetail extends Component {
         super(props);
         this.state = {
             classviewdetail: '',
-            completed: 0
+            completed: 0,
+            history: props.history,
+            loaction: props.location
         }
     }
 
