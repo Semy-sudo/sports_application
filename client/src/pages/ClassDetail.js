@@ -13,7 +13,7 @@ const MyClassPage_Contents = styled.div`
     text-align: center;
 `;
 
-const ClassDetail = () => {
+const ClassDetail = ({ history, location }) => {
     return(
         <ClassTemplate>
             <ClassViewDetail/>
