@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import PaymentContents from '../components/payment/PaymentContents';
-import MapPage from './MapPage';
 
 const PaymentWrap = styled.div`
     width: 100%;
@@ -26,9 +25,6 @@ const PaymentPage = ({ history, location }) => {
             </PaymentHeader>
             <PaymentContents/>
         </PaymentWrap>
-        // <MapPage
-        //     history={ history }
-        // />
     );
 };
 

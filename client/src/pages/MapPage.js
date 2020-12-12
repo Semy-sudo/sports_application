@@ -4,11 +4,11 @@ import ContentsBlockParent from '../components/map/ContentsBlockParent';
 
 const MapPage = ({ history }) => {
     return(
-        // type === 'parent' ?
-        // <ContentsBlock
-        //     history={ history }
-        // /> // :
+        JSON.parse(localStorage.getItem("user")).type === 'parent' ?
         <ContentsBlockParent
+            history={ history }
+        /> :
+        <ContentsBlock
             history={ history }
         />
     );
