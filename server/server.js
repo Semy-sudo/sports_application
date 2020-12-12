@@ -280,14 +280,25 @@ app.get('/api/myclass', (req, res) => {
 });
 
 //클래스 디테일
-app.get('/api/classviewdetail', (req, res) => {
-  let sql = 'SELECT * FROM board WHERE boardid = ?';
+app.get('/api/classviewdetail/:boardid', (req, res) => {
   let boardid = [req.params.boardid];
+  let sql = `SELECT * FROM board WHERE boardid=${boardid}`;
   console.log("boardid",boardid);
-  connection.query(sql, 2 , (err, rows, fields) => {
-      console.log(rows);
-      res.send(rows);        
-  });
+  
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+        console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+        res.json(rows)
+
+        console.log(rows);
+      }
+   })
 });
 
 
