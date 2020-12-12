@@ -279,24 +279,23 @@ app.get('/api/myclass', (req, res) => {
     });
 });
 
+//클래스 디테일
+app.get('/api/classviewdetail', (req, res) => {
+  let sql = 'SELECT * FROM board WHERE boardid = ?';
+  let boardid = [req.params.boardid];
+  console.log("boardid",boardid);
+  connection.query(sql, 2 , (err, rows, fields) => {
+      console.log(rows);
+      res.send(rows);        
+  });
+});
 
-app.get('/OpenClass', function(req,res){
-  
-  console.log(startDate);
-  var _url = req.url;
-  console.log(_url);
-  var queryData = url.parse(_url, true).query;
-  console.log("시작일",queryData.startDate);
 
- 
-})
 
 
 //클래스 열기
 app.post('/api/classopen', function(req, res){
-  var _url = req.url;
-  console.log("_url",_url);
-  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,?,null,?,?,?,?,?,NOW(),null,?)';
+  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,?,null,?,?,?,?,?,NOW(),0,?)';
   let params = [
       req.user,
       req.body.boardTitle,
@@ -307,7 +306,7 @@ app.post('/api/classopen', function(req, res){
       req.body.startDate,
       req.body.finishDate,
       req.body.startTime,
-      req.body.finishDate,
+      req.body.finishTime,
       req.body.FACI_NM,
       req.body.classkind
   ];
@@ -330,6 +329,9 @@ app.delete('/api/myclass/:boardid', (req, res) => {
         res.send(rows);
     })
 });
+
+
+
 
 // 키워드 기반 클래스 목록
 app.get('/api/class/:keyword', function(req, res) {
