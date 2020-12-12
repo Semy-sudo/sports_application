@@ -267,7 +267,7 @@ const CustomerAdd = ({history, location}) => {
                         <td className="half_left_line">
                             <div data-image-content="true">
 
-                                
+                                <BoardMap mapData={mapData}></BoardMap>
 
                             </div>
                         </td>

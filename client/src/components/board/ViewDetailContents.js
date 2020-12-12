@@ -1,8 +1,7 @@
 import React from 'react';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import CustomerDelete from '../board/CustomerDelete';
-import CustomerSelect from '../board/CustomerSelect';
+import BoardMap from '../board/BoardMap';
 import styled from 'styled-components';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
@@ -136,7 +135,7 @@ class ViewDetailContents extends React.Component {
                         <td className="half_left_line">
                             <div data-image-content="true">
 
-                                
+                            <BoardMap mapData={mapData}></BoardMap>
 
                             </div>
                         </td>
