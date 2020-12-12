@@ -69,10 +69,10 @@ const PaymentContents = ({ history, paymentData }) => {
             }
         };
 
-        axios.post('/api/payment', {
+        await axios.post('/api/payment', {
                 paymentDate: getToday(),
-                paymentPlace: paymentData.paymentPlace,
-                paymentThing: paymentData.paymentThing,
+                paymentPlace: "체육동산",
+                paymentThing: "카카오페이",
                 paymentMoney: paymentData.paymentMoney,
                 userName: paymentData.userName,
                 userTel: paymentData.userTel,
