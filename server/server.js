@@ -463,8 +463,9 @@ app.get('/api/class/classListByFilter/:keyword', function(req, res) {
 });
 
 app.post('/api/payment/', (req, res) => {
-  let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
+  let sql = 'INSERT INTO payment VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)';
   let params = [
+      req.body.paymentDate,
       req.body.paymentPlace,
       req.body.paymentThing,
       req.body.paymentMoney,
@@ -480,5 +481,23 @@ app.post('/api/payment/', (req, res) => {
   });
 });
 
+app.get(`/api/payment/:userId`, function(req, res) {
+  var sql = `SELECT * FROM payment WHERE userId=${req.params.userId}`;
+
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+      
+      console.log(rows);
+    }
+  })
+});
 app.listen(port, ()=> console.log(`Listening on port ${port}`));
 
