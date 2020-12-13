@@ -426,5 +426,23 @@ app.post('/api/payment/', (req, res) => {
   });
 });
 
+app.get(`/api/payment/:userId`, function(req, res) {
+  var sql = `SELECT * FROM payment WHERE userId=${req.params.userId}`;
+
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+      
+      console.log(rows);
+    }
+  })
+});
 app.listen(port, ()=> console.log(`Listening on port ${port}`));
 

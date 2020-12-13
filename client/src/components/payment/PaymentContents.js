@@ -77,7 +77,7 @@ const PaymentContents = ({ history, paymentData }) => {
                 userName: paymentData.userName,
                 userTel: paymentData.userTel,
                 paymentContents: paymentData.paymentContents,
-                userId: paymentData.userId,
+                userId: 33,
             },
             config
         )
