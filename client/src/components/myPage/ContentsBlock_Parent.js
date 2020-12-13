@@ -118,7 +118,7 @@ class ContentsBlock_Expert extends Component {
                             신청클래스
                         </Table_Text>
                         <Shortcut_Area>
-                            <Link to="#">
+                            <Link to="/appliedclass">
                                 <img src={ ShortCut }/>
                             </Link>
                         </Shortcut_Area>

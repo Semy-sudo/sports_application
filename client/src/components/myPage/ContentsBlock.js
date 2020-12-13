@@ -83,16 +83,17 @@ class ContentsBlock extends Component {
         <div>
             
         {
-            this.state.customers
-                ? (this
-                    .state
-                    .customers
-                    .map(c => {
-                        return (
-                            <ContentsBlock_Expert/>
-                        );
-                    }))
-                : <ContentsBlock_Parent/>
+            // this.state.customers
+            //     ? (this
+            //         .state
+            //         .customers
+            //         .map(c => {
+            //             return (
+            //                 <ContentsBlock_Expert/>
+            //             );
+            //         }))
+            //     : 
+                <ContentsBlock_Parent/>
         }
         
         </div>

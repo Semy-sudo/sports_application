@@ -10,6 +10,7 @@ import Button from '../common/Button';
 import {post} from 'axios';
 import qs from 'qs';
 import BoardMap from './BoardMap';
+import BoardSearchMap from './BoardSearchMap';
 
 const Contents = styled.div `
     float: left;
@@ -145,7 +146,7 @@ const ErrorMessage = styled.div `
     margin-top: 1rem;
 `;
 
-const CustomerAdd = ({history, location}) => {
+const CustomerAdd = ({history, location, search}) => {
 
     var params = qs.parse(location.search)
     var keys = Object.keys(params);
@@ -266,9 +267,9 @@ const CustomerAdd = ({history, location}) => {
                     <tr>
                         <td className="half_left_line">
                             <div data-image-content="true">
-
-                                <BoardMap mapData={mapData}></BoardMap>
-
+                                 <BoardMap mapData={mapData}></BoardMap> 
+                            {/* <BoardSearchMap history={history} search={search}/> */}
+                        
                             </div>
                         </td>
                         <td className="half_right_line">

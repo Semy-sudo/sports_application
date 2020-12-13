@@ -142,7 +142,7 @@ class ContentsBlock_Expert extends Component {
                             대관 내역
                         </Table_Text>
                         <Shortcut_Area>
-                            <Link to="#">
+                            <Link to="/rent">
                                 <img src={ ShortCut }/>
                             </Link>
                         </Shortcut_Area>
