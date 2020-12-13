@@ -25,8 +25,15 @@ const PaymentPage = ({ history, location }) => {
     var paymentData = new Object();
 
     for(var i = 0; i < Object.keys(params).length; i++) {
-        paymentData[keys[i]] = values[i]
+        if(i === 0) {
+            paymentData[keys[0].replace("?", "")] = values[0]
+        } else {
+            paymentData[keys[i]] = values[i]
+        }
+        
     }
+
+    console.log(paymentData);
 
     return(
         <PaymentWrap>

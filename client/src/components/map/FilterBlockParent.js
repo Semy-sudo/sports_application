@@ -6,9 +6,9 @@ import Badminton from '../../lib/styles/img/img_category/badminton.png';
 import Baseball from '../../lib/styles/img/img_category/baseball.png';
 import Basketball from '../../lib/styles/img/img_category/basketball.png';
 import Etc from '../../lib/styles/img/img_category/etc.png';
-import Football from '../../lib/styles/img/img_category/football.png';
+import Footsal from '../../lib/styles/img/img_category/Footsal.png';
 import Golf from '../../lib/styles/img/img_category/golf.png';
-import Multi from '../../lib/styles/img/img_category/multi.png';
+import Shoot from '../../lib/styles/img/img_category/Shoot.png';
 import Soccer from '../../lib/styles/img/img_category/soccer.png';
 import Tennis from '../../lib/styles/img/img_category/tennis.png';
 import Volleyball from '../../lib/styles/img/img_category/volleyball.png';
@@ -95,7 +95,7 @@ const FilterBlockParent = ({ onClickFilter, onHandleFilter }) => {
                     <FilterItem
                         onClick={ onHandleFilter }
                     >
-                        <FilterImage src={ Soccer } />
+                        <FilterImage src={ Footsal } />
                         <FilterText>
                             풋살
                         </FilterText>
@@ -163,7 +163,7 @@ const FilterBlockParent = ({ onClickFilter, onHandleFilter }) => {
                     <FilterItem
                         onClick={ onHandleFilter }
                     >
-                        <FilterImage src={ Archery } />
+                        <FilterImage src={ Shoot } />
                         <FilterText>
                             사격
                         </FilterText>
