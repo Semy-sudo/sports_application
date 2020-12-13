@@ -29,7 +29,7 @@ const App = () => {
       <Route component={ MyPage } path="/auth" exact />
       <Route component={ LoginPage } path="/auth/login" exact />
       <Route component={ RegisterPage } path="/auth/register" exact />
-      <Route component={ PaymentPage } path="/payment" exact />
+      <Route component={ PaymentPage } path="/payment" />
       <Route component={ MyClassPage } path="/myclass" exact />
 
       <Route component={ MyPaymentPage } path="/auth/myPayment" exact />

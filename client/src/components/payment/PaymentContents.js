@@ -74,10 +74,10 @@ const PaymentContents = ({ history, paymentData }) => {
                 paymentPlace: "체육동산",
                 paymentThing: "카카오페이",
                 paymentMoney: paymentData.paymentMoney,
-                userName: paymentData.userName,
-                userTel: paymentData.userTel,
+                userName: JSON.parse(localStorage.getItem("user")).id,
+                userTel: JSON.parse(localStorage.getItem("user")).email,
                 paymentContents: paymentData.paymentContents,
-                userId: 33,
+                userId: JSON.parse(localStorage.getItem("user")).userId,
             },
             config
         )
@@ -102,7 +102,6 @@ const PaymentContents = ({ history, paymentData }) => {
                     </ContentsElTitle>
                     <ContentsElContents>
                         체육동산
-                        { paymentData.paymentPlace }
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -111,7 +110,6 @@ const PaymentContents = ({ history, paymentData }) => {
                     </ContentsElTitle>
                     <ContentsElContents>
                         카카오페이
-                        {/* { paymentData.paymentThing } */}
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -119,8 +117,7 @@ const PaymentContents = ({ history, paymentData }) => {
                         결제금액
                     </ContentsElTitle>
                     <ContentsElContents>
-                        30000
-                        {/* { paymentData.paymentMoney } */}
+                        { paymentData.paymentMoney }
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -128,8 +125,7 @@ const PaymentContents = ({ history, paymentData }) => {
                         사용자명
                     </ContentsElTitle>
                     <ContentsElContents>
-                        김나희
-                        {/* { paymentData.userName } */}
+                        { JSON.parse(localStorage.getItem("user")).id }
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -137,8 +133,7 @@ const PaymentContents = ({ history, paymentData }) => {
                         전화번호
                     </ContentsElTitle>
                     <ContentsElContents>
-                        010-1234-5678
-                        {/* { paymentData.userTel } */}
+                        { JSON.parse(localStorage.getItem("user")).email }
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsTableTr>
@@ -146,8 +141,7 @@ const PaymentContents = ({ history, paymentData }) => {
                         결제 내역
                     </ContentsElTitle>
                     <ContentsElContents>
-                        장수축구장 체육동산차량
-                        {/* { paymentData.paymentContents } */}
+                        { paymentData.paymentContents }
                     </ContentsElContents>
                 </ContentsTableTr>
                 <ContentsElFooter>

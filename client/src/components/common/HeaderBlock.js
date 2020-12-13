@@ -140,16 +140,6 @@ const HeaderBlock = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link to="/payment">
-                                <Header_nav_icon_area>
-                                    <ImageIcon src={ BoardIcon } />
-                                </Header_nav_icon_area>
-                                <Header_nav_text_area>
-                                    Board
-                                </Header_nav_text_area>
-                            </Link>
-                        </li>
-                        <li>
                             <Link to="/map">
                                 <Header_nav_icon_area>
                                     <ImageIcon src={ MapIcon } />
