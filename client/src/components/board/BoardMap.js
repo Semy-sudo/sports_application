@@ -11,6 +11,8 @@ const KakaoMap = styled.div`
     height: 300px;
 `;
 
+
+
 // 맵 데이터가 있을 때
 function Marker(mapData, mapContainer) {
     var position = new kakao.maps.LatLng(Number(mapData.FACI_POINT_Y), Number(mapData.FACI_POINT_X));

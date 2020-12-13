@@ -10,8 +10,8 @@ var FileStore = require('session-file-store')(session)
 
 const port = process.env.PORT || 4000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 const data = fs.readFileSync('./database.json');
 const conf = JSON.parse(data); //data를 js객체로 변환
@@ -25,6 +25,10 @@ connection.connect();
 
 var router = express.Router();
 
+const url = require('url');
+
+
+
 
 app.get('/post', function (req, res) {
     res.send('GET request to the post');
@@ -32,8 +36,6 @@ app.get('/post', function (req, res) {
 });
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
 
 //session 관련
 app.use(session({
@@ -124,6 +126,7 @@ app.post('/api/auth/register', function(req, res){
   });
 });
 
+
 app.get(`/api/auth/getExpert/:nickName`, function(req, res) {
   var params = req.params.nickName;
   var sql = `SELECT * FROM user WHERE id=${params}`;
@@ -143,6 +146,7 @@ app.get(`/api/auth/getExpert/:nickName`, function(req, res) {
     }
   });
 });
+
 
 app.get('/api/map/mapList/:keyword', function(req, res){
   var params = req.params.keyword;
@@ -252,14 +256,25 @@ app.get('/api/map/mapList/', (req, res) => {
 
 
 // 홈 화면 클래스띄우기
-app.get('/api/customers', (req, res) => {
+app.get('/api/onedayclass', (req, res) => {
     connection.query(
-        "SELECT * FROM board WHERE isDeleted = 0",
+        "SELECT * FROM board WHERE isDeleted = 0 && classkind = 1",
         (err, rows, fields) => {
             res.send(rows);
             console.log(rows);
         }
     );
+    
+});
+app.get('/api/regularclass', (req, res) => {
+  connection.query(
+      "SELECT * FROM board WHERE isDeleted = 0 && classkind = 2",
+      (err, rows, fields) => {
+          res.send(rows);
+          console.log(rows);
+      }
+  );
+  
 });
 
 //마이페이지에서 expert와 
@@ -297,21 +312,58 @@ app.get('/api/myclass', (req, res) => {
     });
 });
 
-//클래스 열기
-app.post('/api/classopen', (req, res) => {
-    let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0,1)';
-    let params = [
-        req.user,
-        req.body.boardType,
-        req.body.boardLimit,
-        req.body.boardTitle,
-        req.body.boardContents
-    ];
-    connection.query(sql, params, (err, rows, fields) => {
-        res.send(rows);
+//클래스 디테일
+app.get('/api/classviewdetail/:boardid', (req, res) => {
+  let boardid = [req.params.boardid];
+  let sql = `SELECT * FROM board WHERE boardid=${boardid}`;
+  console.log("boardid",boardid);
+  
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+        console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+        res.json(rows)
+
         console.log(rows);
-    });
+      }
+   })
 });
+
+
+
+
+//클래스 열기
+app.post('/api/classopen', function(req, res){
+  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,?,null,?,?,?,?,?,NOW(),0,?)';
+  let params = [
+      req.user,
+      req.body.boardTitle,
+      req.body.baordpay,
+      req.body.boardmin,
+      req.body.boardmax,
+      req.body.boardContents,
+      req.body.startDate,
+      req.body.finishDate,
+      req.body.startTime,
+      req.body.finishTime,
+      req.body.FACI_NM,
+      req.body.classkind
+  ];
+
+ 
+  connection.query(sql, params, (err, rows, fields) => {
+      res.send(rows);
+      console.log("row",rows);
+  });
+  res.redirect('/payment');
+});
+
+
 
 app.delete('/api/myclass/:boardid', (req, res) => {
     let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
@@ -321,6 +373,9 @@ app.delete('/api/myclass/:boardid', (req, res) => {
         res.send(rows);
     })
 });
+
+
+
 
 // 키워드 기반 클래스 목록
 app.get('/api/class/:keyword', function(req, res) {
