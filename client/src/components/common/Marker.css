@@ -51,6 +51,7 @@
 .contents .contents_contents {
     text-align: left;
     font-size: 14px;
+    overflow: hidden;
 }
 
 .article {

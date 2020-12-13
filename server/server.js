@@ -335,28 +335,72 @@ app.get('/api/classviewdetail', (req, res) => {
 
 //클래스 열기
 app.post('/api/classopen', function(req, res){
-  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,?,null,?,?,?,?,?,NOW(),0,?)';
-  let params = [
-      req.user,
-      req.body.boardTitle,
-      req.body.baordpay,
-      req.body.boardmin,
-      req.body.boardmax,
-      req.body.boardContents,
-      req.body.startDate,
-      req.body.finishDate,
-      req.body.startTime,
-      req.body.finishTime,
-      req.body.FACI_NM,
-      req.body.classkind
+  var sql = "insert into board values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  var params = [
+    req.body.nickName,
+    req.body.boardTitle,
+    req.body.boardpay,
+    req.body.boardmin,
+    req.body.boardmax,
+    req.body.boardContents,
+    req.body.boardType,
+    req.body.startDate,
+    req.body.finishDate,
+    req.body.startTime,
+    req.body.finishTime,
+    req.body.classkind,
+    req.body.FACI_NM,                                        
+    req.body.FACI_GB_CD,                                            
+    req.body.FACI_GB_NM,                                            
+    req.body.FCOB_CD,                                               
+    req.body.FCOB_NM,                                              
+    req.body.FTYPE_CD,                                              
+    req.body.FTYPE_NM,                                             
+    req.body.FMNG_TYPE_GB_CD,                                       
+    req.body.FMNG_TYPE_GB_NM,                                     
+    req.body.FMNG_CP_CD,                                            
+    req.body.FMNG_CP_NM,                                           
+    req.body.FMNG_CPB_CD,                                           
+    req.body.FMNG_CPB_NM,                                          
+    req.body.FMNG_DEPT_NM,                                         
+    req.body.FMNG_USER_TEL,                                        
+    req.body.ADDR_CP_CD,                                            
+    req.body.ADDR_CP_NM,                                       
+    req.body.ADDR_CPB_CD,                                           
+    req.body.ADDR_CPB_NM,                                       
+    req.body.ADDR_EMD_CD,                                       
+    req.body.ADDR_EMD_NM,                                      
+    req.body.ADDR_AMD_CD,                                      
+    req.body.ADDR_AMD_NM,                                      
+    req.body.FACI_ROAD_ADDR1,                                      
+    req.body.FACI_POINT_X,                                   
+    req.body.FACI_POINT_Y,                                     
+    req.body.TOT_FACI_AREA,                                   
+    req.body.STAND_CPT_PSN_CNT,                                  
+    req.body.STAND_SEAT_CNT,                              
+    req.body.FACI_HOMEPAGE,                                  
+    req.body.NATION_YN,                                     
+    req.body.FACI_STAT,
+    req.body.DEL_YN,
   ];
-
+  
+  console.log("=====================================");
+  console.log(req.body.mapData);
  
-  connection.query(sql, params, (err, rows, fields) => {
-      res.send(rows);
-      console.log("row",rows);
+  connection.query(sql, params, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+      res.send({
+        "code": 400,
+        "failed": "error occured",
+      })
+    } else {
+      console.log("The solution is", rows);
+
+      res.json(rows);
+    }
   });
-  res.redirect('/payment');
 });
 
 
@@ -393,6 +437,7 @@ app.get('/api/class/:keyword', function(req, res) {
     }
   })
 });
+
 
 
 app.post('/api/payment/', (req, res) => {

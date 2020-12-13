@@ -29,7 +29,7 @@ function parseJsonToString(json) {
 }
 
 function Marker(classData, mapContainer, history) {
-    var position = new kakao.maps.LatLng(Number(classData.mapdata.FACI_POINT_Y), Number(classData.mapdata.FACI_POINT_X));
+    var position = new kakao.maps.LatLng(Number(classData.FACI_POINT_Y), Number(classData.FACI_POINT_X));
     var marker = new kakao.maps.Marker({
         map: mapContainer,
         position: position,
@@ -40,8 +40,8 @@ function Marker(classData, mapContainer, history) {
     });
     var expert = getExpert();
 
-    if(classData.mapdata.FACI_NM) {
-        classData.mapdata.FACI_NM = classData.mapdata.FACI_NM.replace(/"/gi, "");
+    if(classData.FACI_NM) {
+        classData.FACI_NM = classData.FACI_NM.replace(/"/gi, "");
     }
 
     var content = 
@@ -59,13 +59,13 @@ function Marker(classData, mapContainer, history) {
     '           <b>대관시설정보</b>' +
     '       </div>' +
     '       <div class="contents_contents">' +
-    `           ${classData.mapdata.FACI_NM}` +
+    `           ${classData.FACI_NM}` +
     '       </div>' +
     '       <div class="contents_contents">' +
-    `           ${classData.mapdata.ADDR_CP_NM} ${' '} ${classData.mapdata.ADDR_CPB_NM} ${' '} ${classData.mapdata.ADDR_EMD_NM}` +
+    `           ${classData.ADDR_CP_NM} ${' '} ${classData.ADDR_CPB_NM} ${' '} ${classData.ADDR_EMD_NM}` +
     '       </div>' +
     '       <div class="contents_contents">' +
-    `           ${classData.mapdata.FACI_ROAD_ADDR1}` +
+    `           ${classData.FACI_ROAD_ADDR1}` +
     '       </div>' +
     '       <div class="contents_header">' +
     '           수업정보' +
@@ -154,44 +154,42 @@ const ContentsBlockParent = ({ history }) => {
         boardType: '',
         startDate: '',
         finishDate: '',
-        mapdata: {
-            FACI_NM: '',                                        
-            FACI_GB_CD: '',                                            
-            FACI_GB_NM: '',                                            
-            FCOB_CD: '',                                               
-            FCOB_NM: '',                                              
-            FTYPE_CD: '',                                              
-            FTYPE_NM: '',                                             
-            FMNG_TYPE_GB_CD: '',                                       
-            FMNG_TYPE_GB_NM: '',                                     
-            FMNG_CP_CD: '',                                            
-            FMNG_CP_NM: '',                                           
-            FMNG_CPB_CD: '',                                           
-            FMNG_CPB_NM: '',                                          
-            FMNG_DEPT_NM: '',                                         
-            FMNG_USER_TEL: '',                                        
-            ADDR_CP_CD: '',                                            
-            ADDR_CP_NM: '',                                       
-            ADDR_CPB_CD: '',                                           
-            ADDR_CPB_NM: '',                                       
-            ADDR_EMD_CD: '',                                       
-            ADDR_EMD_NM: '',                                      
-            ADDR_AMD_CD: '',                                      
-            ADDR_AMD_NM: '',                                      
-            FACI_ROAD_ADDR1: '',                                      
-            FACI_POINT_X: '126.570667',                                   
-            FACI_POINT_Y: '33.450701',                                     
-            TOT_FACI_AREA: '',                                   
-            STAND_CPT_PSN_CNT: '',                                  
-            STAND_SEAT_CNT: '',                              
-            FACI_HOMEPAGE: '',                                  
-            NATION_YN: '',                                     
-            FACI_STAT:  '',
-            DEL_YN: '',
-        },
-        CREATEDATE: '',
         ISDELETED: null,
         classKind: null,
+        FACI_NM: '',                                        
+        FACI_GB_CD: '',                                            
+        FACI_GB_NM: '',                                            
+        FCOB_CD: '',                                               
+        FCOB_NM: '',                                              
+        FTYPE_CD: '',                                              
+        FTYPE_NM: '',                                             
+        FMNG_TYPE_GB_CD: '',                                       
+        FMNG_TYPE_GB_NM: '',                                     
+        FMNG_CP_CD: '',                                            
+        FMNG_CP_NM: '',                                           
+        FMNG_CPB_CD: '',                                           
+        FMNG_CPB_NM: '',                                          
+        FMNG_DEPT_NM: '',                                         
+        FMNG_USER_TEL: '',                                        
+        ADDR_CP_CD: '',                                            
+        ADDR_CP_NM: '',                                       
+        ADDR_CPB_CD: '',                                           
+        ADDR_CPB_NM: '',                                       
+        ADDR_EMD_CD: '',                                       
+        ADDR_EMD_NM: '',                                      
+        ADDR_AMD_CD: '',                                      
+        ADDR_AMD_NM: '',                                      
+        FACI_ROAD_ADDR1: '',                                      
+        FACI_POINT_X: '126.570667',                                   
+        FACI_POINT_Y: '33.450701',                                     
+        TOT_FACI_AREA: '',                                   
+        STAND_CPT_PSN_CNT: '',                                  
+        STAND_SEAT_CNT: '',                              
+        FACI_HOMEPAGE: '',                                  
+        NATION_YN: '',                                     
+        FACI_STAT:  '',
+        DEL_YN: '',
+        CREATEDATE: '',
     }]);
     const [filter, setFilter] = useState(false);
     const onClick = async e => {
@@ -257,6 +255,7 @@ const ContentsBlockParent = ({ history }) => {
             res = await axios.get(`/api/class/classListByFilter/${filterValue}`, config);
         }
 
+        console.log(res);
         setClassList(res.data);
     };
 
@@ -275,7 +274,7 @@ const ContentsBlockParent = ({ history }) => {
                     center: new kakao.maps.LatLng(33.450701, 126.570667),
                     level: 7
                 } : {
-                    center: new kakao.maps.LatLng(Number(classList[0].mapdata.FACI_POINT_Y), Number(classList[0].mapdata.FACI_POINT_X)),
+                    center: new kakao.maps.LatLng(Number(classList[0].FACI_POINT_Y), Number(classList[0].FACI_POINT_X)),
                     level: 7
                 }
 
