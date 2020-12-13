@@ -339,28 +339,72 @@ app.get('/api/classviewdetail/:boardid', (req, res) => {
 
 //클래스 열기
 app.post('/api/classopen', function(req, res){
-  let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,?,null,?,?,?,?,?,NOW(),0,?)';
-  let params = [
-      req.user,
-      req.body.boardTitle,
-      req.body.baordpay,
-      req.body.boardmin,
-      req.body.boardmax,
-      req.body.boardContents,
-      req.body.startDate,
-      req.body.finishDate,
-      req.body.startTime,
-      req.body.finishTime,
-      req.body.FACI_NM,
-      req.body.classkind
+  var sql = "insert into board values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  var params = [
+    req.body.nickName,
+    req.body.boardTitle,
+    req.body.boardpay,
+    req.body.boardmin,
+    req.body.boardmax,
+    req.body.boardContents,
+    req.body.boardType,
+    req.body.startDate,
+    req.body.finishDate,
+    req.body.startTime,
+    req.body.finishTime,
+    req.body.classkind,
+    req.body.FACI_NM,                                        
+    req.body.FACI_GB_CD,                                            
+    req.body.FACI_GB_NM,                                            
+    req.body.FCOB_CD,                                               
+    req.body.FCOB_NM,                                              
+    req.body.FTYPE_CD,                                              
+    req.body.FTYPE_NM,                                             
+    req.body.FMNG_TYPE_GB_CD,                                       
+    req.body.FMNG_TYPE_GB_NM,                                     
+    req.body.FMNG_CP_CD,                                            
+    req.body.FMNG_CP_NM,                                           
+    req.body.FMNG_CPB_CD,                                           
+    req.body.FMNG_CPB_NM,                                          
+    req.body.FMNG_DEPT_NM,                                         
+    req.body.FMNG_USER_TEL,                                        
+    req.body.ADDR_CP_CD,                                            
+    req.body.ADDR_CP_NM,                                       
+    req.body.ADDR_CPB_CD,                                           
+    req.body.ADDR_CPB_NM,                                       
+    req.body.ADDR_EMD_CD,                                       
+    req.body.ADDR_EMD_NM,                                      
+    req.body.ADDR_AMD_CD,                                      
+    req.body.ADDR_AMD_NM,                                      
+    req.body.FACI_ROAD_ADDR1,                                      
+    req.body.FACI_POINT_X,                                   
+    req.body.FACI_POINT_Y,                                     
+    req.body.TOT_FACI_AREA,                                   
+    req.body.STAND_CPT_PSN_CNT,                                  
+    req.body.STAND_SEAT_CNT,                              
+    req.body.FACI_HOMEPAGE,                                  
+    req.body.NATION_YN,                                     
+    req.body.FACI_STAT,
+    req.body.DEL_YN,
   ];
-
+  
+  console.log("=====================================");
+  console.log(req.body.mapData);
  
-  connection.query(sql, params, (err, rows, fields) => {
-      res.send(rows);
-      console.log("row",rows);
+  connection.query(sql, params, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+      res.send({
+        "code": 400,
+        "failed": "error occured",
+      })
+    } else {
+      console.log("The solution is", rows);
+
+      res.json(rows);
+    }
   });
-  res.redirect('/payment');
 });
 
 
@@ -400,8 +444,8 @@ app.get('/api/class/:keyword', function(req, res) {
 
 app.get('/api/class/classListByPlace/:keyword', function(req, res) {
   var params = req.params.keyword.split(" ");
-  var sql = `SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FMNG_CP_NM') = '${params[0]}' AND JSON_EXTRACT(mapData, '$.FMNG_CP_NM') = '${params[1]}'`;  
-  
+  var sql = "SELECT * FROM board WHERE FMNG_CP_NM = '" + params[0] + "' AND FMNG_CPB_NM = '" + params[1] + "'";
+
   connection.query(sql, function(error, rows, field) {
     if(error) {
       console.log("error occured", error);
@@ -423,27 +467,27 @@ app.get('/api/class/classListByFilter/:keyword', function(req, res) {
   var sql = '';
 
   if(params === '골프') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%게이트볼%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%게이트볼%'";
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%게이트볼%' OR FCOB_NM LIKE '%게이트볼%'";
   } else if(params === '농구') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%농구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%농구%'";
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%농구%' OR FCOB_NM LIKE '%농구%'";
   } else if(params === '테니스') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%테니스%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%테니스%' OR JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%정구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%정구%'";
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%정구%' OR FCOB_NM LIKE '%정구%' OR FACI_NM LIKE '%테니스%' OR FCOB_NM LIKE '%테니스%'";
   } else if(params === '배구') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%배구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%배구%'";   
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%배구%' OR FCOB_NM LIKE '%배구%'";
   } else if(params === '배드민턴') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%배드민턴%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%배드민턴%'";   
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%배드민턴%' OR FCOB_NM LIKE '%배드민턴%'";
   } else if(params === '축구') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%축구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%축구%'";   
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%축구%' OR FCOB_NM LIKE '%축구%'";
   } else if(params === '풋살') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%풋살%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%풋살%'";   
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%풋살%' OR FCOB_NM LIKE '%풋살%'";
   } else if(params === '야구') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%야구%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%야구%'";   
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%야구%' OR FCOB_NM LIKE '%야구%'";
   } else if(params === '사격') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%사격%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%사격%'";   
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%사격%' OR FCOB_NM LIKE '%사격%'";
   } else if(params === '양궁') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%양궁%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%양궁%' OR JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%국궁%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%국궁%'";
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%양궁%' OR FCOB_NM LIKE '%양궁%' OR FACI_NM LIKE '%국궁%' OR FCOB_NM LIKE '%국궁%'";
   } else if(params === '기타') {
-    sql = "SELECT * FROM board WHERE JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%암벽%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%암벽%' OR JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%빙상%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%빙상%' OR JSON_EXTRACT(mapData, '$.FACI_NM') LIKE '%인라인%' OR JSON_EXTRACT(mapData, '$.FCOB_NM') LIKE '%인라인%'";
+    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%빙상%' OR FCOB_NM LIKE '%빙상%' OR FACI_NM LIKE '%암벽%' OR FCOB_NM LIKE '%암벽%' OR FACI_NM LIKE '%인라인%' OR FCOB_NM LIKE '%인라인%'";
   }
 
   connection.query(sql, function(error, rows, field) {
