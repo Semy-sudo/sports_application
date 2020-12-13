@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import MyClassSetContents from './MyClassSetContents';
+import MyRentSetContents from './MyRentSetContents';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import styled from 'styled-components';
-import InfiniteScroll from "../../InfiniteScroll";
 
 const Table_td = styled.td `
     width: 200px;
@@ -27,7 +26,7 @@ const Button_Back = styled.button`
 `;
 
 
-class MyClassSet extends Component {
+class MyRentSet extends Component {
 
     constructor(props) {
         super(props);
@@ -61,8 +60,7 @@ class MyClassSet extends Component {
     render() {
         return (
             <div>
-                 <InfiniteScroll height={500}>
-                <h2>현재 나의 등록 클래스 현황</h2>
+                <h2>현재 대관 현황</h2>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -70,7 +68,7 @@ class MyClassSet extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        
+                        <TableCell align="center">예약일시&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;대관장소&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;대관시간</TableCell>
                         <br></br>
                         <TableRow align="center">
                     
@@ -82,12 +80,15 @@ class MyClassSet extends Component {
                                         .myclass
                                         .map(c => {
                                             return (
-                                                <MyClassSetContents
+                                                <MyRentSetContents
                                                     stateRefresh={this.stateRefresh}
                                                     key={c.boardid}
-                                                    boardTitle={c.boardTitle}
-                                                    boardpay={c.boardpay}
-                                                    boardContents={c.boardContents}
+                                                    CREATEDATE={c.CREATEDATE}
+                                                    mapdata={c.mapdata}
+                                                    startDate={c.startDate}
+                                                    finishDate={c.finishDate}
+                                                    startTime={c.startTime}
+                                                    finishTime={c.finishTime}
                                                     />
                                             );
                                         })
@@ -101,7 +102,7 @@ class MyClassSet extends Component {
                                 <Link to="/auth">뒤로가기</Link>
                         </Button_Back>
                     </Table>
-                    </InfiniteScroll>
+                   
             </div>
               
         )
@@ -109,4 +110,4 @@ class MyClassSet extends Component {
 
 }
 
-export default MyClassSet;
+export default MyRentSet;

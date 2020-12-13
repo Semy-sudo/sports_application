@@ -110,6 +110,7 @@ app.post('/api/auth/logout', function(req,res){
 
 //회원가입
 app.post('/api/auth/register', function(req, res){
+
   let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
   let params = [
       req.body.type,
@@ -121,34 +122,27 @@ app.post('/api/auth/register', function(req, res){
       req.body.certifiDate
   ];
   connection.query(sql, params, (err, rows, fields) => {
+     
+    // let sql = 'SELECT * FROM expert WHERE  QF_GRADE_NM = ? && QF_ITM_NM =? && AQ_DT';
+    // let params = [
+    //   req.body.certifiGrade,
+    //   req.body.certifiName,
+    //   req.body.certifiDate
+    // ];
+    // connection.query(sql, params , (err, rows, fields) => {
+    
+    //   res.send(rows);
+    //   console.log(rows);
+    // });
+
       res.send(rows);
       console.log(rows);
   });
 });
 
 
-app.get(`/api/auth/getExpert/:nickName`, function(req, res) {
-  var params = req.params.nickName;
-  var sql = `SELECT * FROM user WHERE id=${params}`;
-
-  connection.query(sql, function(error, rows, field) {
-    if(error) {
-      console.log("error occured", error);
-
-      res.send({
-        "code": 400,
-        "failed": "error occured",
-      })
-    } else {
-      console.log("The solution is", rows);
-
-      res.json(rows);
-    }
-  });
-});
-
-
 app.get('/api/map/mapList/:keyword', function(req, res){
+  console.log(req.params);
   var params = req.params.keyword;
   var sql = "SELECT * FROM map WHERE FACI_NM LIKE '%" + params + "%' OR FCOB_NM LIKE '%" + params + "%'";
 
@@ -170,6 +164,7 @@ app.get('/api/map/mapList/:keyword', function(req, res){
 
 
 app.get('/api/map/mapListByPlace/:keyword', function(req, res){
+  console.log(req.params);
   var params = req.params.keyword.split(" ");
   var sql = "SELECT * FROM map WHERE FMNG_CP_NM = '" + params[0] + "' AND FMNG_CPB_NM = '" + params[1] + "'";
 
@@ -183,11 +178,13 @@ app.get('/api/map/mapListByPlace/:keyword', function(req, res){
         })
     } else {
       res.json(rows)
+      console.log(rows);
     }
   });
 });
 
 app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
+  console.log(req.params);
   var params = req.params.keyword;
   var sql = '';
 
@@ -199,8 +196,6 @@ app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
     sql = "SELECT * FROM map WHERE FACI_NM LIKE '%테니스%' OR FCOB_NM LIKE '%테니스%' OR FACI_NM LIKE '%테니스%' OR FCOB_NM LIKE '%테니스%'";  
   } else if(params === '배구') {
     sql = "SELECT * FROM map WHERE FACI_NM LIKE '%배구%' OR FCOB_NM LIKE '%배구%'";    
-  } else if(params === '배드민턴') {
-    sql = "SELECT * FROM map WHERE FACI_NM LIKE '%배드민턴%' OR FCOB_NM LIKE '%배드민턴%'";    
   } else if(params === '축구') {
     sql = "SELECT * FROM map WHERE FACI_NM LIKE '%축구%' OR FCOB_NM LIKE '%축구%'";  
   } else if(params === '풋살') {
@@ -226,7 +221,7 @@ app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
     } else {
       res.json(rows)
       
-      console.log(rows);
+      //console.log(rows);
     }
   })
 });
@@ -235,6 +230,7 @@ app.get('/api/map/mapList/', (req, res) => {
   var sql = "SELECT * FROM map";
 
   connection.query(sql, function(error, results, field) {
+    console.log(results);
     if(error) {
       console.log("error occured", error);
 
@@ -252,6 +248,7 @@ app.get('/api/map/mapList/', (req, res) => {
     }
   });
 });
+
 
 
 
@@ -280,7 +277,7 @@ app.get('/api/regularclass', (req, res) => {
 //마이페이지에서 expert와 
 app.get('/api/contentsblock', (req, res) => {
     var userid = req.user;
-    var expert = 'expert';
+    var expert = 'parent';
     let sql = 'SELECT * FROM user WHERE id =? AND type=?';
     connection.query(sql, [userid,expert], (err, rows, fields) => {
         console.log("/api/contentsblock",rows);
@@ -301,6 +298,16 @@ app.get('/api/mypage', (req, res) => {
     });
 });
 
+//parent 측 
+app.get('/api/parentapplied', (req, res) => {
+  //var userid;
+  let sql = 'SELECT * FROM board WHERE boardid = ?';
+  connection.query(sql, [2], (err, rows, fields) => {
+      console.log("/api/parentapplied",rows);
+      res.send(rows);        
+  });
+});
+
 
 //내 클래스 내역
 app.get('/api/myclass', (req, res) => {
@@ -313,25 +320,14 @@ app.get('/api/myclass', (req, res) => {
 });
 
 //클래스 디테일
-app.get('/api/classviewdetail/:boardid', (req, res) => {
+app.get('/api/classviewdetail', (req, res) => {
+  let sql = 'SELECT * FROM board WHERE boardid = ?';
   let boardid = [req.params.boardid];
-  let sql = `SELECT * FROM board WHERE boardid=${boardid}`;
   console.log("boardid",boardid);
-  
-  connection.query(sql, function(error, rows, field) {
-    if(error) {
-        console.log("error occured", error);
-
-        res.send({
-            "code": 400,
-            "failed": "error occurred",
-        })
-    } else {
-        res.json(rows)
-
-        console.log(rows);
-      }
-   })
+  connection.query(sql, 2 , (err, rows, fields) => {
+      console.log(rows);
+      res.send(rows);        
+  });
 });
 
 
@@ -442,74 +438,11 @@ app.get('/api/class/:keyword', function(req, res) {
   })
 });
 
-app.get('/api/class/classListByPlace/:keyword', function(req, res) {
-  var params = req.params.keyword.split(" ");
-  var sql = "SELECT * FROM board WHERE FMNG_CP_NM = '" + params[0] + "' AND FMNG_CPB_NM = '" + params[1] + "'";
 
-  connection.query(sql, function(error, rows, field) {
-    if(error) {
-      console.log("error occured", error);
-
-        res.send({
-            "code": 400,
-            "failed": "error occurred",
-        })
-    } else {
-      res.json(rows)
-      
-      console.log(rows);
-    }
-  })
-});
-
-app.get('/api/class/classListByFilter/:keyword', function(req, res) {
-  var params = req.params.keyword;
-  var sql = '';
-
-  if(params === '골프') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%게이트볼%' OR FCOB_NM LIKE '%게이트볼%'";
-  } else if(params === '농구') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%농구%' OR FCOB_NM LIKE '%농구%'";
-  } else if(params === '테니스') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%정구%' OR FCOB_NM LIKE '%정구%' OR FACI_NM LIKE '%테니스%' OR FCOB_NM LIKE '%테니스%'";
-  } else if(params === '배구') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%배구%' OR FCOB_NM LIKE '%배구%'";
-  } else if(params === '배드민턴') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%배드민턴%' OR FCOB_NM LIKE '%배드민턴%'";
-  } else if(params === '축구') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%축구%' OR FCOB_NM LIKE '%축구%'";
-  } else if(params === '풋살') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%풋살%' OR FCOB_NM LIKE '%풋살%'";
-  } else if(params === '야구') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%야구%' OR FCOB_NM LIKE '%야구%'";
-  } else if(params === '사격') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%사격%' OR FCOB_NM LIKE '%사격%'";
-  } else if(params === '양궁') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%양궁%' OR FCOB_NM LIKE '%양궁%' OR FACI_NM LIKE '%국궁%' OR FCOB_NM LIKE '%국궁%'";
-  } else if(params === '기타') {
-    sql = "SELECT * FROM board WHERE FACI_NM LIKE '%빙상%' OR FCOB_NM LIKE '%빙상%' OR FACI_NM LIKE '%암벽%' OR FCOB_NM LIKE '%암벽%' OR FACI_NM LIKE '%인라인%' OR FCOB_NM LIKE '%인라인%'";
-  }
-
-  connection.query(sql, function(error, rows, field) {
-    if(error) {
-      console.log("error occured", error);
-
-        res.send({
-            "code": 400,
-            "failed": "error occurred",
-        })
-    } else {
-      res.json(rows)
-      
-      console.log(rows);
-    }
-  })
-});
 
 app.post('/api/payment/', (req, res) => {
-  let sql = 'INSERT INTO payment VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)';
+  let sql = 'INSERT INTO payment VALUES (null,NOW(),?,?,?,?,?,?,?)';
   let params = [
-      req.body.paymentDate,
       req.body.paymentPlace,
       req.body.paymentThing,
       req.body.paymentMoney,
@@ -525,23 +458,5 @@ app.post('/api/payment/', (req, res) => {
   });
 });
 
-app.get(`/api/payment/:userId`, function(req, res) {
-  var sql = `SELECT * FROM payment WHERE userId=${req.params.userId}`;
-
-  connection.query(sql, function(error, rows, field) {
-    if(error) {
-      console.log("error occured", error);
-
-        res.send({
-            "code": 400,
-            "failed": "error occurred",
-        })
-    } else {
-      res.json(rows)
-      
-      console.log(rows);
-    }
-  })
-});
 app.listen(port, ()=> console.log(`Listening on port ${port}`));
 

@@ -9,11 +9,20 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '../common/Button';
+import BoardSearchMap from './BoardSearchMap';
+import boardimg from '../../lib/styles/img/테니스장.png';
 
 const Table_Row = styled.td `
     width: 100px;
     height: 100px;
     text-align: center;
+`;
+
+const Second_img = styled.img `
+    width: 300px;
+    height: 200px;
+    margin-left: 2em;
+    margin-right: 1em;
 `;
 
 const Contents_Title = styled.div `
@@ -102,13 +111,18 @@ const ButtonWidthMarginTop = styled(Button)`
     float: right;
 `;
 
+
 class ViewDetailContents extends React.Component {
 
+
     render() {
+
+        const search = this.props.search;
+        const history = this.props.history;
+
+        
         return (
             <div>
-                {/* <TableCell align="left">{this.props.boardTitle}</TableCell>
-                <TableCell align="left">{this.props.boardContents}</TableCell> */}
                 <Contents>
             <Table_Layout>
                 <Table_Text>
@@ -119,7 +133,7 @@ class ViewDetailContents extends React.Component {
                     <tr>
                         <td className="full_line" colspan="2">
                             <Table_Text>
-                            <h4>등록날짜:{this.props.CREATEDATE}</h4>
+                            <h4>등록일시 :{this.props.CREATEDATE}</h4>
                             </Table_Text>
                         </td>
                     </tr>
@@ -133,9 +147,9 @@ class ViewDetailContents extends React.Component {
                     <tr>
                         <td className="half_left_line">
                             <div data-image-content="true">
-
+                            {/* <BoardSearchMap  history={history} search={search}/> */}
                             {/* <BoardMap mapData={mapData}></BoardMap> */}
-
+                            <Second_img src={boardimg}/>
                             </div>
                         </td>
                         <td className="half_right_line">

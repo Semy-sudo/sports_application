@@ -17,16 +17,16 @@ const Table_Row = styled.td `
 `;
 
 
-class MyClassSetContents extends React.Component {
+class MyAppliedSetContents extends React.Component {
     
 
     render() {
         return (
             <div>
                 <TableCell align="center"><h2> ☛ </h2></TableCell>
-                <b>{this.props.boardTitle}</b>
+                <b>{this.props.nickName}</b> 지도사님
                 <TableCell align="center">{this.props.boardpay}</TableCell>
-                <TableCell align="center">{this.props.boardContents}</TableCell>   
+                <TableCell align="center">{this.props.boardTitle}</TableCell>   
             </div>
         )
     }
@@ -34,4 +34,4 @@ class MyClassSetContents extends React.Component {
 
 
 
-export default MyClassSetContents;
+export default MyAppliedSetContents;
