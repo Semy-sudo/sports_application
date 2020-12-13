@@ -157,10 +157,11 @@ const CustomerAdd = ({history, location, search}) => {
     var finishTime = values[3];
     var FACI_NM = values[4];
     var mapData = new Object();
-
-    for (var i = 4; i < Object.keys(params).length; i++) {
+   
+for (var i = 4; i < Object.keys(params).length; i++) {
         mapData[keys[i]] = values[i]
     }
+    console.log("mapdata",mapData);
 
     const [error, setError] = useState('');
     const [certifiState, setCertifiState] = useState(false);

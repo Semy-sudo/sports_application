@@ -130,7 +130,7 @@ const PaymentContents = ({ history, paymentData }) => {
                 </ContentsTableTr>
                 <ContentsTableTr>
                     <ContentsElTitle>
-                        전화번호
+                        이메일
                     </ContentsElTitle>
                     <ContentsElContents>
                         { JSON.parse(localStorage.getItem("user")).email }

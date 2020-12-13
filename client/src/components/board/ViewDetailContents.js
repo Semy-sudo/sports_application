@@ -10,11 +10,19 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '../common/Button';
 import BoardSearchMap from './BoardSearchMap';
+import boardimg from '../../lib/styles/img/테니스장.png';
 
 const Table_Row = styled.td `
     width: 100px;
     height: 100px;
     text-align: center;
+`;
+
+const Second_img = styled.img `
+    width: 300px;
+    height: 200px;
+    margin-left: 2em;
+    margin-right: 1em;
 `;
 
 const Contents_Title = styled.div `
@@ -111,6 +119,7 @@ class ViewDetailContents extends React.Component {
 
         const search = this.props.search;
         const history = this.props.history;
+
         
         return (
             <div>
@@ -138,9 +147,9 @@ class ViewDetailContents extends React.Component {
                     <tr>
                         <td className="half_left_line">
                             <div data-image-content="true">
-                            <BoardSearchMap  history={history} search={search}/>
-
-
+                            {/* <BoardSearchMap  history={history} search={search}/> */}
+                            {/* <BoardMap mapData={mapData}></BoardMap> */}
+                            <Second_img src={boardimg}/>
                             </div>
                         </td>
                         <td className="half_right_line">

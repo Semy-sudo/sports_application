@@ -118,7 +118,6 @@ const HeaderBlock = () => {
                 <Header_title_Area>
                     <Link to="/">체육동산</Link>
                 </Header_title_Area>
-                <Header_Type_Area>
                     {
                         JSON.parse(localStorage.getItem("user") !== null) &&
                         <Header_Type_Area>
@@ -129,7 +128,6 @@ const HeaderBlock = () => {
                         }
                         </Header_Type_Area> 
                     }
-                </Header_Type_Area>
             </Header_title>
             <Header_nav>
                 <Header_nav_area>

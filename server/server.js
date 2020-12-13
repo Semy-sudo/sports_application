@@ -142,6 +142,7 @@ app.post('/api/auth/register', function(req, res){
 
 
 app.get('/api/map/mapList/:keyword', function(req, res){
+  console.log(req.params);
   var params = req.params.keyword;
   var sql = "SELECT * FROM map WHERE FACI_NM LIKE '%" + params + "%' OR FCOB_NM LIKE '%" + params + "%'";
 
@@ -163,6 +164,7 @@ app.get('/api/map/mapList/:keyword', function(req, res){
 
 
 app.get('/api/map/mapListByPlace/:keyword', function(req, res){
+  console.log(req.params);
   var params = req.params.keyword.split(" ");
   var sql = "SELECT * FROM map WHERE FMNG_CP_NM = '" + params[0] + "' AND FMNG_CPB_NM = '" + params[1] + "'";
 
@@ -176,11 +178,13 @@ app.get('/api/map/mapListByPlace/:keyword', function(req, res){
         })
     } else {
       res.json(rows)
+      console.log(rows);
     }
   });
 });
 
 app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
+  console.log(req.params);
   var params = req.params.keyword;
   var sql = '';
 
@@ -217,7 +221,7 @@ app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
     } else {
       res.json(rows)
       
-      console.log(rows);
+      //console.log(rows);
     }
   })
 });
@@ -226,6 +230,7 @@ app.get('/api/map/mapList/', (req, res) => {
   var sql = "SELECT * FROM map";
 
   connection.query(sql, function(error, results, field) {
+    console.log(results);
     if(error) {
       console.log("error occured", error);
 
@@ -243,6 +248,7 @@ app.get('/api/map/mapList/', (req, res) => {
     }
   });
 });
+
 
 
 
@@ -271,7 +277,7 @@ app.get('/api/regularclass', (req, res) => {
 //마이페이지에서 expert와 
 app.get('/api/contentsblock', (req, res) => {
     var userid = req.user;
-    var expert = 'expert';
+    var expert = 'parent';
     let sql = 'SELECT * FROM user WHERE id =? AND type=?';
     connection.query(sql, [userid,expert], (err, rows, fields) => {
         console.log("/api/contentsblock",rows);
@@ -290,6 +296,16 @@ app.get('/api/mypage', (req, res) => {
         console.log("/api/mypage",rows);
         res.send(rows);        
     });
+});
+
+//parent 측 
+app.get('/api/parentapplied', (req, res) => {
+  //var userid;
+  let sql = 'SELECT * FROM board WHERE boardid = ?';
+  connection.query(sql, [2], (err, rows, fields) => {
+      console.log("/api/parentapplied",rows);
+      res.send(rows);        
+  });
 });
 
 
