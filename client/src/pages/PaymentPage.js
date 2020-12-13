@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PaymentContents from '../components/payment/PaymentContents';
-import BoardSearchMap from '../components/board/BoardSearchMap';
+import qs from 'querystring';
 
 const PaymentWrap = styled.div`
     width: 100%;
@@ -19,17 +19,32 @@ const PaymentHeader = styled.div`
 `;
 
 const PaymentPage = ({ history, location }) => {
+    var params = qs.parse(location.search)
+    var keys = Object.keys(params);
+    var values = Object.values(params);
+    var paymentData = new Object();
+
+    for(var i = 0; i < Object.keys(params).length; i++) {
+        if(i === 0) {
+            paymentData[keys[0].replace("?", "")] = values[0]
+        } else {
+            paymentData[keys[i]] = values[i]
+        }
+        
+    }
+
+    console.log(paymentData);
+
     return(
-        // <PaymentWrap>
-        //     <PaymentHeader>
-        //         <h2><b>결제하기</b></h2>
-        //     </PaymentHeader>
-        //     <PaymentContents/>
-        // </PaymentWrap>
-        <BoardSearchMap
-            history={ history }
-            location={ location }
-        />
+        <PaymentWrap>
+            <PaymentHeader>
+                <h2><b>결제하기</b></h2>
+            </PaymentHeader>
+            <PaymentContents
+                history={ history }
+                paymentData={ paymentData }
+            />
+        </PaymentWrap>
     );
 };
 

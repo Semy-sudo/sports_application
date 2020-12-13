@@ -167,7 +167,7 @@ const CustomerAdd = ({history, location, search}) => {
     const [board, setUser] = useState({
         classkind: '',
         boardTitle: '',
-        baordpay: '',
+        boardpay: '',
         boardmin: '',
         boardmax: '',
         boardContents: '',
@@ -201,37 +201,38 @@ const CustomerAdd = ({history, location, search}) => {
             }
         };
 
-        axios
-            .post('/api/classopen', {
-                classkind: board.classkind,
-                boardTitle: board.boardTitle,
-                baordpay: board.baordpay,
-                boardmin: board.boardmin,
-                boardmax: board.boardmax,
-                boardContents: board.boardContents,
-                startDate: board.startDate,
-                finishDate: board.finishDate,
-                startTime: board.startTime,
-                finishTime: board.finishTime,
-                FACI_NM: board.FACI_NM
-            }, config)
-            .then((response) => {
-                setUser({
-                    classkind: '',
-                    boardTitle: '',
-                    baordpay: '',
-                    boardmin: '',
-                    boardmax: '',
-                    boardContents: '',
-                    startDate: '',
-                    finishDate: '',
-                    startTime: '',
-                    finishTime: '',
-                    FACI_NM: ''
-                })
-            });
+        // axios
+        //     .post('/api/classopen', {
+        //         classkind: board.classkind,
+        //         boardTitle: board.boardTitle,
+        //         boardpay: board.boardpay,
+        //         boardmin: board.boardmin,
+        //         boardmax: board.boardmax,
+        //         boardContents: board.boardContents,
+        //         startDate: board.startDate,
+        //         finishDate: board.finishDate,
+        //         startTime: board.startTime,
+        //         finishTime: board.finishTime,
+        //         FACI_NM: board.FACI_NM
+        //     }, config)
+        //     .then((response) => {
+        //         setUser({
+        //             classkind: '',
+        //             boardTitle: '',
+        //             boardpay: '',
+        //             boardmin: '',
+        //             boardmax: '',
+        //             boardContents: '',
+        //             startDate: '',
+        //             finishDate: '',
+        //             startTime: '',
+        //             finishTime: '',
+        //             FACI_NM: ''
+        //         })
+        //     });
 
-        history.push('/');
+        console.log(board);
+        history.push(`/payment?paymentMoney=${((Number(finishDate.replace(/-/gi, "")) - Number(startDate.replace(/-/gi, ""))) * (Number(finishTime) - Number(startTime))) * 30000}&paymentContents=${board.FACI_NM}`);
     };
 
     return (
@@ -279,7 +280,7 @@ const CustomerAdd = ({history, location, search}) => {
                                 </Table_Text>
                                 <Shortcut_Area>
                                     <Input_Detail
-                                        autoComplete="baordpay"
+                                        autoComplete="boardpay"
                                         name="boardpay"
                                         placeholder="원"
                                         type="text"

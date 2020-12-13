@@ -69,7 +69,7 @@ const FilterText = styled.span`
     height: 10px;
 `;
 
-const FilterBlock = ({ onClickFilter, onHandleFilter }) => {
+const FilterBlockParent = ({ onClickFilter, onHandleFilter }) => {
     return(
         <FilterWrap>
             <FilterHeader>
@@ -182,4 +182,4 @@ const FilterBlock = ({ onClickFilter, onHandleFilter }) => {
     );
 };
 
-export default FilterBlock;
+export default FilterBlockParent;

@@ -1,6 +1,7 @@
 import React from 'react';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import { Link } from 'react-router-dom'
 import BoardMap from '../board/BoardMap';
 import styled from 'styled-components';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -104,10 +105,7 @@ const ButtonWidthMarginTop = styled(Button)`
 
 
 class ViewDetailContents extends React.Component {
-    
-  
-    
-    
+
 
     render() {
 
@@ -141,6 +139,7 @@ class ViewDetailContents extends React.Component {
                         <td className="half_left_line">
                             <div data-image-content="true">
                             <BoardSearchMap  history={history} search={search}/>
+
 
                             </div>
                         </td>
@@ -194,7 +193,12 @@ class ViewDetailContents extends React.Component {
                                 cyan="cyan"
                                 fullWidth="fullWidth"
                                 type="button"
-                                >
+                                onClick={ 
+                                    () => {
+                                        this.props.history.push(`/payment?paymentMoney=${this.props.boardpay}&paymentContents=${this.props.boardTitle}`);
+                                    }
+                                }
+                            >
                                 등록&결제
                             </ButtonWidthMarginTop>
 

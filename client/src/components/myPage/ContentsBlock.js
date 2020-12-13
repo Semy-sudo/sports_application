@@ -89,10 +89,12 @@ class ContentsBlock extends Component {
                     .customers
                     .map(c => {
                         return (
-                            <ContentsBlock_Expert/>
+                            // <ContentsBlock_Expert/>
+                            <ContentsBlock_Parent/>
                         );
                     }))
-                : <ContentsBlock_Parent/>
+                : 
+                <ContentsBlock_Parent/>
         }
         
         </div>

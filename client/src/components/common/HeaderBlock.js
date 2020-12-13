@@ -6,6 +6,8 @@ import BoardIcon from '../../lib/styles/img/clipboard-outline.svg';
 import MapIcon from '../../lib/styles/img/map-outline.svg';
 import PersonIcon from '../../lib/styles/img/person-outline.svg';
 import HomeLogo from '../../lib/styles/img/img_category/logo_sports_color.png';
+import ExpertImage from '../../lib/styles/img/지도사.png';
+import ParentImage from '../../lib/styles/img/학부모.png';
 import '../../components/common/Icon.css';
 
 const Header = styled.div`
@@ -19,7 +21,7 @@ const Header = styled.div`
 
 const Header_title = styled.div`
     float: left;
-    width: 30%;
+    width: 35%;
     height: 100px;
     padding-left: 80px;
     font-weight: bold;
@@ -35,12 +37,21 @@ const Header_logo_Area = styled.div`
 const Header_title_Area = styled.div`
     float: left;
     padding-top: 25px;
+`;
+
+const Header_Type_Area = styled.div`
+    float: left;
+    padding-top: 35px;
     padding-left: 20px;
+`;
+
+const Header_Type_Image = styled.img`
+    width: 55px;
 `;
 
 const Header_nav = styled.div`
     float: left;
-    width: 40%;
+    width: 30%;
     height: 100px;
     padding-top: 10px;
     text-align: center;
@@ -65,9 +76,9 @@ const Header_nav = styled.div`
 
 const Header_footer = styled.div`
     float: left;
-    width: 30%;
+    width: 35%;
     height: 100px;
-    padding-left: 50px;
+    padding-left: 100px;
     padding-top: 20px;
     font-weight: bold;
     font-size: 20px;
@@ -107,6 +118,13 @@ const HeaderBlock = () => {
                 <Header_title_Area>
                     <Link to="/">체육동산</Link>
                 </Header_title_Area>
+                <Header_Type_Area>
+                    {
+                        JSON.parse(localStorage.getItem("user")).type === 'parent' ?
+                        <Header_Type_Image src={ ParentImage }/> :
+                        <Header_Type_Image src={ ExpertImage }/>
+                    }
+                </Header_Type_Area>
             </Header_title>
             <Header_nav>
                 <Header_nav_area>
@@ -118,16 +136,6 @@ const HeaderBlock = () => {
                                 </Header_nav_icon_area>
                                 <Header_nav_text_area>
                                     Home
-                                </Header_nav_text_area>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/payment">
-                                <Header_nav_icon_area>
-                                    <ImageIcon src={ BoardIcon } />
-                                </Header_nav_icon_area>
-                                <Header_nav_text_area>
-                                    Board
                                 </Header_nav_text_area>
                             </Link>
                         </li>

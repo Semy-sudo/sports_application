@@ -123,21 +123,17 @@ app.post('/api/auth/register', function(req, res){
   ];
   connection.query(sql, params, (err, rows, fields) => {
      
-    let sql = 'SELECT * FROM expert WHERE QF_GRADE_NM = ?';
-        connection.query(sql, [req.body.certifiGrade], function(err, results){
-            if(err)
-                return done(err);
-            if(!results[0])
-                return done('please check your QF_GRANDE_NM.');
-
-            var expertcerti = results[0];
-            if(expertcerti.certifiName === certifiName && expertcerti.certifiDate === certifiDate ){
-                return;
-            }else{
-                return done('please check your certifiName and certifiDate');
-            }
-        });
-
+    // let sql = 'SELECT * FROM expert WHERE  QF_GRADE_NM = ? && QF_ITM_NM =? && AQ_DT';
+    // let params = [
+    //   req.body.certifiGrade,
+    //   req.body.certifiName,
+    //   req.body.certifiDate
+    // ];
+    // connection.query(sql, params , (err, rows, fields) => {
+    
+    //   res.send(rows);
+    //   console.log(rows);
+    // });
 
       res.send(rows);
       console.log(rows);
@@ -384,7 +380,7 @@ app.get('/api/class/:keyword', function(req, res) {
 
 
 app.post('/api/payment/', (req, res) => {
-  let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
+  let sql = 'INSERT INTO payment VALUES (null,NOW(),?,?,?,?,?,?,?)';
   let params = [
       req.body.paymentPlace,
       req.body.paymentThing,
