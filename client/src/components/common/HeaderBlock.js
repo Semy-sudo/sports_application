@@ -120,9 +120,14 @@ const HeaderBlock = () => {
                 </Header_title_Area>
                 <Header_Type_Area>
                     {
-                        JSON.parse(localStorage.getItem("user")).type === 'parent' ?
-                        <Header_Type_Image src={ ParentImage }/> :
-                        <Header_Type_Image src={ ExpertImage }/>
+                        JSON.parse(localStorage.getItem("user") !== null) &&
+                        <Header_Type_Area>
+                        {
+                            JSON.parse(localStorage.getItem("user")).type === 'parent' ?
+                            <Header_Type_Image src={ ParentImage }/> :
+                            <Header_Type_Image src={ ExpertImage }/>
+                        }
+                        </Header_Type_Area> 
                     }
                 </Header_Type_Area>
             </Header_title>
