@@ -9,7 +9,6 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-
 const Table_Row = styled.td `
     width: 100px;
     height: 100px;
@@ -17,16 +16,19 @@ const Table_Row = styled.td `
 `;
 
 
-class MyClassSetContents extends React.Component {
+class MyRentSetContents extends React.Component {
     
 
     render() {
         return (
             <div>
                 <TableCell align="center"><h2> ☛ </h2></TableCell>
-                <b>{this.props.boardTitle}</b>
-                <TableCell align="center">{this.props.boardpay}</TableCell>
-                <TableCell align="center">{this.props.boardContents}</TableCell>   
+                <TableCell align="center">{this.props.CREATEDATE}</TableCell>
+                <TableCell align="center">{this.props.mapdata}</TableCell>
+                <TableCell align="center">{this.props.startDate}</TableCell>
+                <TableCell align="center">{this.props.finishDate}</TableCell>
+                <TableCell align="center">{this.props.startTime}</TableCell>
+                <TableCell align="center">{this.props.finishTime}</TableCell>
             </div>
         )
     }
@@ -34,4 +36,4 @@ class MyClassSetContents extends React.Component {
 
 
 
-export default MyClassSetContents;
+export default MyRentSetContents;

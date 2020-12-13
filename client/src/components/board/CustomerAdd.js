@@ -10,6 +10,7 @@ import Button from '../common/Button';
 import {post} from 'axios';
 import qs from 'qs';
 import BoardMap from './BoardMap';
+import BoardSearchMap from './BoardSearchMap';
 
 const Contents = styled.div `
     float: left;
@@ -145,7 +146,7 @@ const ErrorMessage = styled.div `
     margin-top: 1rem;
 `;
 
-const CustomerAdd = ({history, location}) => {
+const CustomerAdd = ({history, location, search}) => {
 
     var params = qs.parse(location.search)
     var keys = Object.keys(params);
@@ -156,10 +157,11 @@ const CustomerAdd = ({history, location}) => {
     var finishTime = values[3];
     var FACI_NM = values[4];
     var mapData = new Object();
-
-    for (var i = 4; i < Object.keys(params).length; i++) {
+   
+for (var i = 4; i < Object.keys(params).length; i++) {
         mapData[keys[i]] = values[i]
     }
+    console.log("mapdata",mapData);
 
     const [error, setError] = useState('');
     const [certifiState, setCertifiState] = useState(false);
@@ -267,9 +269,9 @@ const CustomerAdd = ({history, location}) => {
                     <tr>
                         <td className="half_left_line">
                             <div data-image-content="true">
-
-                                <BoardMap mapData={mapData}></BoardMap>
-
+                                 <BoardMap mapData={mapData}></BoardMap> 
+                            {/* <BoardSearchMap history={history} search={search}/> */}
+                        
                             </div>
                         </td>
                         <td className="half_right_line">
