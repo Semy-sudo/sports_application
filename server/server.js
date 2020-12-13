@@ -110,6 +110,7 @@ app.post('/api/auth/logout', function(req,res){
 
 //회원가입
 app.post('/api/auth/register', function(req, res){
+
   let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
   let params = [
       req.body.type,
@@ -121,6 +122,23 @@ app.post('/api/auth/register', function(req, res){
       req.body.certifiDate
   ];
   connection.query(sql, params, (err, rows, fields) => {
+     
+    let sql = 'SELECT * FROM expert WHERE QF_GRADE_NM = ?';
+        connection.query(sql, [req.body.certifiGrade], function(err, results){
+            if(err)
+                return done(err);
+            if(!results[0])
+                return done('please check your QF_GRANDE_NM.');
+
+            var expertcerti = results[0];
+            if(expertcerti.certifiName === certifiName && expertcerti.certifiDate === certifiDate ){
+                return;
+            }else{
+                return done('please check your certifiName and certifiDate');
+            }
+        });
+
+
       res.send(rows);
       console.log(rows);
   });
