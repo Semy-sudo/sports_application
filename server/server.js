@@ -324,7 +324,7 @@ app.get('/api/classviewdetail', (req, res) => {
   let sql = 'SELECT * FROM board WHERE boardid = ?';
   let boardid = [req.params.boardid];
   console.log("boardid",boardid);
-  connection.query(sql, 2 , (err, rows, fields) => {
+  connection.query(sql, 134 , (err, rows, fields) => {
       console.log(rows);
       res.send(rows);        
   });
