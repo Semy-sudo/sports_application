@@ -119,7 +119,7 @@ const HeaderBlock = () => {
                     <Link to="/">체육동산</Link>
                 </Header_title_Area>
 
-                {
+                {/* {
                     JSON.parse(localStorage.getItem("user") !== null) &&
                     <Header_Type_Area>
 
@@ -135,7 +135,7 @@ const HeaderBlock = () => {
                     }
 
                     </Header_Type_Area> 
-                }
+                } */}
 
             </Header_title>
             <Header_nav>

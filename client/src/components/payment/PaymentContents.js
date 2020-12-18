@@ -74,10 +74,10 @@ const PaymentContents = ({ history, paymentData }) => {
                 paymentPlace: "체육동산",
                 paymentThing: "카카오페이",
                 paymentMoney: paymentData.paymentMoney,
-                userName: JSON.parse(localStorage.getItem("user")).id,
-                userTel: JSON.parse(localStorage.getItem("user")).email,
+                // userName: JSON.parse(localStorage.getItem("user")).id,
+                // userTel: JSON.parse(localStorage.getItem("user")).email,
                 paymentContents: paymentData.paymentContents,
-                userId: JSON.parse(localStorage.getItem("user")).userId,
+                // userId: JSON.parse(localStorage.getItem("user")).userId,
             },
             config
         )
