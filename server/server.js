@@ -10,30 +10,11 @@ var FileStore = require('session-file-store')(session)
 
 const port = process.env.PORT || 4000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
-const data = fs.readFileSync('./database.json');
-const conf = JSON.parse(data); //data를 js객체로 변환
-const mysql = require('mysql');
-//const { Router } = require('express');
-
-const connection = mysql.createConnection(
-    {host: conf.host, user: conf.user, password: conf.password, port: conf.port, database: conf.database}
-);
-connection.connect();
-
-var router = express.Router();
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 
-app.get('/post', function (req, res) {
-    res.send('GET request to the post');
-    res.redirect('/post')
-});
-
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+var connection = require('./lib/connection.js');
 
 //session 관련
 app.use(session({
@@ -44,57 +25,13 @@ app.use(session({
 }))
 
 
-var passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy;
+var passport = require('./lib/passport')(app);
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser(function(user, done) {
-    console.log('serializeUser',user);
-    done(null,user.id);
-});
-
-passport.deserializeUser(function(id, done){
-    console.log('deserializeUser',id);
-    done(null,id);
-});
-
-passport.use(new LocalStrategy(
-    {
-        usernameField:'id',
-        passwordField:'passwd'
-    },
-    function (username,password,done){
-        console.log('LocalStrategy', username, password);
-        let sql = 'SELECT * FROM user WHERE id = ?';
-        connection.query(sql, [username], function(err, results){
-            if(err)
-                return done(err);
-            if(!results[0])
-                return done('please check your id.');
-
-            var user = results[0];
-            if(user.passwd === password){
-                return done(null,user)
-            }else{
-                return done('please check your passwd');
-            }
-        });
-      
-
-
-
-        }
-));
-
-
-app.post('/api/auth/login',
-    passport.authenticate('local',{
-        successRedirect: '/auth',
-        failureRedirect: '/auth/login'
-    })
-);
+//로그인 처리
+app.post('/api/auth/login', passport.authenticate('local', {
+  successRedirect: '/auth',
+  failureRedirect: '/auth/login'
+}));
 
 //로그아웃
 app.post('/api/auth/logout', function(req,res){
@@ -108,6 +45,7 @@ app.post('/api/auth/logout', function(req,res){
 
 //회원가입
 app.post('/api/auth/register', function(req, res){
+
   let sql = 'INSERT INTO user VALUES (null,?,?,?,?,?,?,?)';
   let params = [
       req.body.type,
@@ -119,6 +57,19 @@ app.post('/api/auth/register', function(req, res){
       req.body.certifiDate
   ];
   connection.query(sql, params, (err, rows, fields) => {
+     
+    // let sql = 'SELECT * FROM expert WHERE  QF_GRADE_NM = ? && QF_ITM_NM =? && AQ_DT';
+    // let params = [
+    //   req.body.certifiGrade,
+    //   req.body.certifiName,
+    //   req.body.certifiDate
+    // ];
+    // connection.query(sql, params , (err, rows, fields) => {
+    
+    //   res.send(rows);
+    //   console.log(rows);
+    // });
+
       res.send(rows);
       console.log(rows);
   });
@@ -126,7 +77,7 @@ app.post('/api/auth/register', function(req, res){
 
 
 app.get('/api/map/mapList/:keyword', function(req, res){
-
+  console.log(req.params);
   var params = req.params.keyword;
   var sql = "SELECT * FROM map WHERE FACI_NM LIKE '%" + params + "%' OR FCOB_NM LIKE '%" + params + "%'";
 
@@ -146,7 +97,9 @@ app.get('/api/map/mapList/:keyword', function(req, res){
   });
 });
 
+
 app.get('/api/map/mapListByPlace/:keyword', function(req, res){
+  console.log(req.params);
   var params = req.params.keyword.split(" ");
   var sql = "SELECT * FROM map WHERE FMNG_CP_NM = '" + params[0] + "' AND FMNG_CPB_NM = '" + params[1] + "'";
 
@@ -160,11 +113,13 @@ app.get('/api/map/mapListByPlace/:keyword', function(req, res){
         })
     } else {
       res.json(rows)
+      console.log(rows);
     }
   });
 });
 
 app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
+  console.log(req.params);
   var params = req.params.keyword;
   var sql = '';
 
@@ -201,7 +156,7 @@ app.get('/api/map/mapListByFilter/:keyword', function(req, res) {
     } else {
       res.json(rows)
       
-      console.log(rows);
+      //console.log(rows);
     }
   })
 });
@@ -210,6 +165,7 @@ app.get('/api/map/mapList/', (req, res) => {
   var sql = "SELECT * FROM map";
 
   connection.query(sql, function(error, results, field) {
+    console.log(results);
     if(error) {
       console.log("error occured", error);
 
@@ -230,21 +186,33 @@ app.get('/api/map/mapList/', (req, res) => {
 
 
 
+
 // 홈 화면 클래스띄우기
-app.get('/api/customers', (req, res) => {
+app.get('/api/onedayclass', (req, res) => {
     connection.query(
-        "SELECT * FROM board WHERE isDeleted = 0",
+        "SELECT * FROM board WHERE isDeleted = 0 && classkind = 1",
         (err, rows, fields) => {
             res.send(rows);
             console.log(rows);
         }
     );
+    
+});
+app.get('/api/regularclass', (req, res) => {
+  connection.query(
+      "SELECT * FROM board WHERE isDeleted = 0 && classkind = 2",
+      (err, rows, fields) => {
+          res.send(rows);
+          console.log(rows);
+      }
+  );
+  
 });
 
 //마이페이지에서 expert와 
 app.get('/api/contentsblock', (req, res) => {
     var userid = req.user;
-    var expert = 'expert';
+    var expert = 'parent';
     let sql = 'SELECT * FROM user WHERE id =? AND type=?';
     connection.query(sql, [userid,expert], (err, rows, fields) => {
         console.log("/api/contentsblock",rows);
@@ -265,6 +233,16 @@ app.get('/api/mypage', (req, res) => {
     });
 });
 
+//parent 측 
+app.get('/api/parentapplied', (req, res) => {
+  //var userid;
+  let sql = 'SELECT * FROM board WHERE boardid = ?';
+  connection.query(sql, [2], (err, rows, fields) => {
+      console.log("/api/parentapplied",rows);
+      res.send(rows);        
+  });
+});
+
 
 //내 클래스 내역
 app.get('/api/myclass', (req, res) => {
@@ -276,21 +254,91 @@ app.get('/api/myclass', (req, res) => {
     });
 });
 
-//클래스 열기
-app.post('/api/classopen', (req, res) => {
-    let sql = 'INSERT INTO board VALUES (null,?,?,?,?,?,now(),0,1)';
-    let params = [
-        req.user,
-        req.body.boardType,
-        req.body.boardLimit,
-        req.body.boardTitle,
-        req.body.boardContents
-    ];
-    connection.query(sql, params, (err, rows, fields) => {
-        res.send(rows);
-        console.log(rows);
-    });
+//클래스 디테일
+app.get('/api/classviewdetail', (req, res) => {
+  let sql = 'SELECT * FROM board WHERE boardid = ?';
+  let boardid = [req.params.boardid];
+  console.log("boardid",boardid);
+  connection.query(sql, 134 , (err, rows, fields) => {
+      console.log(rows);
+      res.send(rows);        
+  });
 });
+
+
+
+
+//클래스 열기
+app.post('/api/classopen', function(req, res){
+  var sql = "insert into board values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  var params = [
+    req.body.nickName,
+    req.body.boardTitle,
+    req.body.boardpay,
+    req.body.boardmin,
+    req.body.boardmax,
+    req.body.boardContents,
+    req.body.boardType,
+    req.body.startDate,
+    req.body.finishDate,
+    req.body.startTime,
+    req.body.finishTime,
+    req.body.classkind,
+    req.body.FACI_NM,                                        
+    req.body.FACI_GB_CD,                                            
+    req.body.FACI_GB_NM,                                            
+    req.body.FCOB_CD,                                               
+    req.body.FCOB_NM,                                              
+    req.body.FTYPE_CD,                                              
+    req.body.FTYPE_NM,                                             
+    req.body.FMNG_TYPE_GB_CD,                                       
+    req.body.FMNG_TYPE_GB_NM,                                     
+    req.body.FMNG_CP_CD,                                            
+    req.body.FMNG_CP_NM,                                           
+    req.body.FMNG_CPB_CD,                                           
+    req.body.FMNG_CPB_NM,                                          
+    req.body.FMNG_DEPT_NM,                                         
+    req.body.FMNG_USER_TEL,                                        
+    req.body.ADDR_CP_CD,                                            
+    req.body.ADDR_CP_NM,                                       
+    req.body.ADDR_CPB_CD,                                           
+    req.body.ADDR_CPB_NM,                                       
+    req.body.ADDR_EMD_CD,                                       
+    req.body.ADDR_EMD_NM,                                      
+    req.body.ADDR_AMD_CD,                                      
+    req.body.ADDR_AMD_NM,                                      
+    req.body.FACI_ROAD_ADDR1,                                      
+    req.body.FACI_POINT_X,                                   
+    req.body.FACI_POINT_Y,                                     
+    req.body.TOT_FACI_AREA,                                   
+    req.body.STAND_CPT_PSN_CNT,                                  
+    req.body.STAND_SEAT_CNT,                              
+    req.body.FACI_HOMEPAGE,                                  
+    req.body.NATION_YN,                                     
+    req.body.FACI_STAT,
+    req.body.DEL_YN,
+  ];
+  
+  console.log("=====================================");
+  console.log(req.body.mapData);
+ 
+  connection.query(sql, params, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+      res.send({
+        "code": 400,
+        "failed": "error occured",
+      })
+    } else {
+      console.log("The solution is", rows);
+
+      res.json(rows);
+    }
+  });
+});
+
+
 
 app.delete('/api/myclass/:boardid', (req, res) => {
     let sql = 'UPDATE board SET ISDELETED = 1 WHERE boardid = ?';
@@ -302,4 +350,48 @@ app.delete('/api/myclass/:boardid', (req, res) => {
 });
 
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
+
+// 키워드 기반 클래스 목록
+app.get('/api/class/:keyword', function(req, res) {
+  var params = req.params.keyword;
+  var sql = "SELECT * FROM board WHERE boardTitle LIKE '%" + params + "%' OR boardContents LIKE '%" + params + "%'";  
+
+  connection.query(sql, function(error, rows, field) {
+    if(error) {
+      console.log("error occured", error);
+
+        res.send({
+            "code": 400,
+            "failed": "error occurred",
+        })
+    } else {
+      res.json(rows)
+      
+      console.log(rows);
+    }
+  })
+});
+
+
+
+app.post('/api/payment/', (req, res) => {
+  let sql = 'INSERT INTO payment VALUES (null,NOW(),?,?,?,?,?,?,?)';
+  let params = [
+      req.body.paymentPlace,
+      req.body.paymentThing,
+      req.body.paymentMoney,
+      req.body.userName,
+      req.body.userTel,
+      req.body.paymentContents,
+      req.body.userId
+  ];
+
+  connection.query(sql, params, (err, rows, fields) => {
+      res.send(rows);
+      console.log(rows);
+  });
+});
+
+app.listen(port, ()=> console.log(`Listening on port ${port}`));
+

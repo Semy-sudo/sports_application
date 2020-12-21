@@ -7,12 +7,25 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import styled from 'styled-components';
+import InfiniteScroll from "../../InfiniteScroll";
 
 const Table_td = styled.td `
     width: 200px;
     height: 100px;
     text-align: right;
+    margin-top:-20px;
 `;
+
+const Button_Back = styled.button`
+    width: 20%;
+    height: 50px;
+    background-color: #27AE60;
+    border: 0px solid #27AE60;
+    color: white;
+    font-size: 20px;
+    border-radius: 10px;
+`;
+
 
 class MyClassSet extends Component {
 
@@ -48,16 +61,20 @@ class MyClassSet extends Component {
     render() {
         return (
             <div>
-                <h2>현재 나의 클래스</h2>
+                 <InfiniteScroll height={500}>
+                <h2>현재 나의 등록 클래스 현황</h2>
                     <Table>
                         <TableHead>
                             <TableRow>
-                            
+                            <br></br>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        <TableRow>
-                        <TableCell align="right">
+                        
+                        <br></br>
+                        <TableRow align="center">
+                    
+                      
                         {
                                 this.state.myclass
                                     ? this
@@ -68,16 +85,23 @@ class MyClassSet extends Component {
                                                 <MyClassSetContents
                                                     stateRefresh={this.stateRefresh}
                                                     key={c.boardid}
-                                                    boardTitle={c.boardTitle}/>
+                                                    boardTitle={c.boardTitle}
+                                                    boardpay={c.boardpay}
+                                                    boardContents={c.boardContents}
+                                                    />
                                             );
                                         })
                                     : ""
                         }
-                        </TableCell>
+                        
                         </TableRow>
                         </TableBody>
+                        <br></br><br></br>
+                        <Button_Back>
+                                <Link to="/auth">뒤로가기</Link>
+                        </Button_Back>
                     </Table>
-                   
+                    </InfiniteScroll>
             </div>
               
         )

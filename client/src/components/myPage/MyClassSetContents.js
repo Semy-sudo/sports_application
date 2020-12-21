@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
+
 const Table_Row = styled.td `
     width: 100px;
     height: 100px;
@@ -22,9 +23,10 @@ class MyClassSetContents extends React.Component {
     render() {
         return (
             <div>
-                <TableCell align="left">{this.props.boardTitle}</TableCell>
-                <TableCell align="right"><CustomerDelete stateRefresh={this.props.stateRefresh} boardid={this.props.boardid}/></TableCell>
-                <TableCell align="right"><CustomerSelect stateRefresh={this.props.stateRefresh} boardid={this.props.boardid}/></TableCell>
+                <TableCell align="center"><h2> ☛ </h2></TableCell>
+                <b>{this.props.boardTitle}</b>
+                <TableCell align="center">{this.props.boardpay}</TableCell>
+                <TableCell align="center">{this.props.boardContents}</TableCell>   
             </div>
         )
     }

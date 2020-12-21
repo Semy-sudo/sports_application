@@ -22,7 +22,7 @@ class CustomerSelect extends React.Component {
     render() {
         return (
             <Table_td>
-            <button onClick={(e)=> {this.deleteCustomer(this.props.boardid)}}>상세보기</button>
+            <button onClick={(e)=> {this.deleteCustomer(this.props.key)}}>상세보기</button>
             </Table_td>
         )
     }

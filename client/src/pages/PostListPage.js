@@ -1,13 +1,17 @@
 import React from 'react';
-import AuthTemplate from '../components/auth/AuthTemplate';
+import ClassTemplate from '../components/auth/ClassTemplate';
 import ClassAddForm from '../components/board/ClassAddForm';
 
 
-const PostListPage = () => {
+const PostListPage = ({ history, search }) => {
     return(
-        <AuthTemplate>
-            <ClassAddForm/>
-        </AuthTemplate>
+        <ClassTemplate>
+            <ClassAddForm
+                history={ history }
+                search={ search }
+            />
+        </ClassTemplate>
+
     );
 };  
 

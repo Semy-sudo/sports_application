@@ -8,14 +8,20 @@ import MapPage from './pages/MapPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HeaderBlock from './components/common/HeaderBlock';
+import ClassDetail from './pages/ClassDetail';
 import PaymentPage from './pages/PaymentPage';
 import MyClassPage from './pages/MyClassPage';
+import RentPage from './pages/RentPage';
+import AppliedClassPage from './pages/AppliedClassPage';
+import MyPaymentPage from './pages/MyPaymentPage';
+import InfiniteScroll from "./InfiniteScroll";
 
 
 const App = () => {
   return(
     <>
       <HeaderBlock />
+      <InfiniteScroll height={700}>
       <Route component={ HomePage } path="/" exact />
       <Route component={ postListPage } path="/OpenClass" exact/>
       <Route component={ PostPage } path="/post/postDetail" exact />
@@ -23,8 +29,13 @@ const App = () => {
       <Route component={ MyPage } path="/auth" exact />
       <Route component={ LoginPage } path="/auth/login" exact />
       <Route component={ RegisterPage } path="/auth/register" exact />
-      <Route component={ PaymentPage } path="/payment" exact />
+      <Route component={ PaymentPage } path="/payment" />
       <Route component={ MyClassPage } path="/myclass" exact />
+      <Route component={ RentPage } path="/rent" exact />
+      <Route component={ AppliedClassPage } path="/appliedclass" exact />
+      <Route component={ MyPaymentPage } path="/auth/myPayment" exact />
+      <Route component={ ClassDetail } path="/postView" exact />
+      </InfiniteScroll>
 
     </>
   )
