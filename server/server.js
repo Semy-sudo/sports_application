@@ -13,29 +13,8 @@ const port = process.env.PORT || 4000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-const data = fs.readFileSync('./database.json');
-const conf = JSON.parse(data); //data를 js객체로 변환
-const mysql = require('mysql');
-//const { Router } = require('express');
 
-const connection = mysql.createConnection(
-    {host: conf.host, user: conf.user, password: conf.password, port: conf.port, database: conf.database}
-);
-connection.connect();
-
-var router = express.Router();
-
-const url = require('url');
-
-
-
-
-app.get('/post', function (req, res) {
-    res.send('GET request to the post');
-    res.redirect('/post')
-});
-
-
+var connection = require('./lib/connection.js');
 
 //session 관련
 app.use(session({
@@ -46,57 +25,13 @@ app.use(session({
 }))
 
 
-var passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy;
+var passport = require('./lib/passport')(app);
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser(function(user, done) {
-    console.log('serializeUser',user);
-    done(null,user.id);
-});
-
-passport.deserializeUser(function(id, done){
-    console.log('deserializeUser',id);
-    done(null,id);
-});
-
-passport.use(new LocalStrategy(
-    {
-        usernameField:'id',
-        passwordField:'passwd'
-    },
-    function (username,password,done){
-        console.log('LocalStrategy', username, password);
-        let sql = 'SELECT * FROM user WHERE id = ?';
-        connection.query(sql, [username], function(err, results){
-            if(err)
-                return done(err);
-            if(!results[0])
-                return done('please check your id.');
-
-            var user = results[0];
-            if(user.passwd === password){
-                return done(null,user)
-            }else{
-                return done('please check your passwd');
-            }
-        });
-      
-
-
-
-        }
-));
-
-
-app.post('/api/auth/login',
-    passport.authenticate('local',{
-        successRedirect: '/auth',
-        failureRedirect: '/auth/login'
-    })
-);
+//로그인 처리
+app.post('/api/auth/login', passport.authenticate('local', {
+  successRedirect: '/auth',
+  failureRedirect: '/auth/login'
+}));
 
 //로그아웃
 app.post('/api/auth/logout', function(req,res){
